@@ -7,6 +7,7 @@ use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class BarChartController extends Controller
 {
+    // index method
     public function index()
     {
         $breadcrumb = 'Reach Exposure / Probability with mean';
