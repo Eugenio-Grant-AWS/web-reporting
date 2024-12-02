@@ -1,0 +1,326 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+/***** General CSS *****/
+:root {
+    --color-primary: #666666;
+    --color-secondary: #718096;
+    --color-bg: #3948a4;
+    --poppins: "Poppins", Sans-Serif;
+    --inter: "Inter", sans-serif;
+}
+
+body {
+    word-break: break-word;
+    font: 15px/25px "Inter", sans-serif;
+    font-weight: 400;
+    color: var(--color-primary);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    padding: 0;
+    list-style-type: none;
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+}
+p {
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0;
+}
+a {
+    text-decoration: none;
+}
+
+h1 {
+    font-family: "Poppins", Sans-Serif;
+    font-size: 65px;
+    line-height: 1.4;
+    color: #666666;
+    font-weight: 500;
+    margin: 0 0 17px;
+}
+
+h2 {
+    font-family: "Poppins", Sans-Serif;
+    font-size: 55px;
+    line-height: 1.2;
+    color: #666666;
+    font-weight: 500;
+    margin: 0 0 30px;
+}
+
+h3 {
+    font-family: "Poppins", Sans-Serif;
+    font-size: 45px;
+    line-height: 1.2;
+    color: #666666;
+    font-weight: bold;
+    margin: 0;
+    @media screen and (max-width: 1199px) {
+        font-size: 30px;
+    }
+}
+
+h4 {
+    font-size: 24px;
+    line-height: 1.2;
+    color: #666666;
+    font-weight: 500;
+    margin: 0 0 13px;
+}
+
+h5 {
+    font-size: 20px;
+    line-height: 1.2;
+    color: #666666;
+    font-weight: 500;
+    margin: 0 0 20px;
+}
+
+h6 {
+    font-size: 21px;
+    line-height: 1.2;
+    color: #000000;
+    font-weight: bold;
+    @media screen and (max-width: 1199px) {
+        font-size: 17px;
+    }
+}
+.theme-btn {
+    font-size: 16px;
+    font-weight: 600;
+    background: #2196f3;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 16px 16px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 10px #e5cbd8;
+    margin: 0 auto;
+    @media screen and (max-width: 768px) {
+        width: 60%;
+    }
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+/* custom css start */
+/* authorization page start */
+section.authorization {
+    background: url(../images/sign-in.jpg) no-repeat top center;
+    width: 100%;
+    min-height: 100vh;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    form {
+        width: 75%;
+        @media screen and (max-width: 1199px) {
+            width: 100%;
+        }
+        .input-group {
+            border: 1px solid #dbdbdb;
+            background: #fff;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 16px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 20px 0 #0000001f;
+            i {
+                color: #c9c9c9;
+                font-size: 12px;
+                position: absolute;
+            }
+            input {
+                border: none;
+                font-size: 14px;
+                color: var(--color-primary);
+                padding-left: 20px;
+                width: 100%;
+                box-shadow: inset 0 0 20px 20px #fff;
+                &:focus-visible {
+                    outline: none;
+                }
+            }
+        }
+    }
+
+    small {
+        color: var(--color-primary);
+        font-size: 14px;
+        span,
+        a {
+            color: var(--color-bg);
+        }
+    }
+    .modal {
+        p {
+            font-size: 21px;
+            font-weight: bold;
+            margin: 0;
+            @media screen and (max-width: 450px) {
+                font-size: 16px;
+            }
+        }
+    }
+}
+/* authorization page end */
+/* admin dashboard start */
+.admin-dashboard {
+    .bg-custom {
+        background: #fafbff;
+    }
+
+    .body-content {
+        input,
+        select {
+            @media screen and (max-width: 1400px) {
+                width: 40%;
+            }
+            @media screen and (max-width: 992px) {
+                width: 94%;
+            }
+            @media screen and (max-width: 500px) {
+                width: 70%;
+            }
+
+            &:focus-visible {
+                outline: none;
+            }
+        }
+        select {
+            color: #000;
+            font-weight: 600;
+        }
+
+        .search-group {
+            i {
+                font-size: 19px;
+                color: var(--color-primary);
+            }
+        }
+    }
+    header {
+        .admin-profile {
+            a {
+                color: var(--color-secondary);
+            }
+        }
+        .path {
+            p {
+                font-size: 14px;
+                color: var(--color-secondary);
+                span {
+                    color: #000000;
+                }
+            }
+        }
+        .toggle {
+            width: 40px;
+            height: 40px;
+            background: var(--color-bg);
+            i {
+                color: #fff;
+            }
+        }
+    }
+    .sidebar-col {
+        transition: 0.3s ease-in-out;
+        background: #fff;
+        @media screen and (max-width: 767px) {
+            transform: translate(-100%, 0);
+            width: 0;
+        }
+        &.active {
+            transform: translate(0, 0);
+            transition: 0.3s ease-in-out;
+            position: fixed;
+            z-index: 2;
+            width: max-content;
+        }
+        .sidebar {
+            position: relative;
+            .logo {
+                img {
+                    max-width: 75px;
+                }
+            }
+            /* Custom scrollbar styles */
+            &::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--color-bg);
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #f1f1f1;
+                border-radius: 10px;
+            }
+            .nav {
+                .nav-item {
+                    .nav-link {
+                        font-size: 12px;
+                        color: #56606d;
+                        &.current {
+                            color: #fff;
+                            background: var(--color-bg);
+                            border-radius: 20px;
+                        }
+                    }
+                }
+            }
+            a.toggle-cross {
+                top: 10px;
+                right: 5px;
+                position: absolute;
+                width: 30px;
+                height: 30px;
+                background: #3948a4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+
+                i {
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    ul.profile-dropdown {
+        position: absolute;
+        right: 0;
+        background: #fff;
+        box-shadow: 0 0 10px #00000026;
+        width: max-content;
+        padding: 10px 20px;
+        li {
+            a,
+            button {
+                font-size: 16px;
+                color: var(--color-secondary);
+            }
+        }
+    }
+}
+/* admin dashboard end */
