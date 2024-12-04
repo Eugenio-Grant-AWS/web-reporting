@@ -41,3 +41,17 @@
         </div>
     </div>
 @endsection
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('downloadChart').addEventListener('click', function() {
+            var canvas = document.querySelector('canvas');
+            var image = canvas.toDataURL('image/png');
+
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = 'chart.png';
+            link.click();
+        });
+    });
+</script>

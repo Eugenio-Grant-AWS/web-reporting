@@ -45,7 +45,8 @@
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/venn.js@0.2.0/venn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-venn"></script>
+
 </body>
 
 </html>

@@ -17,9 +17,9 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search" class="bg-transparent border-0">
                     </div>
-                    <div class="select-group bg-custom py-3 px-3 rounded-4 mt-lg-0 mt-3 ">
+                    <div class="px-3 py-3 mt-3 select-group bg-custom rounded-4 mt-lg-0 ">
                         <span>Sort by:</span>
-                        <select class="border-0 bg-transparent">
+                        <select class="bg-transparent border-0">
                             <option>Newest </option>
                             <option>Old </option>
                             <option>Alphabatical Order</option>
@@ -31,9 +31,8 @@
 
             </div>
             <div class="bg-white rounded-lg ">
-                <h5 class="mb-4 text-lg font-medium text-gray-700">Sales Data for the Year</h5>
 
-                <button id="export-chart-btn" class="btn btn-primary">
+                <button id="downloadChart" class="btn btn-primary">
                     Export Chart as Image
                 </button>
 
@@ -48,23 +47,14 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const exportBtn = document.getElementById('export-chart-btn');
-        const chartConvas = document.getElementById('lineChart').getElementsByTagName('canvas')[0];
+        document.getElementById('downloadChart').addEventListener('click', function() {
+            var canvas = document.querySelector('canvas');
+            var image = canvas.toDataURL('image/png');
 
-        exportBtn.addEventListener('click', function() {
-
-            if (chartCanvas) {
-                // Get the chart's image in base64 format
-                const imageUrl = chartCanvas.toDataURL('image/png');
-
-                // Create a temporary download link
-                const downloadLink = document.createElement('a');
-                downloadLink.href = imageUrl;
-                downloadLink.download = 'chart-image.png';
-
-                // Trigger the download
-                downloadLink.click();
-            }
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = 'chart.png';
+            link.click();
         });
-    })
+    });
 </script>

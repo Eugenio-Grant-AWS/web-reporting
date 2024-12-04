@@ -33,7 +33,7 @@
                     Export Chart as Image
                 </button>
                 <div style="width:75%;">
-                    <canvas id="canvas"></canvas>
+                    <canvas id="vennChart" width="200" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -44,53 +44,38 @@
 
 @section('scripts')
     <script>
-        // document.addEventListener('DOMContentLoaded', function() {
-        //     // Get the venn data from the controller
-        //     var vennData = @json($vennData); // Convert the PHP array to JavaScript
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('vennChart').getContext('2d');
 
-        //     // Create the Venn diagram inside the 'venn' div
-        //     var chart = venn.VennDiagram();
-        //     d3.select("#venn").datum(vennData).call(chart);
-
-        //     // Export chart as image
-        //     var downloadButton = document.getElementById('downloadChart');
-
-        //     if (downloadButton) {
-        //         downloadButton.addEventListener('click', function() {
-        //             var svg = document.querySelector('svg');
-        //             if (svg) {
-        //                 var data = new XMLSerializer().serializeToString(svg);
-        //                 var img = new Image();
-        //                 img.src = 'data:image/svg+xml;base64,' + btoa(data);
-        //                 var link = document.createElement('a');
-        //                 link.href = img.src;
-        //                 link.download = 'venn-diagram.svg';
-        //                 link.click();
-        //             }
-        //         });
-        //     }
-        // });
-
-        const vennData = @json($vennData);
-
-        // Extract the sets using ChartVenn
-        const data = ChartVenn.extractSets(
-            vennData, {
-                label: 'Sports',
-            }
-        );
-
-        const ctx = document.getElementById('canvas').getContext('2d');
-
-        const chart = new Chart(ctx, {
-            type: 'venn',
-            data: data,
-            options: {
-                title: {
-                    display: true,
-                    text: 'Chart.js Venn Diagram Chart',
+            const config = {
+                type: 'venn',
+                data: {
+                    labels: @json($chartData['labels']), // Pass labels dynamically
+                    datasets: [{
+                        label: 'Sports',
+                        data: @json($chartData['datasets'][0]['data']), // Pass dataset dynamically
+                    }]
                 },
-            },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                    },
+                }
+            };
+
+            const vennChart = new Chart(ctx, config);
+
+            document.getElementById('downloadChart').addEventListener('click', function() {
+                const imageUrl = vennChart.toBase64Image();
+
+                const link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = 'venn-chart.png';
+                link.click();
+            });
         });
     </script>
 @endsection
