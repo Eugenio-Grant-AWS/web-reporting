@@ -1,51 +1,30 @@
-# Laravel specific
-vendor/
+/vendor/
 node_modules/
+npm-debug.log
+yarn-error.log
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
 public/storage
+public/hot
+
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+
 storage/*.key
 .env
-.env.*.local
+Homestead.yaml
+Homestead.json
+/.vagrant
 .phpunit.result.cache
-.vscode
-.idea
-.composer
 
-# Composer dependencies
-composer.lock
-
-# NPM/Yarn dependencies
-package-lock.json
-yarn.lock
-
-# Laravel Dusk
-.dusk-test*
-
-# IDE and editor folders
-.vscode/
-.idea/
-
-# Mac system files
-.DS_Store
-
-# Windows thumbnail cache
-Thumbs.db
-
-# Log files
-storage/logs/*.log
-
-# Cache files
-storage/framework/cache/data/*
-storage/framework/views/*
-storage/framework/sessions/*
-
-# Exclude compiled class files
-storage/framework/views/*
-bootstrap/cache/*
-
-# Test files
-phpunit.xml.dist
-
-# Optional: PHPStorm & Sublime Text
-.phpstorm.meta.php
-.sublime-project
-.sublime-workspace
+/public/build
+/storage/pail
+.env.backup
+.env.production
+.phpactor.json
+auth.json
