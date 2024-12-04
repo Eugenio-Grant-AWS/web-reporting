@@ -1,7 +1,7 @@
 <div class="fixed overflow-y-auto sidebar d-flex flex-column vh-100 side-bar border-end">
     <a href="" class="toggle-cross d-md-none d-flex"> <i class="fas fa-times"></i></a>
     <div class="p-3 mb-3 logo border-bottom ">
-        <a href="#"><img src="{{ asset('assets/images/logo.png') }}" alt=""></a>
+        <a href="#"><img src="{{ asset('assets/images/Logo.png') }}" alt=""></a>
     </div>
     <ul class="gap-3 p-3 mb-0 nav nav-pills flex-column mb-sm-auto align-items-sm-start align-content-center"
         id="menu">
