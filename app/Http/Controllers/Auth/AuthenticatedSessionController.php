@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended(route('bar-chart', absolute: false));
+            return redirect()->intended(route('reach-exposure-probability-with-mean', absolute: false));
         } catch (ValidationException $e) {
             return back()->with('error', 'These credentials do not match our records.');
         }

@@ -1,31 +1,59 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
-
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
-
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+    @extends('layouts.app')
+@section('title', 'Pages')
+@section('content')
+<style>
+    .verification-link{
+        i{
+            font-size: 3.5rem;
+            color: #666666;
+        }
+        .verify-btns{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @media screen and (max-width: 489px) {
+                display: inherit !important;
+                button{
+                    margin-bottom:10px;
+                }
+            }
+        }
+    }
+</style>
+    <x-auth.authorization-background>
+        <div class="verification-link">
+        <i class="fas fa-envelope-open-text mb-3"></i>
+        <h3 class="mb-3">Thank You For Registeration!</h3>
+            <div class="m-auto col-xl-5 col-lg-6 col-md-9">
+              
+               
+                <p class="lh-base">We have sent a verification link to <strong>lorem@lorem.com</strong>. Click on the link in the email to complete your registration. If you don’t see the email, please check your spam folder</p>
+                <div class="verify-btns mt-3">
+                    <form method="POST" action="{{ route('verification.send') }}">
+                            @csrf
+            
+                        
+                            <button type="submit"
+                                class=" theme-btn2">
+                                {{ __('Resend Verification Email') }}
+                            </button>
+                        </form>
+            
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+            
+                            <button type="submit"
+                                class=" theme-btn2">
+                                {{ __('Log Out') }} 
+                            </button>
+                        </form>
+                </div>
             </div>
-        </form>
+        </div>
+    </x-auth.authorization-background>
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
 
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
-        </form>
-    </div>
-</x-guest-layout>
+@endsection
+
+

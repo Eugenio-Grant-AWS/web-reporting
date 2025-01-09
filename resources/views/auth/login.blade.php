@@ -3,7 +3,7 @@
 @section('content')
     <section class="vh-100" style="background-color: #eee;">
         <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="row d-flex justify-content-center pt-5 align-items-center h-100">
                 <div class="col-lg-12 col-xl-11">
                     <div class="text-black card" style="border-radius: 25px;">
                         <div class="card-body p-md-5">
@@ -48,7 +48,7 @@
                                         @endif
 
                                         <!-- Remember Me checkbox (optional) -->
-                                        <div class="mb-5 form-check d-flex justify-content-center">
+                                        <div class="mb-5 form-check d-flex justify-content-center pt-5">
                                             <input class="form-check-input me-2" type="checkbox" value=""
                                                 id="form2Example3c" />
                                             <label class="form-check-label" for="form2Example3">
@@ -57,9 +57,9 @@
                                         </div>
 
                                         <!-- Submit Button -->
-                                        <div class="mx-4 mb-3 d-flex justify-content-center mb-lg-4">
+                                        <div class="mx-4 mb-3 d-flex justify-content-center pt-5 mb-lg-4">
                                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                                class="btn btn-primary btn-lg">Log In</button>
+                                                class="export-btn btn-lg">Log In</button>
                                         </div>
 
                                     </form>

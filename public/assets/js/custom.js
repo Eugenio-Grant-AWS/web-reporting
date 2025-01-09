@@ -40,22 +40,33 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // dropdown
-document.getElementById("userDropdown").addEventListener("click", function (e) {
-    e.preventDefault(); // Prevent the default anchor behavior
-    const dropdown = this.nextElementSibling; // Get the dropdown <ul> element
-    const isVisible = dropdown.style.display === "block";
+// document.getElementById("userDropdown").addEventListener("click", function (e) {
+//     e.preventDefault(); 
+//     const dropdown = this.nextElementSibling; 
+//     const isVisible = dropdown.style.display === "block";
 
-    // Toggle the display property
-    dropdown.style.display = isVisible ? "none" : "block";
-});
+//     dropdown.style.display = isVisible ? "none" : "block";
+// });
 
-// Close dropdown if clicked outside
-document.addEventListener("click", function (e) {
-    const dropdown = document.querySelector(".profile-dropdown");
-    if (
-        !e.target.closest("#userDropdown") &&
-        !e.target.closest(".profile-dropdown")
-    ) {
-        dropdown.style.display = "none";
-    }
-});
+
+// document.addEventListener("click", function (e) {
+//     const dropdown = document.querySelector(".profile-dropdown");
+//     if (
+//         !e.target.closest("#userDropdown") &&
+//         !e.target.closest(".profile-dropdown")
+//     ) {
+//         dropdown.style.display = "none";
+//     }
+// });
+
+
+const header = document.querySelector('header'); 
+const mainContent = document.querySelector('.body-content'); 
+
+function adjustMainHeight() {
+    const headerHeight = header.offsetHeight;
+    mainContent.style.height = `calc(94vh - ${headerHeight}px)`;
+}
+
+window.addEventListener('resize', adjustMainHeight);
+adjustMainHeight();

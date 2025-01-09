@@ -9,11 +9,16 @@
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+    <!-- Include GoJS from the CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/2.1.0/go.js"></script>
     {{-- <title>{{ config('app.name', 'Web') }}</title> --}}
     <title>@yield('breadcrumb', config('app.name', 'Web'))</title>
 
 
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include the Data Labels plugin -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
 
     <!-- Scripts -->
@@ -21,15 +26,16 @@
 </head>
 
 <body>
-    <section class="overflow-hidden admin-dashboard vh-100">
+    <section class="admin-dashboard vh-100 overflow-hidden">
         <div class="container-fluid">
             <div class="row">
                 <div class="p-0 col-xl-2 col-lg-3 col-md-4 sidebar-col">
                     @include('partials.sidebar')
                 </div>
-                <div class="p-0 col-xl-10 col-lg-9 col-md-8 col-12 bg-custom ">
+                <div
+                    class="p-0 col-xl-10 offset-xl-2 offset-lg-3 offset-md-4 col-lg-9 col-md-8 col-12 bgb-body  h-auto overflow-y-auto">
                     @include('partials.header')
-                    <div class="p-1 pt-2 m-4 bg-white body-content h-100 rounded-4">
+                    <div class="p-3 pt-4 m-4 bg-white body-content  rounded-4 ">
                         @yield('content')
                     </div>
                 </div>
@@ -44,7 +50,7 @@
     <script src="{{ asset('assets/js/font-awesome.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-venn"></script>
 
 </body>

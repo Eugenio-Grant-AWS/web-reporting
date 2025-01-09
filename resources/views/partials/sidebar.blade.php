@@ -1,93 +1,93 @@
 <div class="fixed overflow-y-auto sidebar d-flex flex-column vh-100 side-bar border-end">
-    <a href="" class="toggle-cross d-md-none d-flex"> <i class="fas fa-times"></i></a>
+    <a href="" class="toggle-cross d-md-none d-flex z-1"> <i class="fas fa-times"></i></a>
     <div class="p-3 mb-3 logo border-bottom ">
-        <a href="#"><img src="{{ asset('assets/images/Logo.png') }}" alt=""></a>
+        <a href="/reach-exposure-probability-with-mean"><img src="{{ asset('assets/images/logo.png') }}"
+                alt=""></a>
     </div>
-    <ul class="gap-3 p-3 mb-0 nav nav-pills flex-column mb-sm-auto align-items-sm-start align-content-center"
-        id="menu">
+    <ul class="gap-3 p-3 mb-0 nav nav-pills flex-column mb-sm-auto  align-content-center" id="menu">
 
         <li class="nav-item">
-            <a href="{{ route('bar-chart') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center  {{ request()->is('bar-chart*') ? 'current' : '' }}">
+            <a href="{{ route('reach-exposure-probability-with-mean') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center  {{ request()->is('reach-exposure-probability-with-mean*') ? 'current' : '' }}">
                 <i class="fas fa-th-large"></i>
-                <span class="ms-1 ">Reach Exposure/Probability with mean</span>
+                <span>Reach Exposure / Probability with mean</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('pie-chart') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center  {{ request()->is('pie-chart*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Net % of Consumers Reached</span>
+            <a href="{{ route('net-percentage-of-consumers-reached') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center  {{ request()->is('net-percentage-of-consumers-reached*') ? 'current' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                <span>Net % of Consumers Reached</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('line-chart') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center  {{ request()->is('line-chart*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Unduplicated Net Reach</span>
+            <a href="{{ route('unduplicated-net-reach') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center  {{ request()->is('unduplicated-net-reach*') ? 'current' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>Unduplicated Net Reach</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('venn-diagram') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('venn-diagram*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Net Reach</span>
+            <a href="{{ route('net-reach') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('net-reach*') ? 'current' : '' }}">
+                <i class="fas fa-bullseye"></i>
+                <span>Net Reach</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('advertising-attention-by-touchpoint') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('advertising-attention-by-touchpoint*') ? 'current' : '' }}">
+                <i class="fas fa-hand-pointer"></i>
+                <span>Advertising Attention by Touchpoint</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('reach-attention-plot') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('reach-attention-plot*') ? 'current' : '' }}">
+                <i class="fas fa-chart-scatter"></i>
+                <span>Reach x Attention Plot</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="{{ route('attentive-exposure') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('attentive-exposure*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Advertising Attention by Touchpoint</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('scatter-plot') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('scatter-plot*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Reach x Attention Plot</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{ route('heat-map') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('heat-map*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Attentive Exposure</span>
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('attentive-exposure*') ? 'current' : '' }}">
+                <i class="fas fa-eye"></i>
+                <span>Attentive Exposure</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="{{ route('touchpoint-influence') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('touchpoint-influence*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Touchpoint Influence</span>
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('touchpoint-influence*') ? 'current' : '' }}">
+                <i class="fas fa-star"></i>
+                <span>Touchpoint Influence</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('indexed-chart') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('indexed-chart*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Indexed Review of Stronger Drivers</span>
+            <a href="{{ route('indexed-review-of-stronger-drivers') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('indexed-review-of-stronger-drivers*') ? 'current' : '' }}">
+                <i class="fas fa-book"></i>
+                <span>Indexed Review of Stronger Drivers</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="{{ route('tip-summary') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('tip-summary*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">TIP Summary</span>
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('tip-summary') ? 'current' : '' }}">
+                <i class="fas fa-lightbulb"></i>
+                <span>TIP Summary</span>
             </a>
         </li>
         <li class="nav-item">
-            <a href="{{ route('summary-chart') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('summary-chart*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">TIP Summary x Creative Quality</span>
+            <a href="{{ route('tip-summary-creative-quality') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('tip-summary-creative-quality*') ? 'current' : '' }}">
+                <i class="fas fa-pencil-alt"></i>
+                <span>TIP Summary x Creative Quality</span>
             </a>
         </li>
         <li class="nav-item">
             <a href="{{ route('optimized-campaign-summary') }}"
-                class="gap-3 align-middle nav-link d-flex align-items-center {{ request()->is('optimized-campaign-summary*') ? 'current' : '' }}">
-                <i class="fas fa-exclamation-circle"></i>
-                <span class="ms-1 ">Optimized Campaign Summary</span>
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('optimized-campaign-summary*') ? 'current' : '' }}">
+                <i class="fas fa-chart-line"></i>
+                <span>Optimized Campaign Summary</span>
             </a>
         </li>
     </ul>
