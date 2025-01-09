@@ -6,4 +6,8 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ /public/$1 [L,QSA]
+
+ # Redirect root (/) to /login
+    RewriteCond %{REQUEST_URI} ^/$
+    RewriteRule ^$ /login [L,R=302]
 </IfModule>

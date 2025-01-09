@@ -17,7 +17,7 @@
                 </div>
                 <div class="select-group bg-custom rounded-4">
                     <span class="flex-1">Sort by:</span>
-                    <select class="form-select bg-transparent border-0">
+                    <select class="bg-transparent border-0 form-select">
                         <option>Newest</option>
                         <option>Old</option>
                         <option>Alphabetical Order</option>
@@ -43,7 +43,7 @@
     </div>
 </div>
 <!-- CSV Upload Form -->
-{{-- <div class="csv-upload-container mt-4">
+<div class="mt-4 csv-upload-container">
     <h5>Import CSV File</h5>
     <form action="{{ route('media-consumption.import') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -51,9 +51,9 @@
             <label for="csv_file" class="form-label">Choose CSV file</label>
             <input type="file" name="csv_file" id="csv_file" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary mt-2">Import CSV</button>
+        <button type="submit" class="mt-2 btn btn-primary">Import CSV</button>
     </form>
-</div> --}}
+</div>
 @endsection
 
 @section('scripts')
