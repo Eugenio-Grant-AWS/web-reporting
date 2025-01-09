@@ -3,7 +3,7 @@
 @section('content')
     <section class="vh-100" style="background-color: #eee;">
         <div class="container h-100">
-            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="row d-flex justify-content-center pt-5 align-items-center h-100">
                 <div class="col-lg-12 col-xl-11">
                     <div class="text-black card" style="border-radius: 25px;">
                         <div class="card-body p-md-5">
@@ -59,8 +59,8 @@
                                         @endif
 
                                         <!-- Submit Button -->
-                                        <div class="mx-4 mb-3 d-flex justify-content-center mb-lg-4">
-                                            <button type="submit" class="btn btn-primary btn-lg">Save</button>
+                                        <div class="mx-4 mb-3 d-flex justify-content-center pt-5 mb-lg-4">
+                                            <button type="submit" class="export-btn btn-lg">Save</button>
                                         </div>
                                     </form>
 
@@ -112,8 +112,8 @@
                                         </div>
 
                                         <!-- Submit Button -->
-                                        <div class="mx-4 mb-3 d-flex justify-content-center mb-lg-4">
-                                            <button type="submit" class="btn btn-primary btn-lg">Save Password</button>
+                                        <div class="mx-4 mb-3 d-flex justify-content-center pt-5 mb-lg-4">
+                                            <button type="submit" class="export-btn btn-lg">Save Password</button>
                                         </div>
                                     </form>
 
@@ -136,7 +136,7 @@
                                         </div>
 
                                         <!-- Submit Button for Deletion -->
-                                        <div class="mx-4 mb-3 d-flex justify-content-center mb-lg-4">
+                                        <div class="mx-4 mb-3 d-flex justify-content-center pt-5 mb-lg-4">
                                             <button type="submit" class="btn btn-danger btn-lg">Delete Account</button>
                                         </div>
                                     </form>

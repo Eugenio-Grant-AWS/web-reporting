@@ -1,51 +1,52 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HeatMapController;
-use App\Http\Controllers\BarChartController;
-use App\Http\Controllers\PieChartController;
-use App\Http\Controllers\LineChartController;
-use App\Http\Controllers\ScatterPlotController;
-use App\Http\Controllers\VennDiagramController;
-use App\Http\Controllers\IndexedChartController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NetReachController;
 use App\Http\Controllers\SummaryChartController;
 use App\Http\Controllers\SummaryTableController;
+use App\Http\Controllers\IndexedReviewController;
+use App\Http\Controllers\ReachExposureController;
+use App\Http\Controllers\ConsumersReachedController;
+use App\Http\Controllers\AttentiveExposureController;
 use App\Http\Controllers\TouchpointInfluenceController;
-use App\Http\Controllers\CampaignSummaryChartController;
+use App\Http\Controllers\AdvertisingAttentionController;
+use App\Http\Controllers\UnduplicatedNetReachController;
+use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+
+Route::middleware(['auth', 'verified', 'track.previous.url'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/bar-chart', [BarChartController::class, 'index'])->name('bar-chart');
-    Route::get('/pie-chart', [PieChartController::class, 'index'])->name('pie-chart');
-    Route::get('/line-chart', [LineChartController::class, 'index'])->name('line-chart');
-    Route::get('/venn-diagram', [VennDiagramController::class, 'index'])->name('venn-diagram');
-    Route::get('/scatter-plot', [ScatterPlotController::class, 'index'])->name('scatter-plot');
-    Route::get('/heat-map', [HeatMapController::class, 'index'])->name('heat-map');
-    Route::get('/touchpoint-influence', [TouchpointInfluenceController::class, 'index'])->name('touchpoint-influence');
-    Route::get('/indexed-chart', [IndexedChartController::class, 'index'])->name('indexed-chart');
-    Route::get('/tip-summary', [SummaryTableController::class, 'index'])->name('tip-summary');
-    Route::get('/summary-chart', [SummaryChartController::class, 'index'])->name('summary-chart');
-    Route::get('/optimized-campaign-summary', [OptimizedCampaignSummaryController::class, 'index'])->name('optimized-campaign-summary');
-    Route::get('/attentive-exposure', [CampaignSummaryChartController::class, 'index'])->name('attentive-exposure');
+    Route::get('/testconsumer', [TestController::class, 'index'])->name('testconsumer.index');
 
-    // Route::view('/touchpoint-influence', 'touchpoint-influence')->name('touchpoint-influence');
-    // Route::view('/indexed-review', 'indexed-review')->name('indexed-review');
-    // Route::view('/tip-summary', 'tip-summary')->name('tip-summary');
-    // Route::view('/attentive-exposure', 'attentive-exposure')->name('attentive-exposure');
-    // Route::view('/optimized-campaign-summary', 'optimized-campaign-summary')->name('optimized-campaign-summary');
+    Route::get('/reach-exposure-probability-with-mean', [ReachExposureController::class, 'index'])->name('reach-exposure-probability-with-mean');
+    Route::post('/media-consumption/import', [ReachExposureController::class, 'import'])->name('media-consumption.import');
+
+
+    Route::get('/net-percentage-of-consumers-reached', [ConsumersReachedController::class, 'index'])->name('net-percentage-of-consumers-reached');
+    Route::get('/unduplicated-net-reach', [UnduplicatedNetReachController::class, 'index'])->name('unduplicated-net-reach');
+    Route::get('/net-reach', [NetReachController::class, 'index'])->name('net-reach');
+    Route::get('/reach-attention-plot', [Reach_X_AttentionPlotController::class, 'index'])->name('reach-attention-plot');
+    Route::get('/attentive-exposure', [AttentiveExposureController::class, 'index'])->name('attentive-exposure');
+    Route::get('/touchpoint-influence', [TouchpointInfluenceController::class, 'index'])->name('touchpoint-influence');
+    Route::get('/indexed-review-of-stronger-drivers', [IndexedReviewController::class, 'index'])->name('indexed-review-of-stronger-drivers');
+    Route::get('/tip-summary', [SummaryTableController::class, 'index'])->name('tip-summary');
+    Route::get('/tip-summary-creative-quality', [SummaryChartController::class, 'index'])->name('tip-summary-creative-quality');
+    Route::get('/optimized-campaign-summary', [OptimizedCampaignSummaryController::class, 'index'])->name('optimized-campaign-summary');
+    Route::get('/advertising-attention-by-touchpoint', [AdvertisingAttentionController::class, 'index'])->name('advertising-attention-by-touchpoint');
 });
 
 
