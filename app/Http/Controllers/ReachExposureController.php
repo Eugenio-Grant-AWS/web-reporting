@@ -16,7 +16,7 @@ class ReachExposureController extends Controller
     {
         $breadcrumb = 'Reach Exposure - Probability with mean';
 
-        $mediaTypes = DB::table('reach_exposures_old')->get();
+        $mediaTypes = DB::table('reach_exposures')->get();
 
         $mediaTypes = $mediaTypes->map(function ($item) {
             $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
