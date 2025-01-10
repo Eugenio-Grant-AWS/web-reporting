@@ -20,9 +20,11 @@ use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('reach-exposure-probability-with-mean');
+    }
     return redirect()->route('login');
 });
-
 
 // Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
@@ -30,9 +32,6 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified', 'track.previous.url'])->group(function () {
-    Route::get('/', function () {
-        return redirect()->route('reach-exposure-probability-with-mean');
-    });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
