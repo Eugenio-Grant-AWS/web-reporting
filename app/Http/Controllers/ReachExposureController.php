@@ -16,50 +16,38 @@ class ReachExposureController extends Controller
     {
         $breadcrumb = 'Reach Exposure - Probability with mean';
 
-        $mediaTypes = DB::table('reach_exposures')->get();
+        $mediaTypes = DB::table('reach_exposures')
+            ->get()
+            ->map(function ($item) {
+                $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
+                return $item;
+            });
 
-        $mediaTypes = $mediaTypes->map(function ($item) {
-            $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
-            return $item;
-        });
+
 
         $grouped = $mediaTypes->groupBy(['MediaType', 'Adjusted_value']);
 
         $categories = $mediaTypes->pluck('MediaType')->unique()->toArray();
 
+        $values = $mediaTypes->pluck('Adjusted_value')
+            ->unique()
+            ->filter(fn($value) => $value !== "0")
+            ->sort()
+            ->values()
+            ->all();
 
-        $values = $mediaTypes->pluck('Adjusted_value')->unique()->toArray();
-        // $values = collect($mediaTypes->pluck('Adjusted_value')->unique()->toArray())
-        //     ->reject(function ($value) {
-        //         return $value === "0";
-        //     })
-        //     ->values()
-        //     ->toArray();
+        $values = !empty($values) ? array_merge($values, ["0"]) : [];
 
-        sort($values, SORT_NATURAL | SORT_FLAG_CASE);
-        if (($key = array_search("0", $values)) !== false) {
-            unset($values[$key]); // Remove "0"
-            $values[] = "0"; // Add "0" to the end of the array
-        }
-        // dd($values);
         $series = [];
 
-        // Generate colors based on the number of series
         $colors = $this->generateColors(count($values));
 
         foreach ($values as $index => $value) {
-            // if ($value === "0") {
-            //     continue;
-            // }
-            $data = [];
-
-            foreach ($categories as $category) {
-                $totalForCategory = count($grouped->get($category, []));
-                $count = count($grouped->get($category, collect())->get($value, []));
-                $percentage = $totalForCategory > 0 ? round(($count / $totalForCategory) * 100, 1) . '%' : '0%';
-
-                $data[] = $percentage;
-            }
+            $data = collect($categories)->map(function ($category) use ($grouped, $value) {
+                $totalForCategory = $grouped->get($category, collect())->flatten(1)->count();
+                $count = $grouped->get($category, collect())->get($value, collect())->count();
+                return $totalForCategory > 0 ? round(($count / $totalForCategory) * 100, 1) . '%' : '0%';
+            })->toArray();
 
             $series[] = [
                 'name' => $value,
@@ -67,41 +55,25 @@ class ReachExposureController extends Controller
                 'color' => $colors[$index],
             ];
         }
+        if (!empty($series[0]['data'])) {
+            $dataToSort = array_map(fn($value) => strpos($value, '%') !== false ? floatval(str_replace('%', '', $value)) : 0, $series[0]['data']);
+            $pairs = array_map(null, $categories, $dataToSort, array_keys($categories));
 
-        $dataToSort = array_map(function ($value) {
-            if (strpos($value, '%') !== false) {
-                return floatval(str_replace('%', '', $value)) / 100;
-            }
-            return floatval($value);
-        }, $series[0]['data']);
+            usort($pairs, fn($a, $b) => $b[1] <=> $a[1]);
 
-        $pairs = array_map(null, $categories, $dataToSort, array_keys($categories));
+            $sortedCategories = array_column($pairs, 0);
 
-        usort($pairs, function ($a, $b) {
-            return $b[1] <=> $a[1];
-        });
+            $sortedIndices = array_column($pairs, 2);
 
-        $sortedCategories = array_column($pairs, 0);
-        $sortedIndices = array_column($pairs, 2);
+            $sortedSeries = array_map(function ($serie) use ($sortedIndices) {
 
-        $sortedSeries = array_map(function ($serie) use ($sortedIndices) {
-            $serie['data'] = array_map(function ($index) use ($serie) {
-                return $serie['data'][$index];
-            }, $sortedIndices);
-            return $serie;
-        }, $series);
-
-        $sortedSeries = array_map(function ($serie) {
-            $serie['data'] = array_map(function ($value) {
-                if (strpos($value, '%') !== false) {
-                    return floatval(str_replace('%', '', $value)) / 100;
-                }
-                return floatval($value);
-            }, $serie['data']);
-
-            return $serie;
-        }, $sortedSeries);
-
+                $serie['data'] = array_map(fn($index) => $serie['data'][$index], $sortedIndices);
+                return $serie;
+            }, $series);
+        } else {
+            $sortedCategories = $categories;
+            $sortedSeries = $series;
+        }
 
 
         $chartData = [
@@ -125,13 +97,14 @@ class ReachExposureController extends Controller
     private function generateColors(int $count): array
     {
         $colors = [
-            '#FFFFFF',
             '#4e81bd',
             '#bf504d',
             '#2c4d75',
             '#8064a2',
             '#1b6ae7',
             '#f79645',
+            '#FFFFFF',
+
         ];
 
         // Generate additional colors if needed

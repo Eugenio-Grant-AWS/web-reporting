@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ProfileController;
@@ -16,7 +17,12 @@ use App\Http\Controllers\UnduplicatedNetReachController;
 use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
 
+
+
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect()->route('reach-exposure-probability-with-mean');
+    }
     return redirect()->route('login');
 });
 
