@@ -18,13 +18,16 @@ use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 
-
-Route::get('/', function () {
-    if (Auth::check()) {
+if (Auth::check()) {
+    Route::get('/', function () {
         return redirect()->route('reach-exposure-probability-with-mean');
-    }
-    return redirect()->route('login');
-});
+    });
+} else {
+    Route::get('/', function () {
+        return redirect()->route('login');
+    });
+}
+
 
 // Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
