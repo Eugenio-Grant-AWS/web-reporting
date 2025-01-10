@@ -18,15 +18,10 @@ use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 
-if (Auth::check()) {
-    Route::get('/', function () {
-        return redirect()->route('reach-exposure-probability-with-mean');
-    });
-} else {
-    Route::get('/', function () {
-        return redirect()->route('login');
-    });
-}
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 
 // Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
@@ -35,6 +30,9 @@ if (Auth::check()) {
 
 
 Route::middleware(['auth', 'verified', 'track.previous.url'])->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('reach-exposure-probability-with-mean');
+    });
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
