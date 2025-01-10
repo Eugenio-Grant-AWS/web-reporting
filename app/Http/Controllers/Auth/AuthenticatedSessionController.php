@@ -26,17 +26,12 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         try {
-            // Authenticate user
             $request->authenticate();
 
-            // Clear and regenerate session
-            $request->session()->flush();
             $request->session()->regenerate();
 
-            // Directly redirect to target route (bypassing intended redirect)
-            return redirect()->route('reach-exposure-probability-with-mean');
+            return redirect()->intended(route('reach-exposure-probability-with-mean', absolute: false));
         } catch (ValidationException $e) {
-            // Return back with error on invalid credentials
             return back()->with('error', 'These credentials do not match our records.');
         }
     }
@@ -46,14 +41,12 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        // Logout the user
         Auth::guard('web')->logout();
 
-        // Invalidate session
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
-        // Redirect to login page
-        return redirect()->route('login');
+        return redirect('/');
     }
 }
