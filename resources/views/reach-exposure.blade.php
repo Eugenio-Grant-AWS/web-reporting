@@ -43,7 +43,7 @@
     </div>
 </div>
 <!-- CSV Upload Form -->
-<div class="mt-4 csv-upload-container">
+{{-- <div class="mt-4 csv-upload-container">
     <h5>Import CSV File</h5>
     <form action="{{ route('media-consumption.import') }}" method="POST" enctype="multipart/form-data">
         @csrf
@@ -53,7 +53,7 @@
         </div>
         <button type="submit" class="mt-2 btn btn-primary">Import CSV</button>
     </form>
-</div>
+</div> --}}
 @endsection
 
 @section('scripts')
