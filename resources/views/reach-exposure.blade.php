@@ -59,7 +59,6 @@
 @section('scripts')
 <script>
     var chartData = @json($chartData);
-    console.log('Chart Data:', chartData);
 
     if (chartData.series && chartData.categories) {
         var options = {

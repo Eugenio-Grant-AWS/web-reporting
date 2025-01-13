@@ -8,6 +8,7 @@
                         <i class="fas fa-bars"></i></a>
                     <div class="path d-none d-md-block ">
                         {{-- <p>Home / <span>{{ $breadcrumb ?? 'Default Page' }}</span></p> --}}
+
                         <p>
                             <a href="{{ route('reach-exposure-probability-with-mean') }}"
                                 style="text-decoration: none; color: inherit;">Home</a> /
@@ -56,7 +57,7 @@
                                     alt="Profile Image">
 
                             </a>
-                            <ul class="dropdown-menu rounded profile-dropdown" aria-labelledby="userDropdown">
+                            <ul class="rounded dropdown-menu profile-dropdown" aria-labelledby="userDropdown">
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
