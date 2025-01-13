@@ -19,8 +19,6 @@ use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 
 Route::middleware(['check.route'])->group(function () {
-    // dd('here');
-
 
     Route::get('/', function () {
         return redirect('reach-exposure-probability-with-mean');
