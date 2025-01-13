@@ -18,9 +18,14 @@ use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
 
 
+// Route::get('/', function () {
+//     return redirect()->route('reach-exposure-probability-with-mean');
+// });
+
 Route::get('/', function () {
-    return redirect()->route('reach-exposure-probability-with-mean');
-});
+    // You can return a default view here if the user is not logged in.
+    return view('pages.auth.login');
+})->middleware('check.route');
 
 // Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
 //     return view('dashboard');
