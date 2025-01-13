@@ -22,6 +22,6 @@ class CheckRoute
             return redirect()->route('reach-exposure-probability-with-mean');
         }
 
-        return redirect()->route('login');
+        //return redirect()->route('login');
     }
 }
