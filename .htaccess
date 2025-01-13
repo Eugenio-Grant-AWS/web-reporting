@@ -1,13 +1,14 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Redirect all requests to the public folder
+    # Ensure the request is not directly accessing the public directory
     RewriteCond %{REQUEST_URI} !^/public/
+
+    # Rewrite all requests to the public folder
+    RewriteRule ^(.*)$ /public/$1 [L]
+
+    # If the file or directory doesn't exist, route to index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /public/$1 [L,QSA]
-
- # Redirect root (/) to /login
-    RewriteCond %{REQUEST_URI} ^/$
-    RewriteRule ^$ /login [L,R=302]
+    RewriteRule ^(.*)$ index.php [L]
 </IfModule>
