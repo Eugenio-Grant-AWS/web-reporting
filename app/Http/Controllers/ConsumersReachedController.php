@@ -53,7 +53,7 @@ class ConsumersReachedController extends Controller
 
         $targetColumns = array_keys($defaultValues);
 
-        $dataRows = ConsumersReached::select($targetColumns)->get();
+        $dataRows = ConsumersReached::select($targetColumns)->get()->skip(1);
 
         $columnResults = [];
 
