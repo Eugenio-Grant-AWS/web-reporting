@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
+use App\Models\ConsumersReached;
+use Illuminate\Http\Request;
 
 class UnduplicatedNetReachController extends Controller
 {
@@ -10,84 +11,102 @@ class UnduplicatedNetReachController extends Controller
     {
         $breadcrumb = 'Unduplicated Net Reach';
 
-        $commercialQualityData = [
-            'labels' => [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-            ],
-            'datasets' => [
-                [
-                    "label" => 2021,
-                    'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                    'borderColor' => "rgba(38, 185, 154, 0.7)",
-                    "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                    "data" => [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
-                    "fill" => false,
-                ],
-                [
-                    "label" => 2021,
-                    'backgroundColor' => "#ff928a",
-                    'borderColor' => "#ff928a",
-                    "pointBorderColor" => "#ff928a",
-                    "pointBackgroundColor" => "#ffff",
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                    "data" => [12, 33, 44, 44, 55, 23, 40],
-                    "fill" => false,
-                ]
-            ]
-
+        // Define default values for the columns
+        $defaultValues = [
+            'ver_tv_senal_nacional' => 1,
+            'ver_tv_cable' => 0,
+            'ver_tv_internet' => 0,
+            'escuchar_radio' => 0,
+            'escuchar_radio_internet' => 0,
+            'leer_revista_impresa' => 0,
+            'leer_revista_digital' => 0,
+            'leer_periodico_impreso' => 0,
+            'leer_periodico_digital' => 0,
+            'leer_periodico_email' => 0,
+            'vallas_publicitarias' => 0,
+            'centros_comerciales' => 0,
+            'transitar_metrobuses' => 0,
+            'ver_cine' => 0,
+            'abrir_correos_companias' => 0,
+            'entrar_sitios_web' => 0,
+            'entrar_facebook' => 0,
+            'entrar_twitter' => 0,
+            'entrar_instagram' => 0,
+            'entrar_youtube' => 0,
+            'entrar_linkedin' => 0,
+            'entrar_whatsapp' => 0,
+            'escuchar_spotify' => 0,
+            'ver_netflix' => 0,
+            'utilizar_mailing_list' => 0,
+            'videojuegos_celular' => 0,
+            'utilizar_we_transfer' => 0,
+            'utilizar_waze' => 0,
+            'utilizar_uber' => 0,
+            'utilizar_pedidos_ya' => 0,
+            'utilizar_meet' => 0,
+            'utilizar_zoom' => 0,
+            'utilizar_airbnb' => 0,
+            'entrar_google' => 0,
+            'entrar_encuentra24' => 0,
         ];
 
-        $dataMessage = empty($commercialQualityData['datasets']) || empty($commercialQualityData['labels'])
-            ? "No data available to display."
-            : null;
+        $targetColumns = array_keys($defaultValues);
+
+        $dataRows = ConsumersReached::select($targetColumns)->get()->skip(1);
 
 
-        $chart = null;
-        if (!$dataMessage) {
-            $chart = $this->buildChart($commercialQualityData);
+
+        $columnResults = [];
+
+        // Calculate the percentage of 1's and 0's for each column
+        foreach ($targetColumns as $currentColumn) {
+            $countZero = 0;
+            $countOne = 0;
+
+            foreach ($dataRows as $row) {
+                $result = $row->$currentColumn;
+
+                if ($result === 1) {
+                    $countOne++;
+                } else {
+                    $countZero++;
+                }
+            }
+
+            // Store the counts for the current column
+            $columnResults[$currentColumn] = [
+                'count_1' => $countOne,
+                'count_0' => $countZero
+            ];
         }
 
+        // Initialize data for commercial quality chart
+        $commercialQualityData = [
+            'labels' => [],
+            'marginal' => [],
+            'cumulative' => [],
+        ];
 
-        return view('unduplicated-net-reach', compact('chart', 'breadcrumb', 'dataMessage'));
-    }
+        $previousPercentage = 0;
+        foreach ($columnResults as $key => $values) {
+            $reachedCount = $values['count_1'];
+            $notReachedCount = $values['count_0'];
+            $totalConsumers = $reachedCount + $notReachedCount;
 
+            $reachedPercentage = $totalConsumers > 0 ? round(($reachedCount / $totalConsumers) * 100, 2) : 0;
+            $difference = abs($reachedPercentage - $previousPercentage); // Ensure positive difference
 
-    /**
-     * Build the chart using the provided data.
-     */
-    private function buildChart($commercialQualityData)
-    {
-        return   $chart = Chartjs::build()
-            ->name('lineChartTest')
-            ->type('line')
-            ->size(['width' => 400, 'height' => 200])
-            ->labels($commercialQualityData['labels'])
-            ->datasets($commercialQualityData['datasets'])->options([
-                'scales' => [
-                    'y' => [
-                        'beginAtZero' => true,
-                    ]
-                ],
-                'plugins' => [
-                    'legend' => [
-                        'position' => 'bottom',
-                    ],
-                ],
-            ]);
+            $commercialQualityData['labels'][] = ucfirst(str_replace('_', ' ', $key));
+            $commercialQualityData['marginal'][] = max(0, $difference); // Marginal bar data
+            $commercialQualityData['cumulative'][] = max(0, $reachedPercentage); // Cumulative line data
+
+            $previousPercentage = $reachedPercentage;
+        }
+
+        // dd($commercialQualityData); // Debug the correct variable
+
+        $dataMessage = count($dataRows) === 0 ? "No data available to display." : null;
+
+        return view('unduplicated-net-reach', compact('commercialQualityData', 'breadcrumb', 'dataMessage'));
     }
 }

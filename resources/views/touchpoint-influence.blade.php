@@ -53,7 +53,7 @@
             // Get the canvas context
             var ctx = canvas.getContext('2d');
 
-            // Fill the canvas with a white background (only if it has transparent pixels)
+
             ctx.save(); // Save the current state of the canvas
             ctx.globalCompositeOperation =
                 'destination-over'; // Ensure we don't overwrite the existing chart

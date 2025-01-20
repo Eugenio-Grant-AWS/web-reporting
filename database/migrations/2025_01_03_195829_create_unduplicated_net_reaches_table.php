@@ -13,13 +13,47 @@ return new class extends Migration
     {
         Schema::create('unduplicated_net_reaches', function (Blueprint $table) {
             $table->id();
-            $table->string('QuotGene');
-            $table->string('QuotEdad');
-            $table->string('QuoSegur');
-            $table->string('MediaType');
-            $table->text('Value');
-            $table->text('Adjusted_value');
-            $table->timestamps();
+            $table->integer('resposer')->nullable();
+            $table->integer('quotgene')->nullable();
+            $table->integer('quotedad')->nullable();
+            $table->integer('quosegur')->nullable();
+            $table->integer('ver_tv_senal_nacional')->nullable();
+            $table->integer('ver_tv_cable')->nullable();
+            $table->integer('ver_tv_internet')->nullable();
+            $table->integer('escuchar_radio')->nullable();
+            $table->integer('escuchar_radio_internet')->nullable();
+            $table->integer('leer_revista_impresa')->nullable();
+            $table->integer('leer_revista_digital')->nullable();
+            $table->integer('leer_periodico_impreso')->nullable();
+            $table->integer('leer_periodico_digital')->nullable();
+            $table->integer('leer_periodico_email')->nullable();
+            $table->integer('vallas_publicitarias')->nullable();
+            $table->integer('centros_comerciales')->nullable();
+            $table->integer('transitar_metrobuses')->nullable();
+            $table->integer('ver_cine')->nullable();
+            $table->integer('abrir_correos_companias')->nullable();
+            $table->integer('entrar_sitios_web')->nullable();
+            $table->integer('entrar_facebook')->nullable();
+            $table->integer('entrar_twitter')->nullable();
+            $table->integer('entrar_instagram')->nullable();
+            $table->integer('entrar_youtube')->nullable();
+            $table->integer('entrar_linkedin')->nullable();
+            $table->integer('entrar_whatsapp')->nullable();
+            $table->integer('escuchar_spotify')->nullable();
+            $table->integer('ver_netflix')->nullable();
+            $table->integer('utilizar_mailing_list')->nullable();
+            $table->integer('videojuegos_celular')->nullable();
+            $table->integer('utilizar_we_transfer')->nullable();
+            $table->integer('utilizar_waze')->nullable();
+            $table->integer('utilizar_uber')->nullable();
+            $table->integer('utilizar_pedidos_ya')->nullable();
+            $table->integer('utilizar_meet')->nullable();
+            $table->integer('utilizar_zoom')->nullable();
+            $table->integer('utilizar_airbnb')->nullable();
+            $table->integer('entrar_google')->nullable();
+            $table->integer('entrar_encuentra24')->nullable();
+
+            // $table->timestamps();
         });
     }
 

@@ -65,7 +65,7 @@ class TouchpointInfluenceController extends Controller
     {
         return Chartjs::build()
             ->name('reachExposureChart')
-            ->type('bar')  // Type can be dynamic if needed
+            ->type('bar')
             ->size(['width' => 400, 'height' => 200])
             ->labels($commercialQualityData['labels'])
             ->datasets($commercialQualityData['datasets'])
