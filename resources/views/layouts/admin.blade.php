@@ -14,6 +14,7 @@
     {{-- <title>{{ config('app.name', 'Web') }}</title> --}}
     <title>@yield('breadcrumb', config('app.name', 'Web'))</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <!-- Include Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -26,16 +27,16 @@
 </head>
 
 <body>
-    <section class="admin-dashboard vh-100 overflow-hidden">
+    <section class="overflow-hidden admin-dashboard vh-100">
         <div class="container-fluid">
             <div class="row">
                 <div class="p-0 col-xl-2 col-lg-3 col-md-4 sidebar-col">
                     @include('partials.sidebar')
                 </div>
                 <div
-                    class="p-0 col-xl-10 offset-xl-2 offset-lg-3 offset-md-4 col-lg-9 col-md-8 col-12 bgb-body  h-auto overflow-y-auto">
+                    class="h-auto p-0 overflow-y-auto col-xl-10 offset-xl-2 offset-lg-3 offset-md-4 col-lg-9 col-md-8 col-12 bgb-body">
                     @include('partials.header')
-                    <div class="p-3 pt-4 m-4 bg-white body-content  rounded-4 ">
+                    <div class="p-3 pt-4 m-4 bg-white body-content rounded-4 ">
                         @yield('content')
                     </div>
                 </div>
@@ -52,6 +53,7 @@
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-venn"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 </body>
 

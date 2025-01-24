@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ConsumersReached;
 use Illuminate\Http\Request;
+use App\Models\ConsumersReached;
+use Illuminate\Support\Facades\DB;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class ConsumersReachedController extends Controller
@@ -12,94 +13,58 @@ class ConsumersReachedController extends Controller
     {
         $breadcrumb = 'Net % of Consumers Reached';
 
-        // Define default values for the columns
-        $defaultValues = [
+        $defaultSelection = [
             'ver_tv_senal_nacional' => 1,
-            'ver_tv_cable' => 0,
-            'ver_tv_internet' => 0,
-            'escuchar_radio' => 0,
-            'escuchar_radio_internet' => 0,
-            'leer_revista_impresa' => 0,
-            'leer_revista_digital' => 0,
-            'leer_periodico_impreso' => 0,
-            'leer_periodico_digital' => 0,
-            'leer_periodico_email' => 0,
-            'vallas_publicitarias' => 0,
-            'centros_comerciales' => 0,
-            'transitar_metrobuses' => 0,
-            'ver_cine' => 0,
-            'abrir_correos_companias' => 0,
-            'entrar_sitios_web' => 0,
-            'entrar_facebook' => 0,
-            'entrar_twitter' => 0,
-            'entrar_instagram' => 0,
-            'entrar_youtube' => 0,
-            'entrar_linkedin' => 0,
-            'entrar_whatsapp' => 0,
-            'escuchar_spotify' => 0,
-            'ver_netflix' => 0,
-            'utilizar_mailing_list' => 0,
-            'videojuegos_celular' => 0,
-            'utilizar_we_transfer' => 0,
-            'utilizar_waze' => 0,
-            'utilizar_uber' => 0,
-            'utilizar_pedidos_ya' => 0,
-            'utilizar_meet' => 0,
-            'utilizar_zoom' => 0,
-            'utilizar_airbnb' => 0,
-            'entrar_google' => 0,
-            'entrar_encuentra24' => 0,
+
+
         ];
+        session()->forget('selected_top_row');
+        $selectedValues = $request->input('top_row', session('selected_top_row', $defaultSelection));
 
-        $targetColumns = array_keys($defaultValues);
+        session(['selected_top_row' => $selectedValues]);
 
-        $dataRows = ConsumersReached::select($targetColumns)->get()->skip(1);
+        $dataRows = DB::table('consumers_reacheds')->select(array_keys($selectedValues))->get();
 
-        $columnResults = [];
+        $results = [];
+        foreach ($dataRows as $index => $row) {
+            $rowArray = (array) $row;
 
-        foreach ($targetColumns as $currentColumn) {
-            $countZero = 0;
-            $countOne = 0;
-
-            foreach ($dataRows as $row) {
-                $result = $row->$currentColumn;
-
-                if ($result === 1) {
-                    $countOne++;
-                } else {
-                    $countZero++;
-                }
+            $sumProduct = 0;
+            foreach ($selectedValues as $column => $topValue) {
+                $sumProduct += $topValue * ($rowArray[$column] ?? 0);
             }
 
-            // Store the counts for the current column
-            $columnResults[$currentColumn] = [
-                'count_1' => $countOne,
-                'count_0' => $countZero
+            $rowResult = $sumProduct > 0 ? 1 : 0;
+
+            $results[] = [
+                'row_id' => $index + 1,
+                'reach' => $rowResult,
+                'sum_product' => $sumProduct,
             ];
         }
 
+        $totalCount = count($results);
+        $countZero = count(array_filter($results, fn($item) => $item['reach'] == 0));
+        $countOne = count(array_filter($results, fn($item) => $item['reach'] == 1));
+        $zeroPercentage = $totalCount ? ($countZero / $totalCount) * 100 : 0;
+        $onePercentage = $totalCount ? ($countOne / $totalCount) * 100 : 0;
+
         $commercialQualityData = [
-            'labels' => ['Not Reached', 'Reached'],
-            'datasets' => []
+            'labels' => ['Reached', 'Not Reached'],
+            'datasets' => [
+                'Default' => [
+                    'data' => [$onePercentage, $zeroPercentage]
+                ]
+            ]
         ];
 
-        foreach ($columnResults as $key => $values) {
-            $reachedCount = $values['count_1'];
-            $notReachCount = $values['count_0'];
-            $totalConsumers = $reachedCount + $notReachCount;
-
-            $reachedPercentage = $totalConsumers > 0 ? round(($reachedCount / $totalConsumers) * 100, 2) : 0;
-            $notReachedPercentage = $totalConsumers > 0 ? round(($notReachCount / $totalConsumers) * 100, 2) : 0;
-
-            $commercialQualityData['datasets'][] = [
-                'label' => ucfirst(str_replace('_', ' ', $key)),
-                'data' => [$notReachedPercentage, $reachedPercentage],
-                'backgroundColor' => ['#FF5733', '#33FF57'],
-            ];
+        if ($request->ajax()) {
+            return response()->json([
+                'commercialQualityData' => $commercialQualityData
+            ]);
         }
 
         $dataMessage = count($dataRows) === 0 ? "No data available to display." : null;
-
-        return view('consumers-reached', compact('commercialQualityData', 'breadcrumb', 'dataMessage'));
+        return view('consumers-reached', compact('breadcrumb', 'dataMessage', 'commercialQualityData', 'selectedValues'));
     }
 }
