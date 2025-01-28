@@ -3,91 +3,113 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class AdvertisingAttentionController extends Controller
 {
+
+
     public function index()
     {
         $breadcrumb = 'Advertising Attention by Touchpoint';
 
-        $commercialQualityData = $this->getCommercialQualityData();
+        $mediaTypes = DB::table('advertising_attentions')
+            ->get()
+            ->map(function ($item) {
+                $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
+                return $item;
+            });
 
-        $dataMessage = empty($commercialQualityData['datasets']) || empty($commercialQualityData['labels'])
-            ? "No data available to display !"
-            : null;
 
-        $chart = null;
 
-        if (!$dataMessage) {
-            $chart = $this->buildChart($commercialQualityData);
+        $grouped = $mediaTypes->groupBy(['MediaType', 'Value']);
+
+        $categories = $mediaTypes->pluck('MediaType')->unique()->toArray();
+        $values = $mediaTypes->pluck('Value')
+            ->unique()
+            ->sort()
+            ->values()
+            ->all();
+
+        // $values = !empty($values) ? array_merge($values, ["0"]) : [];
+
+        $series = [];
+
+        $colors = $this->generateColors(count($values));
+
+        foreach ($values as $index => $value) {
+            $data = collect($categories)->map(function ($category) use ($grouped, $value) {
+                $totalForCategory = $grouped->get($category, collect())->flatten(1)->count();
+                $count = $grouped->get($category, collect())->get($value, collect())->count();
+                return $totalForCategory > 0 ? round(($count / $totalForCategory) * 100, 1) . '%' : '0%';
+            })->toArray();
+
+            $series[] = [
+                'name' => $value,
+                'data' => $data,
+                'color' => $colors[$index],
+            ];
+        }
+        if (!empty($series[0]['data'])) {
+            $dataToSort = array_map(fn($value) => strpos($value, '%') !== false ? floatval(str_replace('%', '', $value)) : 0, $series[0]['data']);
+            $pairs = array_map(null, $categories, $dataToSort, array_keys($categories));
+
+            usort($pairs, fn($a, $b) => $b[1] <=> $a[1]);
+
+            $sortedCategories = array_column($pairs, 0);
+
+            $sortedIndices = array_column($pairs, 2);
+
+            $sortedSeries = array_map(function ($serie) use ($sortedIndices) {
+
+                $serie['data'] = array_map(fn($index) => $serie['data'][$index], $sortedIndices);
+                return $serie;
+            }, $series);
+        } else {
+            $sortedCategories = $categories;
+            $sortedSeries = $series;
         }
 
-        return view('advertising-attention', compact('chart', 'breadcrumb', 'dataMessage'));
-    }
 
-    /**
-     * Prepare the commercial quality data for chart rendering.
-     */
-    private function getCommercialQualityData()
-    {
-        return [
-            'labels' => ['Figma', 'Sketch', 'XD', 'Photoshop', 'Illustrator', 'AfterEffect', 'InDesign', 'Maya', 'Premiere', 'Final Cut', 'Figma', 'Sketch'],
-            'datasets' => [
-                [
-                    'label' => '2021',
-                    'type' => 'line',
-                    'backgroundColor' => '#ffffff',
-                    'borderColor' => 'rgba(0, 123, 255, 0.3)',
-                    'borderWidth' => 2,
-                    'fill' => false,
-                    'data' => [80, 60, 78, 75, 77, 84, 98, 77, 78, 79, 92, 62],
-                    'yAxisID' => 'y',
-                ],
-                [
-                    'label' => '2021 ',
-                    'backgroundColor' => '#7ac0f8',
-                    'borderColor' => 'rgba(33, 150, 243, 1)',
-                    'borderWidth' => 1,
-                    'data' => [70, 18, 35, 20, 40, 15, 58, 18, 58, 56, 92, 41],
-                    'yAxisID' => 'y2',
-                ]
-            ]
+        $chartData = [
+            'categories' => $sortedCategories,
+            'series' => $sortedSeries,
         ];
+        // dd($chartData);
+
+
+        $dataMessage = empty($chartData['series']) ? "No data available to display." : null;
+
+        return view('advertising-attention', compact('breadcrumb', 'chartData', 'dataMessage'));
     }
 
     /**
-     * Build the chart using the provided data.
+     * Generate an array of unique colors.
+     *
+     * @param int $count Number of colors to generate.
+     * @return array
      */
-    private function buildChart($commercialQualityData)
+    private function generateColors(int $count): array
     {
-        return Chartjs::build()
-            ->name('reachExposureChart')
-            ->type('bar')  // Type can be dynamic if needed
-            ->size(['width' => 400, 'height' => 200])
-            ->labels($commercialQualityData['labels'])
-            ->datasets($commercialQualityData['datasets'])
-            ->options([
-                'scales' => [
-                    'y' => [
-                        'beginAtZero' => true,
-                    ],
-                ],
-                'y2' => [
-                    'position' => 'right',
-                    'beginAtZero' => true,
-                    'ticks' => [
-                        'callback' => new \Illuminate\Support\HtmlString('function(value) { return value; }'),  // Optional: Format tick labels
-                    ],
-                ],
-                'plugins' => [
-                    'legend' => [
-                        'position' => 'bottom',
-                    ],
-                ],
-                'layout' => [
-                    'padding' => 10,
-                ],
-            ]);
+        $colors = [
+            '#4e81bd',
+            '#bf504d',
+            '#2c4d75',
+            '#8064a2',
+            '#1b6ae7',
+            '#f79645',
+            '#FFFFFF',
+
+        ];
+
+        // Generate additional colors if needed
+        if ($count > 1) {
+            for ($i = 0; $i < $count - 1; $i++) {  // Don't generate the last color here
+                $hue = (($i + 3) * (360 / ($count))) % 360;
+                $colors[] = "hsl($hue, 70%, 50%)";
+            }
+        }
+        return $colors;
     }
 }

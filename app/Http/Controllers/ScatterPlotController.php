@@ -3,15 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class ScatterPlotController extends Controller
 {
     public function index()
     {
-        $breadcrumb = 'Reach x Attention Plot';
 
-        // Scatter plot data, with each data point having x and y values
+        // $breadcrumb = 'Reach x Attention Plot';
+
+        $query = DB::table('reach_attention_plots')
+            ->select('media_type AS MediaType', 'reach_percentage AS Reach', 'attention_percentage AS Attention')
+            ->get();
+
         $chart = Chartjs::build()
             ->name('scatterPlotTest')
             ->type('scatter') // Change to scatter plot type
@@ -50,7 +55,7 @@ class ScatterPlotController extends Controller
                 'scales' => [
                     'x' => [
                         'beginAtZero' => true,
-                        'type' => 'linear', // For scatter plot, x-axis should be linear
+                        'type' => 'linear',
                         'position' => 'bottom',
                     ],
                     'y' => [

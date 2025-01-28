@@ -19,7 +19,7 @@
                     </div>
                     <div class="select-group bg-custom rounded-4 ">
                         <span class="flex-1">Sort by:</span>
-                        <select class="form-select  bg-transparent border-0">
+                        <select class="bg-transparent border-0 form-select">
                             <option>Newest </option>
                             <option>Old </option>
                             <option>Alphabatical Order</option>
@@ -37,7 +37,7 @@
                 @else
                     <div class="pt-5 d-flex justify-content-center">
                         <div class="flow-chart">
-                            <x-chartjs-component :chart="$chart" id="bar-chart" />
+                            <div id="chart"></div>
                         </div>
                     </div>
                 @endif
@@ -47,29 +47,88 @@
 
 @endsection
 
+@section('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('downloadChart').addEventListener('click', function() {
-            var canvas = document.querySelector('canvas');
-            // Get the canvas context
-            var ctx = canvas.getContext('2d');
+    var chartData = @json($chartData);
 
-            // Fill the canvas with a white background (only if it has transparent pixels)
-            ctx.save(); // Save the current state of the canvas
-            ctx.globalCompositeOperation =
-                'destination-over'; // Ensure we don't overwrite the existing chart
-            ctx.fillStyle = 'white'; // Set background color to white
-            ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas
+    if (chartData.series && chartData.categories) {
+        var options = {
+            series: chartData.series,
+            chart: {
+                type: 'bar',
+                height: 1200,
+                width: 1000,
+                stacked: true,
+                stackType: '100%',
+                toolbar: { show: false }
+            },
+            plotOptions: { bar: { horizontal: true } },
+            stroke: { width: 1, colors: ['#fff'] },
+            title: { text: '' },
+            xaxis: {
+                categories: chartData.categories,
+                labels: {
+                    formatter: function (val) {
+                        return val + '%';
+                    }
+                }
+            },
 
-            // Now generate the image with the white background
-            var image = canvas.toDataURL('image/jpg');
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val, { series, seriesIndex, dataPointIndex, w }) {
+                        // Normalize the value for tooltip
+                        const total = w.globals.stackedSeriesTotals[dataPointIndex];
+                        const normalizedVal = (val / total) * 100;
+                        return ` ${normalizedVal.toFixed(1)}%`;
+                    }
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+
+                    return (val).toFixed(1) + '%';
+                    // return val < 1 ? '< 2%' : `${val.toFixed(1)}%`;
+                },
+                style: {
+                    fontSize: '12px',
+                    colors: ['#fff']
+                }
+            },
+            fill: { opacity: 1 },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'left',
+                offsetX: 40
+            },
+            colors: chartData.colors
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+    } else {
+        console.error('Chart data or categories are undefined.');
+    }
+
+    document.getElementById('downloadChart').addEventListener('click', function() {
+        chart.dataURI().then(function(uri) {
             var link = document.createElement('a');
-            link.href = image;
-            link.download = 'chart.jpg';
+            link.href = uri.imgURI;
+            link.download = 'chart.png';
             link.click();
-
-            ctx.restore(); // Restore the canvas to its original state
-
-        });
+        }).catch(console.error);
     });
+    // Select all matching <g> elements
+        const elements = document.querySelectorAll('g.apexcharts-series[seriesName="0"]');
+
+        // Loop through and hide each element
+        elements.forEach(element => {
+            element.style.display = 'none';
+        });
+
 </script>
+
+
+@endsection

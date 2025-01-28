@@ -20,7 +20,7 @@
                     </div>
                     <div class="select-group bg-custom rounded-4 ">
                         <span class="flex-1">Sort by:</span>
-                        <select class="form-select  bg-transparent border-0">
+                        <select class="bg-transparent border-0 form-select">
                             <option>Newest </option>
                             <option>Old </option>
                             <option>Alphabatical Order</option>
@@ -45,86 +45,97 @@
 
 
 @section('scripts')
-    <script>
+<script>
+    // Ensure chartData is available and valid
+    var chartData = @json($chartData);
+
+
         var options = {
-            series: @json($data),
+            series: [{
+                name: 'Attentive Exposure',
+                data: chartData.percentages
+            }],
             chart: {
-                height: 500,
-                type: 'heatmap',
+                type: 'bar',
+                height: 1200,
+                width: 1000,
                 toolbar: {
                     show: false
                 }
             },
-            dataLabels: {
-                enabled: false
-            },
-            colors: ["#F3B415", "#F27036", "#663F59", "#6A6E94", "#4E88B4", "#00A7C6", "#18D8D8", "#A9D794", "#46AF78",
-                "#A93F55", "#8C5E58", "#2176FF", "#33A1FD", "#7A918D", "#BAFF29"
-            ],
-            xaxis: {
-                type: 'category',
-                categories: @json($categories)
-            },
-            yaxis: {
-                show: true
-            },
-            title: {
-                text: ''
-            },
-            grid: {
-                padding: {
-                    right: 20
-                }
-            },
-            responsive: [{
-                breakpoint: 1200,
-                options: {
-                    chart: {
-                        height: 350
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    barHeight: '70%',
+                    dataLabels: {
+                        position: 'top',
                     }
                 }
-            }]
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return val + '%';
+                },
+                offsetX: 24,
+                style: {
+                    fontSize: '12px',
+                    colors: ['#000'] // Set color for better visibility outside bars
+                }
+            },
+            xaxis: {
+                categories: chartData.categories,
+                labels: {
+                    show: false // Disable x-axis labels
+                },
+                axisBorder: {
+                    show: false // Remove x-axis border
+                },
+                axisTicks: {
+                    show: false // Remove x-axis ticks
+                }
+            },
+            yaxis: {
+                labels: {
+                    style: {
+                        fontSize: '14px'
+                    }
+                }
+            },
+            title: {
+                text: 'Attentive Exposure',
+                align: 'center',
+                style: {
+                    fontSize: '18px',
+                    fontWeight: 'bold'
+                }
+            },
+            colors: ['#6a5acd'],
+            tooltip: {
+                enabled: true,
+                y: {
+                    formatter: function (val) {
+                        return val + '%';
+                    }
+                }
+            }
         };
+
 
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
 
-        // Create Gradient Bar
-        var gradientContainer = document.createElement('div');
-        gradientContainer.style.cssText =
-            'height:50px;background:linear-gradient(to right, #F3B415, #F27036, #663F59, #6A6E94, #4E88B4, #00A7C6, #18D8D8, #A9D794, #46AF78, #A93F55, #8C5E58, #2176FF, #33A1FD, #7A918D, #BAFF29);margin-top:20px;margin-left:70px;border-radius:8px;width:40%';
-
-        // Create Labels for Gradient with Color Matching
-        var labelContainer = document.createElement('div');
-        labelContainer.style.cssText =
-            'font-size:12px;margin-top:10px;margin-left:70px;width:40%;display:flex;justify-content:space-between;';
-
-        // Colors for the percentage labels, matching the gradient colors
-        var colorLabels = ["#F3B415", "#F27036", "#663F59", "#6A6E94", "#4E88B4", "#00A7C6", "#18D8D8", "#A9D794",
-            "#46AF78", "#A93F55", "#8C5E58", "#2176FF", "#33A1FD", "#7A918D", "#BAFF29"
-        ];
-
-        // Create percentage labels with the corresponding color
-        colorLabels.forEach(function(color, index) {
-            var label = document.createElement('span');
-            label.style.color = color;
-            label.style.fontSize = '12px';
-            label.innerText = (index * 7) + "%"; // Display 0%, 7%, 14%, ..., 100%
-            labelContainer.appendChild(label);
-        });
-
-        // Append the gradient and labels to the chart
-        document.querySelector("#chart").appendChild(gradientContainer);
-        document.querySelector("#chart").appendChild(labelContainer);
-
-        // Download Button
-        document.getElementById('downloadChart').addEventListener('click', function() {
-            chart.dataURI().then(function(uri) {
+        // Functionality to download chart as image
+        document.getElementById('downloadChart').addEventListener('click', function () {
+            chart.dataURI().then(function (uri) {
                 var link = document.createElement('a');
                 link.href = uri.imgURI;
-                link.download = 'chart.png';
+                link.download = 'attentive_exposure_chart.png';
                 link.click();
-            }).catch(console.error);
+            });
         });
-    </script>
+
+</script>
+
+
 @endsection

@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('reach_attention_plots', function (Blueprint $table) {
             $table->id();
+            $table->integer('RespoSer');
             $table->string('QuotGene');
             $table->string('QuotEdad');
             $table->string('QuoSegur');
             $table->string('MediaType');
-            $table->text('Value');
-            $table->text('Adjusted_value');
-            $table->timestamps();
+            $table->string('Attention');
+            $table->string('Reach');
+            // $table->timestamps();
         });
     }
 

@@ -16,9 +16,9 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search" class="bg-transparent border-0">
                     </div>
-                    <div class="select-group bg-custom py-3 px-3 rounded-4 mt-lg-0 mt-3 ">
+                    <div class="px-3 py-3 mt-3 select-group bg-custom rounded-4 mt-lg-0 ">
                         <span>Sort by:</span>
-                        <select class="border-0 bg-transparent">
+                        <select class="bg-transparent border-0">
                             <option>Newest </option>
                             <option>Old </option>
                             <option>Alphabatical Order</option>
