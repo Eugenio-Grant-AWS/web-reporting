@@ -13,13 +13,14 @@ return new class extends Migration
     {
         Schema::create('indexed_reviews', function (Blueprint $table) {
             $table->id();
+            $table->integer('RespoSer');
             $table->string('QuotGene');
             $table->string('QuotEdad');
             $table->string('QuoSegur');
+            $table->integer('Index');              // Store INDEX (e.g., 1, 2, 3, ...)
+            $table->string('Influence');           // Store Influence type (e.g., 1. Awareness, 2. Understanding, ...)
+            $table->string('tpi');
             $table->string('MediaType');
-            $table->text('Value');
-            $table->text('Adjusted_value');
-            $table->timestamps();
         });
     }
 

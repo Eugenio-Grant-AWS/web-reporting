@@ -5,8 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NetReachController;
-use App\Http\Controllers\SummaryChartController;
-use App\Http\Controllers\SummaryTableController;
+use App\Http\Controllers\TIPSummaryController;
 use App\Http\Controllers\IndexedReviewController;
 use App\Http\Controllers\ReachExposureController;
 use App\Http\Controllers\ConsumersReachedController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\AdvertisingAttentionController;
 use App\Http\Controllers\UnduplicatedNetReachController;
 use App\Http\Controllers\Reach_X_AttentionPlotController;
 use App\Http\Controllers\OptimizedCampaignSummaryController;
+use App\Http\Controllers\TIPSummaryCreativeQualityController;
 
 
 // Route::get('/', function () {
@@ -50,8 +50,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/attentive-exposure', [AttentiveExposureController::class, 'index'])->name('attentive-exposure');
     Route::get('/touchpoint-influence', [TouchpointInfluenceController::class, 'index'])->name('touchpoint-influence');
     Route::get('/indexed-review-of-stronger-drivers', [IndexedReviewController::class, 'index'])->name('indexed-review-of-stronger-drivers');
-    Route::get('/tip-summary', [SummaryTableController::class, 'index'])->name('tip-summary');
-    Route::get('/tip-summary-creative-quality', [SummaryChartController::class, 'index'])->name('tip-summary-creative-quality');
+    Route::get('/tip-summary', [TIPSummaryController::class, 'index'])->name('tip-summary');
+    Route::get('/tip-summary-creative-quality', [TIPSummaryCreativeQualityController::class, 'index'])->name('tip-summary-creative-quality');
     Route::get('/optimized-campaign-summary', [OptimizedCampaignSummaryController::class, 'index'])->name('optimized-campaign-summary');
     Route::get('/advertising-attention-by-touchpoint', [AdvertisingAttentionController::class, 'index'])->name('advertising-attention-by-touchpoint');
 });

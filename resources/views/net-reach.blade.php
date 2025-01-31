@@ -19,7 +19,7 @@
                     </div>
                     <div class="select-group bg-custom rounded-4 ">
                         <span class="flex-1">Sort by:</span>
-                        <select class="form-select  bg-transparent border-0">
+                        <select class="bg-transparent border-0 form-select">
                             <option>Newest </option>
                             <option>Old </option>
                             <option>Alphabatical Order</option>
@@ -50,68 +50,103 @@
 @endsection
 
 
-
-
 @section('scripts')
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Ensure chartData is available before creating chart
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Ensure chartData is available before creating chart
+        const chartData = @json($chartData);
+        console.log("Chart Data:", chartData);
 
-            const chartData = @json($chartData);
+        const labels = chartData.labels || [];
+        const datasets = chartData.datasets[0].data || [];
+        const backgroundColor = chartData.datasets[0].backgroundColor;
 
-            const labels = chartData.labels || [];
-            const datasets = chartData.datasets && chartData.datasets.length > 0 ? chartData.datasets[0].data : [];
-            const backgroundColor = chartData.datasets[0].backgroundColor;
-
-            const ctx = document.getElementById('vennChart').getContext('2d');
-
-            const config = {
-                type: 'euler',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: labels,
-                        data: datasets,
-                        backgroundColor: backgroundColor
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                    },
-                },
-
-            };
-
-            const vennChart = new Chart(ctx, config);
-
-            // Export chart as image
-            document.getElementById('downloadChart').addEventListener('click', function() {
-                var canvas = document.querySelector('canvas');
-                // Get the canvas context
-                var ctx = canvas.getContext('2d');
-
-                // Fill the canvas with a white background (only if it has transparent pixels)
-                ctx.save(); // Save the current state of the canvas
-                ctx.globalCompositeOperation =
-                    'destination-over'; // Ensure we don't overwrite the existing chart
-                ctx.fillStyle = 'white'; // Set background color to white
-                ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas
-
-                // Now generate the image with the white background
-                var image = canvas.toDataURL('image/jpg');
-                var link = document.createElement('a');
-                link.href = image;
-                link.download = 'chart.jpg';
-                link.click();
-
-                ctx.restore(); // Restore the canvas to its original state
-
-            });;
-
+        // Parse dataset percentages as numeric values
+        const datasetValues = datasets.map(d => {
+            // Remove the '%' and convert to number
+            return parseFloat(d.percentage.replace('%', ''));
         });
-    </script>
+        console.log("Dataset Values (Numeric):", datasetValues);
+
+        // Calculate the total value of the dataset
+        const totalValue = datasetValues.reduce((acc, val) => acc + val, 0);
+
+        // Calculate percentages based on totalValue (optional, you can use the dataset values directly too)
+        const datasetPercentages = datasetValues.map(value => ((value / totalValue) * 100).toFixed(2) + '%');
+        console.log("Dataset Percentages:", datasetPercentages);
+
+        const ctx = document.getElementById('vennChart').getContext('2d');
+
+        const config = {
+            type: 'venn',  // Using the Venn diagram chart type
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Net Reach',
+                    data: datasetValues,  // Use numeric values here
+                    backgroundColor: backgroundColor,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return `${labels[tooltipItem.dataIndex]}: ${datasetPercentages[tooltipItem.dataIndex]}`;
+                            }
+                        }
+                    },
+
+                    // Use the datalabels plugin to display the percentages inside the Venn diagram
+                    datalabels: {
+                        display: true,
+                        formatter: function(value, context) {
+                            // Display percentage in the Venn diagram
+                            return datasetPercentages[context.dataIndex]; // Show percentage for each Venn section
+                        },
+                        color: 'black',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        align: 'center',
+                        anchor: 'center'
+                    }
+                }
+            },
+        };
+        console.log(config);
+
+        // Create the Venn chart
+        const vennChart = new Chart(ctx, config);
+
+        // Export chart as image
+        document.getElementById('downloadChart').addEventListener('click', function() {
+            var canvas = document.querySelector('canvas');
+            var ctx = canvas.getContext('2d');
+
+            // Fill the canvas with a white background (only if it has transparent pixels)
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Now generate the image with the white background
+            var image = canvas.toDataURL('image/jpg');
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = 'chart.jpg';
+            link.click();
+
+            ctx.restore(); // Restore the canvas to its original state
+        });
+    });
+</script>
+
 @endsection
+
+

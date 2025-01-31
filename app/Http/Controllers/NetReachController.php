@@ -2,80 +2,99 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+
 class NetReachController extends Controller
 {
     public function index()
     {
         $breadcrumb = 'Net Reach';
 
+        // Define Venn Diagram Colors
         $vennColors = [
-            'A' => '#ffdcae',  // A background color
-            'B' => '#a5d7a7',   // B background color
-            'C' => '#cba3ff',  // C background color
+            'SOLO Ver TV nacional' => '#ffdcae',
+            'SOLO Ver TV por cable' => '#a5d7a7',
+            'SOLO Ver TV por internet' => '#cba3ff',
+            'Ver TV nacional + Ver TV por Cable' => '#8ba9a7',
+            'Ver TV nacional + Ver TV por internet' => '#a5c67f',
+            'SOLO Ver TV por cable + Ver TV por internet' => '#e5aeae',
+            'All Three' => '#bfccaf'
         ];
 
-        $commercialQualityData = [
-            [
-                'label' => 'B',
-                'values' => ['alex', 'casey', 'drew', 'hunter']
-            ],
-            [
-                'label' => 'A',
-                'values' => ['casey', 'drew', 'jade']
-            ],
-            [
-                'label' => 'C',
-                'values' => ['drew', 'glen', 'jade']
+        // Get total respondents to calculate percentages
+        $total_responses = DB::table('consumers_reacheds')->count();
+        $total_responses = max($total_responses, 1); // Prevent division by zero
+
+        // Fetch category counts dynamically
+        $dataCounts = [
+            'SOLO Ver TV nacional' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 1)
+                ->where('ver_tv_cable', 0)
+                ->where('ver_tv_internet', 0)
+                ->count(),
+
+            'SOLO Ver TV por cable' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 0)
+                ->where('ver_tv_cable', 1)
+                ->where('ver_tv_internet', 0)
+                ->count(),
+
+            'SOLO Ver TV por internet' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 0)
+                ->where('ver_tv_cable', 0)
+                ->where('ver_tv_internet', 1)
+                ->count(),
+
+            'Ver TV nacional + Ver TV por Cable' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 1)
+                ->where('ver_tv_cable', 1)
+                ->where('ver_tv_internet', 0)
+                ->count(),
+
+            'Ver TV nacional + Ver TV por internet' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 1)
+                ->where('ver_tv_cable', 0)
+                ->where('ver_tv_internet', 1)
+                ->count(),
+
+            'SOLO Ver TV por cable + Ver TV por internet' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 0)
+                ->where('ver_tv_cable', 1)
+                ->where('ver_tv_internet', 1)
+                ->count(),
+
+            'All Three' => DB::table('consumers_reacheds')
+                ->where('ver_tv_senal_nacional', 1)
+                ->where('ver_tv_cable', 1)
+                ->where('ver_tv_internet', 1)
+                ->count(),
+        ];
+
+        // Calculate percentages
+        $dataPercentages = [];
+        foreach ($dataCounts as $key => $count) {
+            $dataPercentages[$key] = round(($count / $total_responses) * 100, 2);
+        }
+
+        // Convert data to match the required structure with percentages included
+        $chartData = [
+            'labels' => array_keys($dataCounts),
+            'datasets' => [
+                [
+                    'label' => 'Net Reach',
+                    'data' => array_map(function ($key) use ($dataCounts, $dataPercentages) {
+                        return [
+                            'sets' => explode(' + ', $key),
+                            'value' => $dataCounts[$key],
+                            'percentage' => $dataPercentages[$key] . '%'
+                        ];
+                    }, array_keys($dataCounts)),
+                    'backgroundColor' => array_values($vennColors)
+                ]
             ]
         ];
-
-
-        // The check ensures that we only access the data if it's available
-        $dataMessage = null;
-
-        if (
-            empty($commercialQualityData) ||
-            !isset($commercialQualityData[0]['values']) ||
-            !isset($commercialQualityData[1]['values']) ||
-            !isset($commercialQualityData[2]['values'])
-        ) {
-            $dataMessage = "No data available to display.";  // Error message if data is missing
-        }
-
-        // Always initialize chartData
-        $chartData = null;
-
-        if (!$dataMessage) {
-            // Only proceed if there is valid data
-            $chartData = [
-                'labels' => ['B', 'C', 'A', 'B ∩ C', 'B ∩ A', 'C ∩ A', 'B ∩ C ∩ A'],
-                'datasets' => [
-                    [
-                        'label' => 'Net Reach',
-                        'data' => [
-                            // **SAFE ACCESS TO DATA WITH isset()**
-                            ['sets' => ['B'], 'value' => count($commercialQualityData[0]['values'])],
-                            ['sets' => ['C'], 'value' => count($commercialQualityData[1]['values'])],
-                            ['sets' => ['A'], 'value' => count($commercialQualityData[2]['values'])],
-                            ['sets' => ['B', 'C'], 'value' => count(array_intersect($commercialQualityData[0]['values'], $commercialQualityData[1]['values']))],
-                            ['sets' => ['B', 'A'], 'value' => count(array_intersect($commercialQualityData[1]['values'], $commercialQualityData[0]['values']))],
-                            ['sets' => ['C', 'A'], 'value' => count(array_intersect($commercialQualityData[1]['values'], $commercialQualityData[2]['values']))],
-                            ['sets' => ['B', 'C', 'A'], 'value' => count(array_intersect($commercialQualityData[0]['values'], $commercialQualityData[1]['values'], $commercialQualityData[2]['values']))],
-                        ],
-
-                        'backgroundColor' => [
-                            $vennColors['B'],
-                            $vennColors['C'],
-                            $vennColors['A'],
-                            '#8ba9a7',
-                            '#a5c67f',
-                            '#e5aeae',
-                            '#bfccaf',
-                        ],
-                    ]
-                ]
-            ];
-        }
+        // Check if data is available
+        $dataMessage = ($total_responses === 0) ? "No data available to display." : null;
 
         // Pass the data to the view
         return view('net-reach', compact('chartData', 'breadcrumb', 'dataMessage'));

@@ -50,7 +50,7 @@
         <div class="row align-items-baseline ">
             <div class="col-xl-4 ">
                 <div class="body-left">
-                    <h6>Indexed Review Of Stronger Drivers</h6>
+                    <h6>TIP Summary x Creative Quality</h6>
                 </div>
             </div>
             <div class="col-xl-8 ">
@@ -90,6 +90,7 @@
                                 <th>Top of Mind</th>
                                 <th>Image</th>
                                 <th>Loyalty</th>
+                                {{-- <th>Mean</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -97,32 +98,29 @@
                                 @if($mediaType !== 'Column Percentages')
                                     <tr>
                                         <td>{{ $mediaType }}</td>
-                                        @foreach ([
-                                            '1. Awareness Adjusted Percentage',
-                                            '2. Understanding Adjusted Percentage',
-                                            '3. Trial Adjusted Percentage',
-                                            '4. Top of Mind Adjusted Percentage',
-                                            '5. Image Adjusted Percentage',
-                                            '6. Loyalty Adjusted Percentage'
-                                        ] as $key)
-                                            @php
-                                                $value = $data[$key] ?? 'N/A';
-                                                $style = '';
-                                                if (is_numeric($value)) {
-                                                    $value = round($value); // Round off value to nearest integer
-                                                    if ($value <= 80) {
-                                                        $style = 'background-color: #ffc7ce;'; // Red
-                                                    } elseif ($value > 130) {
-                                                        $style = 'background-color: #c6efce;'; // Green
-                                                    }
-                                                }
-                                            @endphp
-                                            <td style="{{ $style }}">{{ is_numeric($value) ? $value : 'N/A' }}</td>
-                                        @endforeach
+                                        <td>{{ round($data['1. Awareness Percentage']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['2. Understanding Percentage']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['3. Trial Percentage']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['4. Top of Mind Percentage']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['5. Image Percentage']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['6. Loyalty Percentage']) ?? 'N/A' }}%</td>
+                                        {{-- <td>{{ round($data['Grand Total Row %']) ?? 'N/A' }}%</td> --}}
                                     </tr>
                                 @endif
                             @endforeach
                         </tbody>
+                        {{-- <tfoot>
+                            <tr>
+                                <th>Grand Total Column %</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['1. Awareness Column Percentage']) ?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['2. Understanding Column Percentage']) ?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['3. Trial Column Percentage']) ?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['4. Top of Mind Column Percentage']) ?? 'N/A' }}%</th>
+                                <th>{{round( $commercialQualityData['Column Percentages']['5. Image Column Percentage'] )?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['6. Loyalty Column Percentage']) ?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['Grand Total Column %']) ?? 'N/A' }}%</th>
+                            </tr>
+                        </tfoot> --}}
                     </table>
 
                 </div>
