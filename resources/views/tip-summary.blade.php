@@ -131,7 +131,7 @@
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             let table = new DataTable('#myTable');
 
@@ -151,7 +151,25 @@
                 }
             });
         });
+    </script> --}}
+    <script>
+        $(document).ready(function() {
+            let table = new DataTable('#myTable', {
+                "ordering": false, // Disable sorting functionality
+                "info": false, // Optionally, disable the info text (number of rows, etc.)
+                "paging": false, // Disable paging (if you want to show all rows at once)
+            });
+
+            $('#customSearch').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            $('#customSort').on('change', function() {
+                // Since sorting is disabled, there's no need to handle this anymore
+            });
+        });
     </script>
+
     <style>
         div.dt-container div.dt-layout-row:has(.dt-search) {
             display: none !important;

@@ -37,7 +37,6 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/testconsumer', [TestController::class, 'index'])->name('testconsumer.index');
 
     Route::get('/reach-exposure-probability-with-mean', [ReachExposureController::class, 'index'])->name('reach-exposure-probability-with-mean');
     Route::post('/media-consumption/import', [ReachExposureController::class, 'import'])->name('media-consumption.import');

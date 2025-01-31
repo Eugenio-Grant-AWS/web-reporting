@@ -133,25 +133,22 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
     <script>
         $(document).ready(function() {
-            let table = new DataTable('#myTable');
+            let table = new DataTable('#myTable', {
+                "ordering": false, // Disable sorting functionality
+                "info": false, // Optionally, disable the info text (number of rows, etc.)
+                "paging": false, // Disable paging (if you want to show all rows at once)
+            });
 
             $('#customSearch').on('keyup', function() {
                 table.search(this.value).draw();
             });
 
             $('#customSort').on('change', function() {
-                let columnIndex = $(this).val();
-                if (columnIndex) {
-                    let order = table.order();
-                    let orderColumn = parseInt(columnIndex);
-                    let newOrder = order[0][0] === orderColumn ? 'desc' : 'asc';
-                    table.order([orderColumn, newOrder]).draw();
-                } else {
-                    table.order([]).draw();
-                }
+                // Since sorting is disabled, there's no need to handle this anymore
             });
         });
     </script>
+
     <style>
         div.dt-container div.dt-layout-row:has(.dt-search) {
             display: none !important;
