@@ -59,10 +59,10 @@
             }],
             chart: {
                 type: 'scatter',
-                height: 600,
-                width: 900,
+                height: 700,
+                width: 1000,
                 toolbar: { show: false },
-                zoom: { enabled: false }
+                zoom: { enabled: true }
             },
             xaxis: {
                 title: {
@@ -72,7 +72,7 @@
                 labels: {
                     formatter: val => val.toFixed(0) + '%'
                 },
-                tickAmount: 6,
+                tickAmount: 12,
                 min: 0,
                 max: 120,
                 axisBorder: { show: true }, // Keep x-axis line visible
@@ -86,7 +86,7 @@
                 labels: {
                     formatter: val => val.toFixed(0) + '%'
                 },
-                tickAmount: 10,
+                tickAmount: 20,
                 min: 0,
                 max: 100,
                 axisBorder: { show: true }, // Keep y-axis line visible
@@ -106,7 +106,7 @@
                 points: chartData.map(point => ({
                     x: point.x,
                     y: point.y,
-                    marker: { size: 4, fillColor: '#FF0000' },
+                    marker: { size: 6, fillColor: '#FF0000' },
                     label: {
                         text: point.label,
                         offsetX: 10,

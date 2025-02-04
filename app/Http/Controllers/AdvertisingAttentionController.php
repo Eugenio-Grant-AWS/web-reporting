@@ -9,18 +9,57 @@ use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 class AdvertisingAttentionController extends Controller
 {
 
-
     public function index()
     {
         $breadcrumb = 'Advertising Attention by Touchpoint';
 
+        $mediaTypeMapping = [
+            "Ver TV por cable" => "TV cable",
+            "O?r radio" => "Radio",
+            "O?r radio online" => "Radio online",
+            "Leer revista impresa" => "Revista impresa",
+            "Leer revista digital" => "Revista digital",
+            "Leer peri?dico impreso" => "Periódico impreso",
+            "Leer peri?dico digital" => "Periódico digital",
+            "Peri?dico por email" => "Periódico email",
+            "Ver vallas publicitarias" => "Vallas publicitarias",
+            "Visitar centros comerciales" => "Visitar centros comerciales",
+            "Ir al cine" => "Cine",
+            "Abrir emails comerciales" => "Emails comerciales",
+            "Usar X (Twitter)" => "X (Twitter)",
+            "Usar Instagram" => "Instagram",
+            "Usar YouTube" => "YouTube",
+            "Usar LinkedIn" => "LinkedIn",
+            "Usar WhatsApp" => "WhatsApp",
+            "Escuchar Spotify" => "Spotify",
+            "Jugar en el celular" => "Jugar en el celular",
+            "Usar WeTransfer" => "WeTransfer",
+            "Usar PedidosYa" => "PedidosYa",
+            "Usar Meet" => "Meet",
+            "Usar Airbnb" => "Airbnb",
+            "Usar Encuentra24" => "Encuentra24",
+            "Ver TV nacional" => "TV nacional",
+            "Ver TV por internet" => "TV por internet",
+            "Usar metrob?s" => "Usar metrobús",
+            "Buscar aseguradoras en Google" => "Buscar aseguradoras en Google",
+            "Usar Facebook" => "Facebook",
+            "Usar listas de correo" => "Usar listas de correo",
+            "Usar Uber" => "Uber",
+            "Usar TikTok" => "TikTok",
+            "Usar Zoom" => "Zoom",
+            "Ver Netflix" => "Netflix",
+        ];
+
         $mediaTypes = DB::table('advertising_attentions')
             ->get()
-            ->map(function ($item) {
+            ->map(function ($item) use ($mediaTypeMapping) {
                 $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
+                if (isset($mediaTypeMapping[$item->MediaType])) {
+                    $item->MediaType = $mediaTypeMapping[$item->MediaType];
+                }
+
                 return $item;
             });
-
 
 
         $grouped = $mediaTypes->groupBy(['MediaType', 'Value']);

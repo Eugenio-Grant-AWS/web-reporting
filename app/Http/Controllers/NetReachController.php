@@ -2,101 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class NetReachController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = 'Net Reach';
 
-        // Define Venn Diagram Colors
-        $vennColors = [
-            'SOLO Ver TV nacional' => '#ffdcae',
-            'SOLO Ver TV por cable' => '#a5d7a7',
-            'SOLO Ver TV por internet' => '#cba3ff',
-            'Ver TV nacional + Ver TV por Cable' => '#8ba9a7',
-            'Ver TV nacional + Ver TV por internet' => '#a5c67f',
-            'SOLO Ver TV por cable + Ver TV por internet' => '#e5aeae',
-            'All Three' => '#bfccaf'
+        // Default selected categories
+        $defaultCategories = [
+            'ver_tv_senal_nacional',
+            'ver_tv_cable',
+            'ver_tv_internet',
         ];
 
-        // Get total respondents to calculate percentages
-        $total_responses = DB::table('consumers_reacheds')->count();
-        $total_responses = max($total_responses, 1); // Prevent division by zero
+        session()->forget('selected_top_row');
+        $selectedCategories = $request->input('top_row', $defaultCategories);
+        session(['selected_top_row' => $selectedCategories]);
 
-        // Fetch category counts dynamically
-        $dataCounts = [
-            'SOLO Ver TV nacional' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 1)
-                ->where('ver_tv_cable', 0)
-                ->where('ver_tv_internet', 0)
-                ->count(),
 
-            'SOLO Ver TV por cable' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 0)
-                ->where('ver_tv_cable', 1)
-                ->where('ver_tv_internet', 0)
-                ->count(),
+        if (count($selectedCategories) < 3) {
+            return response()->json(['message' => 'At least 3 categories must be selected.'], 400);
+        }
 
-            'SOLO Ver TV por internet' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 0)
-                ->where('ver_tv_cable', 0)
-                ->where('ver_tv_internet', 1)
-                ->count(),
+        // Fetch consumers data
+        $consumers = DB::table('consumers_reacheds')->get();
+        $total_responses = $consumers->count() ?: 1;
 
-            'Ver TV nacional + Ver TV por Cable' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 1)
-                ->where('ver_tv_cable', 1)
-                ->where('ver_tv_internet', 0)
-                ->count(),
-
-            'Ver TV nacional + Ver TV por internet' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 1)
-                ->where('ver_tv_cable', 0)
-                ->where('ver_tv_internet', 1)
-                ->count(),
-
-            'SOLO Ver TV por cable + Ver TV por internet' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 0)
-                ->where('ver_tv_cable', 1)
-                ->where('ver_tv_internet', 1)
-                ->count(),
-
-            'All Three' => DB::table('consumers_reacheds')
-                ->where('ver_tv_senal_nacional', 1)
-                ->where('ver_tv_cable', 1)
-                ->where('ver_tv_internet', 1)
-                ->count(),
-        ];
+        // Compute data dynamically based on selected categories
+        $dataCounts = [];
+        $dataCounts[$selectedCategories[0]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 0)->where($selectedCategories[2], 0)->count();
+        $dataCounts[$selectedCategories[1]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 1)->where($selectedCategories[2], 0)->count();
+        $dataCounts[$selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 0)->where($selectedCategories[2], 1)->count();
+        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[1]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 1)->where($selectedCategories[2], 0)->count();
+        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 0)->where($selectedCategories[2], 1)->count();
+        $dataCounts[$selectedCategories[1] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 1)->where($selectedCategories[2], 1)->count();
+        $dataCounts['All Three'] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 1)->where($selectedCategories[2], 1)->count();
 
         // Calculate percentages
         $dataPercentages = [];
         foreach ($dataCounts as $key => $count) {
-            $dataPercentages[$key] = round(($count / $total_responses) * 100, 2);
+            $dataPercentages[$key] = round(($count / $total_responses) * 100, 1);
         }
-
-        // Convert data to match the required structure with percentages included
+        // dd($dataPercentages);
+        // Prepare chart data
         $chartData = [
-            'labels' => array_keys($dataCounts),
+            'labels' => array_map(function ($key) use ($dataPercentages) {
+                return $key . ' (' . $dataPercentages[$key] . '%)';
+            }, array_keys($dataCounts)),
             'datasets' => [
                 [
                     'label' => 'Net Reach',
-                    'data' => array_map(function ($key) use ($dataCounts, $dataPercentages) {
-                        return [
-                            'sets' => explode(' + ', $key),
-                            'value' => $dataCounts[$key],
-                            'percentage' => $dataPercentages[$key] . '%'
-                        ];
-                    }, array_keys($dataCounts)),
-                    'backgroundColor' => array_values($vennColors)
-                ]
-            ]
+                    'data' => array_map(function ($key) use ($dataPercentages) {
+                        return ['sets' => explode(' + ', $key), 'value' => $dataPercentages[$key]];
+                    }, array_keys($dataPercentages)),
+                    'backgroundColor' => ['#ffdcae', '#a5d7a7', '#cba3ff', '#8ba9a7', '#a5c67f', '#e5aeae', '#bfccaf'],
+                ],
+            ],
         ];
-        // Check if data is available
-        $dataMessage = ($total_responses === 0) ? "No data available to display." : null;
+        // dd($chartData);
+        // Return the updated chart data as JSON for the AJAX request
+        if ($request->ajax()) {
+            return response()->json(['chartData' => $chartData]);
+        }
 
-        // Pass the data to the view
-        return view('net-reach', compact('chartData', 'breadcrumb', 'dataMessage'));
+        $dataMessage = null;
+        return view('net-reach', compact('chartData', 'dataMessage', 'breadcrumb', 'selectedCategories'));
     }
 }

@@ -79,7 +79,6 @@ class TIPSummaryCreativeQualityController extends Controller
             }
         }
 
-        // Compute Grand Total Column-Wise Percentage
         if ($columnWiseGrandTotal > 0) {
             $columnWisePercentages['Grand Total Column %'] = round(($columnWiseGrandTotal / count($columnWisePercentages)), 2);
         }
@@ -100,8 +99,53 @@ class TIPSummaryCreativeQualityController extends Controller
             }
         }
 
+        $mediaTypeMapping = [
+            "Abrir emails comerciales" => "Emails comerciales",
+            "Buscar aseguradoras en Google" => "Buscar aseguradoras",
+            "Escuchar Spotify" => "Spotify",
+            "Ir al cine" => "Cine",
+            "Jugar en el celular" => "Jugar en el celular",
+            "Leer periódico digital" => "Periódico digital",
+            "Leer periódico impreso" => "Periódico impreso",
+            "Leer revista digital" => "Revista digital",
+            "Leer revista impresa" => "Revista impresa",
+            "Oír radio" => "Radio",
+            "Oír radio online" => "Radio online",
+            "Periódico por email" => "Periódico email",
+            "Usar Airbnb" => "Airbnb",
+            "Usar Encuentra24" => "Encuentra24",
+            "Usar Facebook" => "Facebook",
+            "Usar Instagram" => "Instagram",
+            "Usar LinkedIn" => "LinkedIn",
+            "Usar listas de correo" => "Listas de correo",
+            "Usar Meet" => "Meet",
+            "Usar metrobús" => "Metrobús",
+            "Usar PedidosYa" => "PedidosYa",
+            "Usar TikTok" => "TikTok",
+            "Usar Uber" => "Uber",
+            "Usar WeTransfer" => "WeTransfer",
+            "Usar WhatsApp" => "WhatsApp",
+            "Usar X (Twitter)" => "Twitter",
+            "Usar YouTube" => "YouTube",
+            "Usar Zoom" => "Zoom",
+            "Ver Netflix" => "Netflix",
+            "Ver TV nacional" => "TV nacional",
+            "Ver TV por cable" => "TV cable",
+            "Ver TV por internet" => "TV por internet",
+            "Ver vallas publicitarias" => "Vallas publicitarias",
+            "Visitar centros comerciales" => "Centros comerciales",
+        ];
+
+        $commercialQualityData = collect($commercialQualityData)->mapWithKeys(function ($data, $mediaType) use ($mediaTypeMapping) {
+
+            $cleanedMediaType = trim($mediaType);
+            $newMediaType = $mediaTypeMapping[$cleanedMediaType] ?? $cleanedMediaType; // Default to the original if no mapping found
+
+            return [$newMediaType => $data];
+        })->toArray();
+
         $commercialQualityData['Column Percentages'] = $columnWisePercentages;
-        // dd($commercialQualityData);
+
         $dataMessage = empty($commercialQualityData) ? "No data available to display." : null;
 
         return view('TIP_summary_creative_quality', compact('breadcrumb', 'commercialQualityData', 'dataMessage'));

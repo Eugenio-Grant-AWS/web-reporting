@@ -3,49 +3,76 @@
 
 @section('content')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
+   <style>
+        /* Table Styling */
+        #myTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: Arial, sans-serif;
+        }
 
-    <style>
-        .status {
+        /* Green header with white text */
+        #myTable th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
             text-align: center;
-            border-radius: 5px;
-            padding: 5px 27px;
-            border: 1px solid;
         }
 
-        .status.true {
-            background: #a6e7d8;
-            border-color: #008767;
-            color: #008767;
-        }
-
-        .status.false {
-            background: #FFC5C5;
-            border-color: #DF0404;
-            color: #DF0404;
-        }
-
-        tr {
-            border-bottom: 1px solid #00000014;
-        }
-
-        td,
-        th {
-            font-size: 14px;
+        /* Adjusting column widths */
+        #myTable td, #myTable th {
+            padding: 10px;
             text-align: center;
-            padding: 20px 0;
+            border: 1px solid #ddd;
         }
 
-        th {
-            color: #000000;
+        /* Fixed column widths */
+        #myTable th:nth-child(1), #myTable td:nth-child(1) {
+            width: 20%; /* Adjust according to your needs */
         }
 
-        td {
-            color: #292D32;
-            font-weight: 500;
+        #myTable th:nth-child(2), #myTable td:nth-child(2) {
+            width: 12%;
         }
+
+        #myTable th:nth-child(3), #myTable td:nth-child(3) {
+            width: 12%;
+        }
+
+        #myTable th:nth-child(4), #myTable td:nth-child(4) {
+            width: 12%;
+        }
+
+        #myTable th:nth-child(5), #myTable td:nth-child(5) {
+            width: 12%;
+        }
+
+        #myTable th:nth-child(6), #myTable td:nth-child(6) {
+            width: 12%;
+        }
+
+        #myTable th:nth-child(7), #myTable td:nth-child(7) {
+            width: 12%;
+        }
+
+        /* Zebra striping for rows (optional) */
+        #myTable tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect for rows */
+        #myTable tr:hover {
+            background-color: #ddd;
+        }
+
+        /* Table Footer (optional) */
+        #myTable tfoot th {
+            /* background-color: #55f140; */
+            background-color: #4CAF50;
+        }
+
+
     </style>
-
-
     <div class="container-fluid">
         <div class="row align-items-baseline ">
             <div class="col-xl-4 ">
@@ -55,20 +82,18 @@
             </div>
             <div class="col-xl-8 ">
                 <div class="body-right">
-                    <div class=" search-group bg-custom rounded-4">
+                    {{-- <div class=" search-group bg-custom rounded-4">
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search" id="customSearch" class="bg-transparent border-0">
-                    </div>
+                    </div> --}}
                     <div class="select-group bg-custom rounded-4">
-                        <span class="flex-1">Sort by:</span>
-                        <select id="customSort" class="bg-transparent border-0 form-select">
-                            <option value="">Select</option>
-                            <option value="0">Customer Name</option>
-                            <option value="1">Company</option>
-                            <option value="2">Phone Number</option>
-                            <option value="3">Email</option>
-                            <option value="4">Country</option>
-                            <option value="5">Status</option>
+                        <select id="mediaFilter" class="bg-transparent border-0 form-select">
+                            <option value="">Select Media</option>
+                            @foreach ($commercialQualityData as $mediaType => $data)
+                                @if($mediaType !== 'Column Percentages')
+                                    <option value="{{ $mediaType }}">{{ $mediaType }}</option>
+                                @endif
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -162,12 +187,15 @@
                 "paging": false, // Disable paging (if you want to show all rows at once)
             });
 
+            // Custom Search functionality
             $('#customSearch').on('keyup', function() {
                 table.search(this.value).draw();
             });
 
-            $('#customSort').on('change', function() {
-                // Since sorting is disabled, there's no need to handle this anymore
+            // Media Channel filter functionality
+            $('#mediaFilter').on('change', function() {
+                var selectedMedia = this.value;
+                table.columns(0).search(selectedMedia ? '^' + selectedMedia + '$' : '', true, false).draw();
             });
         });
     </script>
