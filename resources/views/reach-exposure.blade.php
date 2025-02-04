@@ -30,7 +30,7 @@
         </div>
 
 
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-12">
                 <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Select Media Channels</h5>
@@ -76,7 +76,7 @@
                 </div>
             </div>
             </div>
-        </div>
+        </div> --}}
 
         <div class="bg-white rounded-lg">
             @if ($dataMessage)
@@ -108,7 +108,7 @@
 
 @section('scripts')
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+// document.addEventListener("DOMContentLoaded", function() {
     var chartData = @json($chartData);
 
     if (chartData.series && chartData.categories) {
@@ -189,34 +189,34 @@ document.addEventListener("DOMContentLoaded", function() {
             });
 
     // Update chart dynamically when a dropdown value is selected
-    $('.js-example-basic-multiple').on('change', function() {
-            var selectedOptions = $(this).val();
-            var data = {};
-            selectedOptions.forEach(option => {
-                data[option] = 1;
-            });
+    // $('.js-example-basic-multiple').on('change', function() {
+    //         var selectedOptions = $(this).val();
+    //         var data = {};
+    //         selectedOptions.forEach(option => {
+    //             data[option] = 1;
+    //         });
 
-            $.ajax({
-                url: "{{ route('reach-exposure-probability-with-mean') }}",
-                method: "GET",
-                data: { top_row: data },
-                success: function(response) {
-                    chart.updateOptions({
-                        series: response.commercialQualityData.datasets.Default.data
-                    });
-                }
-            });
-        });
+    //         $.ajax({
+    //             url: "{{ route('reach-exposure-probability-with-mean') }}",
+    //             method: "GET",
+    //             data: { top_row: data },
+    //             success: function(response) {
+    //                 chart.updateOptions({
+    //                     series: response.commercialQualityData.datasets.Default.data
+    //                 });
+    //             }
+    //         });
+    //     });
 
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2({
-                placeholder: "Select an option", // Placeholder text
-                width: '50%'
-            });
+    //     $(document).ready(function() {
+    //         $('.js-example-basic-multiple').select2({
+    //             placeholder: "Select an option", // Placeholder text
+    //             width: '50%'
+    //         });
 
-        });
+    //     });
 
-    });
+    // });
 </script>
 
 
