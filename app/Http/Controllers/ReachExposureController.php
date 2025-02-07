@@ -15,7 +15,7 @@ class ReachExposureController extends Controller
     public function index(Request $request)
     {
         $breadcrumb = 'Reach Exposure - Probability with mean';
-
+    
         // Define the mapping of old to new values
         $mediaTypeMapping = [
             "Ver la televisión de señal nacional" => "TV nacional",
@@ -40,7 +40,7 @@ class ReachExposureController extends Controller
             "Entrar a Youtube" => "YouTube",
             "Entrar a LinkedIn" => "LinkedIn",
             "Escuchar Spotify" => "Spotify",
-            "24.Ver Netflix" => "Netflix",
+            "Ver Netflix" => "Netflix",
             "Utilizar Mailing list" => "Usar listas de correo",
             "Videojuegos (celular)" => "Jugar en el celular",
             "Utilizar We transfer" => "WeTransfer",
@@ -54,48 +54,54 @@ class ReachExposureController extends Controller
             "Entrar Encuentra 24" => "Encuentra24",
             "Entrar a Instagram" => "Instagram"
         ];
-
-        $defaultSelection = []; // Make sure this contains a valid selection of column names
-
-        session()->forget('selected_top_row');
-
-        // Handle filter logic: Get selected media types
-        $selectedValues = $request->input('top_row', session('selected_top_row', []));
-        session(['selected_top_row' => $selectedValues]);
-
-        // Prepare the selected keys for the query, to ensure filtering based on selected media channels
-        $filteredKeys = array_keys($selectedValues);
-
-        // If no selection is made, fall back to selecting all columns
-        $columnsToSelect = empty($filteredKeys) ? ['*'] : $filteredKeys;
-
-        $dataRows = DB::table('reach_exposures')
-            ->select($columnsToSelect) // Select only relevant columns
-            ->when(count($filteredKeys), function ($query) use ($filteredKeys) {
-                return $query->whereIn('MediaType', $filteredKeys);
-            })
-            ->get();
-
-
-        // Fetch the data and apply the mapping to the MediaType
-        $mediaTypes = $dataRows->map(function ($item) use ($mediaTypeMapping) {
-            // Strip any numbering
-            $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
-
-            // Replace with the new value if it exists in the mapping
-            if (isset($mediaTypeMapping[$item->MediaType])) {
-                $item->MediaType = $mediaTypeMapping[$item->MediaType];
-            }
-
-            return $item;
-        });
-
+    
+        // Fetch data from database and apply the mapping
+        $mediaTypes = DB::table('reach_exposures')
+            ->get()
+            ->map(function ($item) use ($mediaTypeMapping) {
+                // Strip any numbering from MediaType
+                $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
+    
+                // Replace with mapped value if exists
+                if (isset($mediaTypeMapping[$item->MediaType])) {
+                    $item->MediaType = $mediaTypeMapping[$item->MediaType];
+                }
+    
+                return $item;
+            });
+            // Get unique categories for filters
+            $uniqueGender = $mediaTypes->pluck('QuotGene')->unique();
+            $uniqueAge = $mediaTypes->pluck('QuotEdad')->unique();
+            $uniqueValue = $mediaTypes->pluck('Value')->unique();
+            $uniqueAdjusted_value = $mediaTypes->pluck('Adjusted_value')->unique();
+            $uniqueMediaType = $mediaTypes->pluck('MediaType')->unique();
+        // Apply filters based on selected options from the request
+        if ($request->has('uniqueGender') && !empty($request->uniqueGender)) {
+            $mediaTypes = $mediaTypes->whereIn('QuotGene', $request->uniqueGender);
+        }
+    
+        if ($request->has('uniqueAge') && !empty($request->uniqueAge)) {
+            $mediaTypes = $mediaTypes->whereIn('QuotEdad', $request->uniqueAge);
+        }
+    
+        if ($request->has('uniqueValue') && !empty($request->uniqueValue)) {
+            $mediaTypes = $mediaTypes->whereIn('Value', $request->uniqueValue);
+        }
+    
+        if ($request->has('uniqueAdjusted_value') && !empty($request->uniqueAdjusted_value)) {
+            $mediaTypes = $mediaTypes->whereIn('Adjusted_value', $request->uniqueAdjusted_value);
+        }
+    
+        if ($request->has('uniqueMediaType') && !empty($request->uniqueMediaType)) {
+            $mediaTypes = $mediaTypes->whereIn('MediaType', $request->uniqueMediaType);
+        }
+    
         // Group by MediaType and Adjusted_value
         $grouped = $mediaTypes->groupBy(['MediaType', 'Adjusted_value']);
-
+    
         // Extract unique categories
         $categories = $mediaTypes->pluck('MediaType')->unique()->toArray();
-
+    
         // Extract unique Adjusted_value values
         $values = $mediaTypes->pluck('Adjusted_value')
             ->unique()
@@ -103,14 +109,14 @@ class ReachExposureController extends Controller
             ->sort()
             ->values()
             ->all();
-
+    
         // Ensure 0 is included in the list of values
         $values = !empty($values) ? array_merge($values, ["0"]) : [];
-
+    
         // Prepare the series data for the chart
         $series = [];
         $colors = $this->generateColors(count($values));
-
+    
         foreach ($values as $index => $value) {
             $data = collect($categories)->map(function ($category) use ($grouped, $value) {
                 // Get total count for the category
@@ -120,7 +126,7 @@ class ReachExposureController extends Controller
                 // Calculate the percentage
                 return $totalForCategory > 0 ? round(($count / $totalForCategory) * 100, 1) . '%' : '0%';
             })->toArray();
-
+    
             // Add to series array
             $series[] = [
                 'name' => $value,
@@ -128,20 +134,20 @@ class ReachExposureController extends Controller
                 'color' => $colors[$index],
             ];
         }
-
+    
         // Sort the categories based on the first data value in each series
         if (!empty($series[0]['data'])) {
             // Convert percentage strings to float for sorting
             $dataToSort = array_map(fn($value) => strpos($value, '%') !== false ? floatval(str_replace('%', '', $value)) : 0, $series[0]['data']);
             $pairs = array_map(null, $categories, $dataToSort, array_keys($categories));
-
+    
             // Sort by the percentage values
             usort($pairs, fn($a, $b) => $b[1] <=> $a[1]);
-
+    
             // Extract sorted categories and their indices
             $sortedCategories = array_column($pairs, 0);
             $sortedIndices = array_column($pairs, 2);
-
+    
             // Sort series based on the sorted indices
             $sortedSeries = array_map(function ($serie) use ($sortedIndices) {
                 $serie['data'] = array_map(fn($index) => $serie['data'][$index], $sortedIndices);
@@ -152,25 +158,27 @@ class ReachExposureController extends Controller
             $sortedCategories = $categories;
             $sortedSeries = $series;
         }
-
+    
         // Prepare the chart data
         $chartData = [
             'categories' => $sortedCategories,
             'series' => $sortedSeries,
         ];
-
+    
+        // Return data as JSON if it's an AJAX request
         if ($request->ajax()) {
             return response()->json([
                 'chartData' => $chartData
             ]);
         }
-
-        // If there is no data, set the message
+    
+        // If no data, set the message
         $dataMessage = empty($chartData['series']) ? "No data available to display." : null;
-
+    
         // Pass data to the view
-        return view('reach-exposure', compact('breadcrumb', 'chartData', 'dataMessage'));
+        return view('reach-exposure', compact('breadcrumb', 'chartData', 'dataMessage', 'uniqueGender', 'uniqueAge', 'uniqueValue', 'uniqueAdjusted_value', 'uniqueMediaType'));
     }
+    
 
 
     /**

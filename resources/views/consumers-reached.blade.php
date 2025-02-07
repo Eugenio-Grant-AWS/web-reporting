@@ -1,12 +1,13 @@
 @extends('layouts.admin')
 @section('title', $breadcrumb)
 @section('content')
+
 @php
 $defaultSelection = [
     'ver_tv_senal_nacional' => 1,
-
 ];
 @endphp
+
 <div class="container-fluid">
     <div class="row align-items-baseline">
         <div class="col-xl-4">
@@ -26,12 +27,15 @@ $defaultSelection = [
                 </button>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Select Media Channels</h5>
+    </div>
 
-                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+    <!-- Filters Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
+                <h5 class="mb-3">Select Media Channels</h5>
+                <form method="GET" id="filter-form">
+                <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
                         <option value="ver_tv_senal_nacional" <?= isset($defaultSelection['ver_tv_senal_nacional']) ? 'selected' : '' ?>>ver_tv_senal_nacional</option>
                         <option value="ver_tv_cable">ver_tv_cable</option>
                         <option value="ver_tv_internet">ver_tv_internet</option>
@@ -69,24 +73,72 @@ $defaultSelection = [
                         <option value="entrar_google">entrar_google</option>
                         <option value="entrar_encuentra24">entrar_encuentra24</option>
                       </select>
-                </div>
+                </form>
             </div>
-            </div>
-        </div>
-        <div class="bg-white rounded-lg">
-            @if ($dataMessage)
-                @component('components.no_data_message', ['message' => $dataMessage])
-                @endcomponent
-            @else
-                <div class="pt-5 d-flex justify-content-center">
-                    <div class="flow-chart">
-                        <div id="pieChartTest"></div>
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
+
+    <div class="row">
+    <!-- QuotGene Filter -->
+    <div class="col-sm-6 col-md-4 mb-3">
+        <div class="filter-group">
+            <label for="quotgene">QuotGene</label>
+            <select name="quotgene[]" id="quotgene" class="form-select js-example-basic-multiple " multiple >
+                @foreach($quotgeneValues as $quotgene)
+                    <option value="{{ $quotgene }}">{{ $quotgene }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <!-- QuotEdad Filter -->
+    <div class="col-sm-6 col-md-4 mb-3">
+        <div class="filter-group">
+            <label for="quotedad">QuotEdad</label>
+            <select name="quotedad[]" id="quotedad" class="form-select js-example-basic-multiple" multiple>
+                @foreach($quotedadValues as $quotedad)
+                    <option value="{{ $quotedad }}">{{ $quotedad }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <!-- QuoSegur Filter -->
+    <div class="col-sm-6 col-md-4 mb-3">
+        <div class="filter-group">
+            <label for="quosegur">QuoSegur</label>
+            <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
+                @foreach($quosegurValues as $quosegur)
+                    <option value="{{ $quosegur }}">{{ $quosegur }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <!-- Apply Filters Button -->
+    <div class="col-12 mt-3 d-flex justify-content-end">
+        <button type="button" class="btn btn-primary" id="applyFiltersBtn">Apply Filters</button>
+    </div>
 </div>
+
+</div>
+
+
+    <!-- Chart Section -->
+    <div class="bg-white rounded-lg">
+        @if ($dataMessage)
+            @component('components.no_data_message', ['message' => $dataMessage])
+            @endcomponent
+        @else
+            <div class="pt-5 d-flex justify-content-center">
+                <div class="flow-chart">
+                    <div id="pieChartTest"></div>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -138,9 +190,8 @@ $defaultSelection = [
 
         var chart = new ApexCharts(document.querySelector("#pieChartTest"), options);
         chart.render();
-
-        // Update chart dynamically when a dropdown value is selected
-        $('.js-example-basic-multiple').on('change', function() {
+ // Update chart dynamically when a dropdown value is selected
+ $('.js-example-basic-multiple').on('change', function() {
             var selectedOptions = $(this).val();
             var data = {};
             selectedOptions.forEach(option => {
@@ -158,6 +209,32 @@ $defaultSelection = [
                 }
             });
         });
+        // Update chart dynamically when a dropdown value is selected
+        $('#applyFiltersBtn').on('click', function() {
+    var quotgeneSelected = $('#quotgene').val();
+    var quotedadSelected = $('#quotedad').val();
+    var quosegurSelected = $('#quosegur').val();
+
+    // Make sure to send the correct data in the AJAX request
+    $.ajax({
+        url: "{{ route('net-percentage-of-consumers-reached') }}",
+        method: "GET",
+        data: {
+            quotgene: quotgeneSelected,
+            quotedad: quotedadSelected,
+            quosegur: quosegurSelected
+        },
+        success: function(response) {
+            // Update the chart with the new data from the response
+            chart.updateOptions({
+                series: response.commercialQualityData.datasets.Default.data
+            });
+        },
+        error: function(error) {
+            console.log('Error fetching data:', error);
+        }
+    });
+});
 
         // Download chart as an image
         document.getElementById('downloadChart').addEventListener('click', function() {
@@ -174,9 +251,16 @@ $defaultSelection = [
                 placeholder: "Select an option", // Placeholder text
                 width: '50%'
             });
-
         });
     });
+    $(document).ready(function() {
+    // Initialize select2 for better multi-select functionality
+    $('.form-select').select2({
+        placeholder: "Select an option",  // Placeholder text
+        width: '100%'  // Full width for select dropdowns
+    });
+});
+
 </script>
 
 @endsection

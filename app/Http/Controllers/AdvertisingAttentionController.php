@@ -4,17 +4,49 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class AdvertisingAttentionController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = 'Advertising Attention by Touchpoint';
+        $query = DB::table('advertising_attentions');
+
+
+        if ($request->has('uniqueRespoSer') && !empty($request->uniqueRespoSer)) {
+            $query = $query->whereIn('RespoSer', $request->uniqueRespoSer);
+        }
+        if ($request->has('uniqueGender') && !empty($request->uniqueGender)) {
+            $query = $query->whereIn('QuotGene', $request->uniqueGender);
+        }
+        if ($request->has('uniqueAge') && !empty($request->uniqueAge)) {
+            $query = $query->whereIn('QuotEdad', $request->uniqueAge);
+        }
+        if ($request->has('uniqueValue') && !empty($request->uniqueValue)) {
+            $query = $query->whereIn('Value', $request->uniqueValue);
+        }
+        if ($request->has('uniqueQuoSegur') && !empty($request->uniqueQuoSegur)) {
+            $query = $query->whereIn('QuoSegur', $request->uniqueQuoSegur);
+        }
+        if ($request->has('uniqueMediaType') && !empty($request->uniqueMediaType)) {
+            $query = $query->whereIn('MediaType', $request->uniqueMediaType);
+        }
+
+        $mediaTypes = $query->get();
+
+      
+        $uniqueRespoSer = $mediaTypes->pluck('RespoSer')->unique();
+        $uniqueGender = $mediaTypes->pluck('QuotGene')->unique();
+        $uniqueAge = $mediaTypes->pluck('QuotEdad')->unique();
+        $uniqueValue = $mediaTypes->pluck('Value')->unique();
+        $uniqueQuoSegur = $mediaTypes->pluck('QuoSegur')->unique();
+        $uniqueMediaType = $mediaTypes->pluck('MediaType')->unique();
 
         $mediaTypeMapping = [
-            "Ver TV por cable" => "TV cable",
+            "Ver TV por cable" => "Ver TV por cable",
             "O?r radio" => "Radio",
             "O?r radio online" => "Radio online",
             "Leer revista impresa" => "Revista impresa",
@@ -50,20 +82,15 @@ class AdvertisingAttentionController extends Controller
             "Ver Netflix" => "Netflix",
         ];
 
-        $mediaTypes = DB::table('advertising_attentions')
-            ->get()
-            ->map(function ($item) use ($mediaTypeMapping) {
-                $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
-                if (isset($mediaTypeMapping[$item->MediaType])) {
-                    $item->MediaType = $mediaTypeMapping[$item->MediaType];
-                }
-
-                return $item;
-            });
-
+        $mediaTypes = $mediaTypes->map(function ($item) use ($mediaTypeMapping) {
+            $item->MediaType = preg_replace('/^\d+\.\s/', '', $item->MediaType);
+            if (isset($mediaTypeMapping[$item->MediaType])) {
+                $item->MediaType = $mediaTypeMapping[$item->MediaType];
+            }
+            return $item;
+        });
 
         $grouped = $mediaTypes->groupBy(['MediaType', 'Value']);
-
         $categories = $mediaTypes->pluck('MediaType')->unique()->toArray();
         $values = $mediaTypes->pluck('Value')
             ->unique()
@@ -71,10 +98,7 @@ class AdvertisingAttentionController extends Controller
             ->values()
             ->all();
 
-        // $values = !empty($values) ? array_merge($values, ["0"]) : [];
-
         $series = [];
-
         $colors = $this->generateColors(count($values));
 
         foreach ($values as $index => $value) {
@@ -84,12 +108,15 @@ class AdvertisingAttentionController extends Controller
                 return $totalForCategory > 0 ? round(($count / $totalForCategory) * 100, 1) . '%' : '0%';
             })->toArray();
 
+
             $series[] = [
                 'name' => $value,
                 'data' => $data,
                 'color' => $colors[$index],
             ];
         }
+
+        // Sort the categories and series data
         if (!empty($series[0]['data'])) {
             $dataToSort = array_map(fn($value) => strpos($value, '%') !== false ? floatval(str_replace('%', '', $value)) : 0, $series[0]['data']);
             $pairs = array_map(null, $categories, $dataToSort, array_keys($categories));
@@ -97,11 +124,9 @@ class AdvertisingAttentionController extends Controller
             usort($pairs, fn($a, $b) => $b[1] <=> $a[1]);
 
             $sortedCategories = array_column($pairs, 0);
-
             $sortedIndices = array_column($pairs, 2);
 
             $sortedSeries = array_map(function ($serie) use ($sortedIndices) {
-
                 $serie['data'] = array_map(fn($index) => $serie['data'][$index], $sortedIndices);
                 return $serie;
             }, $series);
@@ -110,18 +135,29 @@ class AdvertisingAttentionController extends Controller
             $sortedSeries = $series;
         }
 
-
+        // Prepare chart data to pass to the view
         $chartData = [
             'categories' => $sortedCategories,
             'series' => $sortedSeries,
         ];
-        // dd($chartData);
-
-
+        if ($request->ajax()) {
+            return response()->json(['chartData' => $chartData]);
+        }
+        // If no data is found, show a message
         $dataMessage = empty($chartData['series']) ? "No data available to display." : null;
-
-        return view('advertising-attention', compact('breadcrumb', 'chartData', 'dataMessage'));
+        return view('advertising-attention', compact(
+            'breadcrumb',
+            'chartData',
+            'dataMessage',
+            'uniqueRespoSer',
+            'uniqueGender',
+            'uniqueAge',
+            'uniqueQuoSegur',
+            'uniqueMediaType',
+            'uniqueValue'
+        ));
     }
+
 
     /**
      * Generate an array of unique colors.
@@ -151,4 +187,5 @@ class AdvertisingAttentionController extends Controller
         }
         return $colors;
     }
+    
 }

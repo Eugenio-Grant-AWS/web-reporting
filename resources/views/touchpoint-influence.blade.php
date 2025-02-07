@@ -99,6 +99,120 @@
                     </div>
                 </div>
             </div>
+            <div class="filter-section mb-4">
+                <form method="GET" id="filter-form">
+                    <div class="row">
+                        @if(!empty($uniqueGender))
+                            <div class="col-md-4">
+                                <div class="filter-group">
+                                    <label for="uniqueGender">Gender</label>
+                                    <select name="uniqueGender[]" id="uniqueGender" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueGender as $gender)
+                                            <option value="{{ $gender }}">{{ $gender }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueAge))
+                            <div class="col-md-4">
+                                <div class="filter-group">
+                                    <label for="uniqueAge">Age</label>
+                                    <select name="uniqueAge[]" id="uniqueAge" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueAge as $age)
+                                            <option value="{{ $age }}">{{ $age }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueValue))
+                            <div class="col-md-4">
+                                <div class="filter-group">
+                                    <label for="uniqueValue">Value</label>
+                                    <select name="uniqueValue[]" id="uniqueValue" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueValue as $value)
+                                            <option value="{{ $value }}">{{ $value }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueMediaType))
+                            <div class="col-md-4">
+                                <div class="filter-group">
+                                    <label for="uniqueMediaType">Media Type</label>
+                                    <select name="uniqueMediaType[]" id="uniqueMediaType" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueMediaType as $media)
+                                            <option value="{{ $media }}">{{ $media }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueRespoSer))
+                            <div class="col-md-4 mt-3">
+                                <div class="filter-group">
+                                    <label for="uniqueRespoSer">Response Service</label>
+                                    <select name="uniqueRespoSer[]" id="uniqueRespoSer" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueRespoSer as $respoSer)
+                                            <option value="{{ $respoSer }}">{{ $respoSer }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueQuoSegur))
+                            <div class="col-md-4 mt-3">
+                                <div class="filter-group">
+                                    <label for="uniqueQuoSegur">Security Quote</label>
+                                    <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueQuoSegur as $quoSegur)
+                                            <option value="{{ $quoSegur }}">{{ $quoSegur }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueReach))
+                            <div class="col-md-4 mt-3">
+                                <div class="filter-group">
+                                    <label for="uniqueReach">Reach</label>
+                                    <select name="uniqueReach[]" id="uniqueReach" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueReach as $reach)
+                                            <option value="{{ $reach }}">{{ $reach }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if(!empty($uniqueattentive_exposure))
+                            <div class="col-md-4 mt-3">
+                                <div class="filter-group">
+                                    <label for="uniqueattentive_exposure">Attentive Exposure</label>
+                                    <select name="uniqueattentive_exposure[]" id="uniqueattentive_exposure" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueattentive_exposure as $attentive_exposure)
+                                            <option value="{{ $attentive_exposure }}">{{ $attentive_exposure }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="col-md-4 mt-3 text-end">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
         </div>
         @if ($dataMessage)
             @component('components.no_data_message', ['message' => $dataMessage])
@@ -159,22 +273,86 @@
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 
     <script>
+$(document).ready(function() {
+    let table = new DataTable('#myTable', {
+        "ordering": false,
+        "info": false,
+        "paging": false,
+    });
+
+    // Initialize Select2 for multi-select filters
+    $('.js-example-basic-multiple').select2({
+        placeholder: "Select an option",
+        width: '50%'
+    });
+
+    // Handle form submission with AJAX
+    $('#filter-form').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission (which reloads the page)
+        applyFilters(); // Call the function to apply filters
+    });
+
+    // Function to apply filters via AJAX
+    function applyFilters() {
+        var formData = $('#filter-form').serialize(); // Get all form data
+
+        $.ajax({
+            url: '{{ route('touchpoint-influence') }}', // The route to your controller action
+            method: 'GET',
+            data: formData,
+            success: function(response) {
+                // Update table with filtered data
+                updateTable(response);
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+            }
+        });
+    }
+
+    // Function to update the table with the new data
+    function updateTable(response) {
+    var tableBody = $('#myTable tbody');
+    tableBody.empty(); // Clear existing table data
+
+    console.log(response);  // Log the response to the console for debugging
+
+    if (response.commercialQualityData) {
+        // Loop through the new data and populate the table
+        Object.keys(response.commercialQualityData).forEach(function(mediaType) {
+            const mediaTypeData = response.commercialQualityData[mediaType];
+            tableBody.append(`
+                <tr>
+                    <td>${mediaType}</td>
+                    <td>${mediaTypeData['1. Awareness Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['2. Understanding Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['3. Trial Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['4. Top of Mind Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['5. Image Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['6. Loyalty Percentage'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['Grand Total Row %'] || 'N/A'}%</td>
+                </tr>
+            `);
+        });
+
+        // Redraw the DataTable to reflect new data
+        $('#myTable').DataTable().clear().draw();
+        $('#myTable').DataTable().rows.add(tableBody.children()).draw(); // Refresh DataTable rows
+    } else {
+        // Handle the case where there is no data to display (optional)
+        tableBody.append('<tr><td colspan="8">No data available</td></tr>');
+    }
+}
+
+
+
+});
+
+
         $(document).ready(function() {
-            let table = new DataTable('#myTable', {
-                "ordering": false, // Disable sorting functionality
-                "info": false, // Optionally, disable the info text (number of rows, etc.)
-                "paging": false, // Disable paging (if you want to show all rows at once)
-            });
-
-            // Custom Search functionality
-            $('#customSearch').on('keyup', function() {
-                table.search(this.value).draw();
-            });
-
-            // Media Channel filter functionality
-            $('#mediaFilter').on('change', function() {
-                var selectedMedia = this.value;
-                table.columns(0).search(selectedMedia ? '^' + selectedMedia + '$' : '', true, false).draw();
+            $('.js-example-basic-multiple').select2({
+                placeholder: "Select an option", // Placeholder text
+                width: '50%'
             });
         });
     </script>

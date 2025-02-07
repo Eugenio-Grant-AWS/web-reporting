@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+
+
 
 class AttentiveExposureController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = 'Media Exposure';
 
@@ -49,9 +52,43 @@ class AttentiveExposureController extends Controller
         ];
 
         // Fetch data from the attentive_exposures table
-        $mediaData = DB::table('attentive_exposures')
-            ->select('MediaType', 'attentive_exposure')
-            ->get();
+        $mediaData = DB::table('attentive_exposures')->get();
+
+               // Get unique categories for filters
+            $uniqueRespoSer = $mediaData->pluck('RespoSer')->unique();
+            $uniqueGender = $mediaData->pluck('QuotGene')->unique();
+            $uniqueAge = $mediaData->pluck('QuotEdad')->unique();
+            $uniqueQuoSegur = $mediaData->pluck('QuoSegur')->unique();
+            $uniqueMediaType = $mediaData->pluck('MediaType')->unique();
+            $uniqueValue = $mediaData->pluck('Value')->unique();
+            $uniqueReach = $mediaData->pluck('Reach')->unique();
+            $uniqueattentive_exposure = $mediaData->pluck('attentive_exposure')->unique();
+
+            // Apply filters based on selected options from the request
+            if ($request->has('uniqueRespoSer') && !empty($request->uniqueRespoSer)) {
+                $mediaData = $mediaData->whereIn('RespoSer', $request->uniqueRespoSer);
+            }
+            if ($request->has('uniqueGender') && !empty($request->uniqueGender)) {
+                $mediaData = $mediaData->whereIn('QuotGene', $request->uniqueGender);
+            }
+            if ($request->has('uniqueAge') && !empty($request->uniqueAge)) {
+                $mediaData = $mediaData->whereIn('QuotEdad', $request->uniqueAge);
+            }
+            if ($request->has('uniqueQuoSegur') && !empty($request->uniqueQuoSegur)) {
+                $mediaData = $mediaData->whereIn('QuoSegur', $request->uniqueQuoSegur);
+            }
+            if ($request->has('uniquMediaType') && !empty($request->uniqueMediaType)) {
+                $mediaData = $mediaData->whereIn('MediaType', $request->uniqueMediaType);
+            }
+            if ($request->has('uniqueValue') && !empty($request->uniqueValue)) {
+                $mediaTypes = $mediaData->whereIn('Value', $request->uniqueValue);
+            }
+            if ($request->has('uniqueReach') && !empty($request->uniqueReach)) {
+                $mediaData = $mediaData->whereIn('Reach', $request->uniqueReach);
+            }
+            if ($request->has('uniqueattentive_exposure') && !empty($request->uniqueattentive_exposure)) {
+                $mediaData = $mediaData->whereIn('attentive_exposure', $request->uniqueattentive_exposure);
+            }
         // Ensure proper UTF-8 encoding for special characters
         $mediaData->transform(function ($item) use ($mediaTypeMapping) {
             // Map MediaType to the new label if it exists in the mapping
@@ -82,8 +119,9 @@ class AttentiveExposureController extends Controller
 
         // Check if data is available
         $dataMessage = empty($chartData['categories']) ? "No data available to display." : null;
-
-        // Pass data to the view
-        return view('attentive-exposure', compact('breadcrumb', 'chartData', 'dataMessage'));
+        if ($request->ajax()) {
+            return response()->json(['chartData' => $chartData, 'dataMessage' => $dataMessage]);
+        }
+        return view('attentive-exposure', compact('breadcrumb', 'chartData', 'dataMessage' , 'uniqueRespoSer', 'uniqueGender', 'uniqueAge', 'uniqueQuoSegur', 'uniqueMediaType', 'uniqueValue', 'uniqueReach','uniqueattentive_exposure'));
     }
 }

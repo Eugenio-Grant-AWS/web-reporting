@@ -36,11 +36,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
+    // Define the route for the AJAX request to handle the filters
     Route::get('/reach-exposure-probability-with-mean', [ReachExposureController::class, 'index'])->name('reach-exposure-probability-with-mean');
     Route::post('/media-consumption/import', [ReachExposureController::class, 'import'])->name('media-consumption.import');
 
+    Route::get('/reach-exposure/filter', [ReachExposureController::class, 'index'])->name('reach-exposure-filter');
 
     Route::get('/net-percentage-of-consumers-reached', [ConsumersReachedController::class, 'index'])->name('net-percentage-of-consumers-reached');
     Route::get('/unduplicated-net-reach', [UnduplicatedNetReachController::class, 'index'])->name('unduplicated-net-reach');

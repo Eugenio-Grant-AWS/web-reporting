@@ -10,7 +10,7 @@ use IcehouseVentures\LaravelChartjs\Facades\Chartjs;
 
 class TouchpointInfluenceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = 'Touchpoint Influence';
 
@@ -18,7 +18,47 @@ class TouchpointInfluenceController extends Controller
 
         $tpis = TouchpointInfluence::distinct()->pluck('tpi')->toArray();
 
-        $fixedTotals = TouchpointInfluence::select('MediaType', 'tpi', DB::raw('COUNT(*) as total'))
+        // Fetch the unique filter options
+        $uniqueRespoSer = TouchpointInfluence::distinct()->pluck('RespoSer');
+        $uniqueGender = TouchpointInfluence::distinct()->pluck('QuotGene');
+        $uniqueAge = TouchpointInfluence::distinct()->pluck('QuotEdad');
+        $uniqueQuoSegur = TouchpointInfluence::distinct()->pluck('QuoSegur');
+        $uniqueMediaType = TouchpointInfluence::distinct()->pluck('MediaType');
+        $uniqueIndex = TouchpointInfluence::distinct()->pluck('index');
+        $uniqueInfluence = TouchpointInfluence::distinct()->pluck('Influence');
+        $uniquetpi = TouchpointInfluence::distinct()->pluck('tpi');
+
+        // Start query to fetch data
+        $mediaData = TouchpointInfluence::query();
+
+        // Apply filters based on selected options from the request
+        if ($request->has('uniqueRespoSer') && !empty($request->uniqueRespoSer)) {
+            $mediaData = $mediaData->whereIn('RespoSer', $request->uniqueRespoSer);
+        }
+        if ($request->has('uniqueGender') && !empty($request->uniqueGender)) {
+            $mediaData = $mediaData->whereIn('QuotGene', $request->uniqueGender);
+        }
+        if ($request->has('uniqueAge') && !empty($request->uniqueAge)) {
+            $mediaData = $mediaData->whereIn('QuotEdad', $request->uniqueAge);
+        }
+        if ($request->has('uniqueQuoSegur') && !empty($request->uniqueQuoSegur)) {
+            $mediaData = $mediaData->whereIn('QuoSegur', $request->uniqueQuoSegur);
+        }
+        if ($request->has('uniqueMediaType') && !empty($request->uniqueMediaType)) {
+            $mediaData = $mediaData->whereIn('MediaType', $request->uniqueMediaType);
+        }
+        if ($request->has('uniquetpi') && !empty($request->uniquetpi)) {
+            $mediaData = $mediaData->whereIn('tpi', $request->uniquetpi);
+        }
+        if ($request->has('uniqueInfluence') && !empty($request->uniqueInfluence)) {
+            $mediaData = $mediaData->whereIn('Influence', $request->uniqueInfluence);
+        }
+        if ($request->has('uniqueindex') && !empty($request->uniqueindex)) {
+            $mediaData = $mediaData->whereIn('index', $request->uniqueindex);
+        }
+
+        // Now apply the same aggregation logic as before
+        $fixedTotals = $mediaData->select('MediaType', 'tpi', DB::raw('COUNT(*) as total'))
             ->groupBy('MediaType', 'tpi')
             ->get()
             ->groupBy('MediaType')
@@ -27,9 +67,7 @@ class TouchpointInfluenceController extends Controller
             })
             ->toArray();
 
-
-        // Fetch influence counts in a single query
-        $influenceCounts = TouchpointInfluence::where('influence', 1)
+        $influenceCounts = $mediaData->where('influence', 1)
             ->select('MediaType', 'tpi', DB::raw('COUNT(*) as total'))
             ->groupBy('MediaType', 'tpi')
             ->get()
@@ -39,11 +77,11 @@ class TouchpointInfluenceController extends Controller
             })
             ->toArray();
 
+        // Continue with the same logic for computing the data
         $commercialQualityData = [];
         $columnWiseSums = array_fill_keys($tpis, 0);
         $rowCount = count($mediaTypes);
 
-        // Compute data with optimized loops
         foreach ($mediaTypes as $mediaType) {
             $percentageSum = 0;
             $commercialQualityData[$mediaType] = [];
@@ -60,9 +98,8 @@ class TouchpointInfluenceController extends Controller
                 }
             }
 
-            // Compute Row-wise Grand Total %
             if ($percentageSum > 0) {
-                $firstTpi = reset($tpis); // Get the first TPI as a reference
+                $firstTpi = reset($tpis);
                 $commercialQualityData[$mediaType]['Grand Total Row %'] = round(($percentageSum / ($fixedTotals[$mediaType][$firstTpi] ?? 1)) * 100, 2);
             }
         }
@@ -78,7 +115,6 @@ class TouchpointInfluenceController extends Controller
             }
         }
 
-        // Compute Grand Total Column-Wise Percentage
         if ($columnWiseGrandTotal > 0) {
             $columnWisePercentages['Grand Total Column %'] = round(($columnWiseGrandTotal / count($columnWisePercentages)), 2);
         }
@@ -122,20 +158,21 @@ class TouchpointInfluenceController extends Controller
         ];
 
         $commercialQualityData = collect($commercialQualityData)->mapWithKeys(function ($data, $mediaType) use ($mediaTypeMapping) {
-            // Clean the mediaType by trimming spaces
             $cleanedMediaType = trim($mediaType);
-
-            // Use the mapping to replace old labels with new labels
-            $newMediaType = $mediaTypeMapping[$cleanedMediaType] ?? $cleanedMediaType; // Default to the original if no mapping found
-
+            $newMediaType = $mediaTypeMapping[$cleanedMediaType] ?? $cleanedMediaType;
             return [$newMediaType => $data];
         })->toArray();
-
+        if ($request->ajax()) {
+            return response()->json([
+                'commercialQualityData' => $commercialQualityData,  // Send filtered data
+                'dataMessage' => empty($commercialQualityData) ? "No data available" : null
+            ]);
+        }
         $commercialQualityData['Column Percentages'] = $columnWisePercentages;
 
-        // dd($commercialQualityData);
+        // Check if data exists
         $dataMessage = collect($commercialQualityData)->isEmpty() ? "No data available to display." : null;
 
-        return view('touchpoint-influence', compact('breadcrumb', 'commercialQualityData', 'dataMessage'));
+        return view('touchpoint-influence', compact('breadcrumb', 'commercialQualityData', 'dataMessage','uniqueRespoSer','uniqueGender','uniqueAge','uniqueQuoSegur','uniqueMediaType','uniqueIndex','uniqueInfluence','uniquetpi'));
     }
 }
