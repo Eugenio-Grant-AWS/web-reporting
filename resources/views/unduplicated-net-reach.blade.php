@@ -1,114 +1,110 @@
 @extends('layouts.admin')
-
 @section('breadcrumb', $breadcrumb)
-
 @section('content')
 @php
-$defaultSelection = [
-    'ver_tv_senal_nacional' => 1,
-    'escuchar_radio' => 1,
-    'leer_periodico_impreso' => 1,
-    'leer_revista_impresa' => 1,
-];
+    // Default top row selection for media channels (if not already set)
+    $defaultSelection = [
+        'ver_tv_senal_nacional' => 1,
+        'escuchar_radio' => 1,
+        'leer_periodico_impreso' => 1,
+        'leer_revista_impresa' => 1,
+    ];
 @endphp
-    <div class="container-fluid">
-        <div class="row align-items-baseline">
-            <div class="col-xl-4 ">
-                <div class="body-left">
-                    <h6> Unduplicated Net Reach</h6>
-
-                </div>
+<div class="container-fluid">
+    <!-- Top Row: Title, Search, Sort, Export -->
+    <div class="row align-items-baseline">
+        <div class="col-xl-4">
+            <div class="body-left">
+                <h6>Unduplicated Net Reach</h6>
             </div>
-            <div class="col-xl-8 ">
-                <div class="body-right">
-                    <div class=" search-group bg-custom rounded-4">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search" class="bg-transparent border-0">
-                    </div>
-                    <button id="downloadChart" class="export-btn">
-                        Export Chart as Image <i class="fas fa-download"></i>
-                    </button>
+        </div>
+        <div class="col-xl-8">
+            <div class="body-right">
+                <div class="search-group bg-custom rounded-4">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search" class="bg-transparent border-0">
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
-                        <h5 class="mb-3">Select Media Channels</h5>
-
-                        <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                            <option value="ver_tv_senal_nacional" <?= isset($defaultSelection['ver_tv_senal_nacional']) ? 'selected' : '' ?>>ver_tv_senal_nacional</option>
-                            <option value="ver_tv_cable">ver_tv_cable</option>
-                            <option value="ver_tv_internet">ver_tv_internet</option>
-                            <option value="escuchar_radio" <?= isset($defaultSelection['escuchar_radio']) ? 'selected' : '' ?>>escuchar_radio</option>
-                            <option value="escuchar_radio_internet">escuchar_radio_internet</option>
-                            <option value="leer_revista_impresa" <?= isset($defaultSelection['leer_revista_impresa']) ? 'selected' : '' ?>>leer_revista_impresa</option>
-                            <option value="leer_revista_digital">leer_revista_digital</option>
-                            <option value="leer_periodico_impreso" <?= isset($defaultSelection['leer_periodico_impreso']) ? 'selected' : '' ?>>leer_periodico_impreso</option>
-
-                            <option value="leer_periodico_digital">leer_periodico_digital</option>
-                            <option value="leer_periodico_email">leer_periodico_email</option>
-                            <option value="vallas_publicitarias">vallas_publicitarias</option>
-                            <option value="centros_comerciales">centros_comerciales</option>
-                            <option value="transitar_metrobuses">transitar_metrobuses</option>
-                            <option value="ver_cine">ver_cine</option>
-                            <option value="abrir_correos_companias">abrir_correos_companias</option>
-                            <option value="entrar_sitios_web">entrar_sitios_web</option>
-                            <option value="entrar_facebook">entrar_facebook</option>
-                            <option value="entrar_twitter">entrar_twitter</option>
-                            <option value="entrar_instagram">entrar_instagram</option>
-                            <option value="entrar_youtube">entrar_youtube</option>
-                            <option value="entrar_linkedin">entrar_linkedin</option>
-                            <option value="entrar_whatsapp">entrar_whatsapp</option>
-                            <option value="escuchar_spotify">escuchar_spotify</option>
-                            <option value="ver_netflix">ver_netflix</option>
-                            <option value="utilizar_mailing_list">utilizar_mailing_list</option>
-                            <option value="videojuegos_celular">videojuegos_celular</option>
-                            <option value="utilizar_we_transfer">utilizar_we_transfer</option>
-                            <option value="utilizar_waze">utilizar_waze</option>
-                            <option value="utilizar_uber">utilizar_uber</option>
-                            <option value="utilizar_pedidos_ya">utilizar_pedidos_ya</option>
-                            <option value="utilizar_meet">utilizar_meet</option>
-                            <option value="utilizar_zoom">utilizar_zoom</option>
-                            <option value="utilizar_airbnb">utilizar_airbnb</option>
-                            <option value="entrar_google">entrar_google</option>
-                            <option value="entrar_encuentra24">entrar_encuentra24</option>
-                          </select>
-                    </div>
-                </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg">
-
-                @if ($dataMessage)
-                    @component('components.no_data_message', ['message' => $dataMessage])
-                    @endcomponent
-                @else
-                    <div class="pt-5 d-flex justify-content-center">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <canvas id="reachChart" width="800" height="400"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
+                <button id="downloadChart" class="export-btn">
+                    Export Chart as Image <i class="fas fa-download"></i>
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- Filter Form -->
+    <form id="filter-form">
+        <!-- Top Row Selection: Select Media Channels (Choose 4) -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Select Media Channels (Choose 4)</h5>
+                    <select class="js-example-basic-multiple" name="top_row[]" multiple="multiple">
+                        <option value="ver_tv_senal_nacional" {{ isset($selectedValues['ver_tv_senal_nacional']) ? 'selected' : '' }}>ver_tv_senal_nacional</option>
+                        <option value="escuchar_radio" {{ isset($selectedValues['escuchar_radio']) ? 'selected' : '' }}>escuchar_radio</option>
+                        <option value="leer_periodico_impreso" {{ isset($selectedValues['leer_periodico_impreso']) ? 'selected' : '' }}>leer_periodico_impreso</option>
+                        <option value="leer_revista_impresa" {{ isset($selectedValues['leer_revista_impresa']) ? 'selected' : '' }}>leer_revista_impresa</option>
+                    </select>
+                </div>
+            </div>
+        </div>
 
+        <!-- Additional Filters Section -->
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Additional Filters</h5>
+                    <div class="row">
+                        @foreach($additionalFilterOptions as $col => $options)
+                            <div class="col-md-3 mb-3">
+                                <label for="filter_{{ $col }}">
+                                    {{ isset($filterLabelMapping[$col]) ? $filterLabelMapping[$col] : strtolower($col) }}
+                                </label>
+                                <select class="form-select js-additional-filter" name="filter_{{ $col }}[]" multiple="multiple" id="filter_{{ $col }}">
+                                    @foreach($options as $option)
+                                        <option value="{{ $option }}">{{ $option }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <!-- Chart Container -->
+    <div class="bg-white rounded-lg mt-3">
+        @if ($dataMessage)
+            @component('components.no_data_message', ['message' => $dataMessage])
+            @endcomponent
+        @else
+            <div class="pt-5 d-flex justify-content-center">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <canvas id="reachChart" width="800" height="400"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
+</div>
 @endsection
-<!-- Add Chart.js if not already included -->
 
+@section('scripts')
+<!-- Include necessary libraries -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+<!-- Include Chart.js and ChartDataLabels plugin if needed -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
+    // Initialize the chart using the initial data passed from PHP.
     const chartData = @json($commercialQualityData);
-
     if (chartData.labels.length && chartData.marginal.length && chartData.cumulative.length) {
-
         const data = {
             labels: chartData.labels,
             datasets: [
@@ -125,11 +121,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         anchor: 'end',
                         align: 'top',
                         color: '#000',
-                        font: {
-                            weight: 'bold',
-                            size: 12
-                        },
-                        formatter: (value) => `${value.toFixed(2)}`,
+                        font: { weight: 'bold', size: 12 },
+                        formatter: (value) => `${value.toFixed(2)}`
                     },
                 },
                 {
@@ -140,11 +133,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         anchor: 'end',
                         align: 'start',
                         color: '#fff',
-                        font: {
-                            weight: 'bold',
-                            size: 10
-                        },
-                        formatter: (value) => value > 0 ? `${value.toFixed(2)}` : '',
+                        font: { weight: 'bold', size: 10 },
+                        formatter: (value) => value > 0 ? `${value.toFixed(2)}` : ''
                     },
                 },
             ],
@@ -157,10 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: true,
-                        position: 'bottom',
-                    },
+                    legend: { display: true, position: 'bottom' },
                     tooltip: {
                         callbacks: {
                             label: function (context) {
@@ -168,88 +155,54 @@ document.addEventListener('DOMContentLoaded', function () {
                             },
                         },
                     },
-                    datalabels: {
-                        display: true,
-                    },
+                    datalabels: { display: true },
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function (value) {
-                                return value;
-                            }
-                        }
-                    },
+                    y: { beginAtZero: true, ticks: { callback: (value) => value } },
                 },
             },
             plugins: [ChartDataLabels]
         });
 
-        // Handle dropdown change event
-        $('.js-example-basic-multiple').on('change', function () {
-            var selectedOptions = $(this).val();
-            var data = {};
-            selectedOptions.forEach(option => {
-                data[option] = 1;
-            });
+        // Attach change event to both top row and additional filter dropdowns.
+        $('.js-example-basic-multiple, .js-additional-filter').on('select2:select select2:unselect', function (e) {
+            // Enforce a maximum of 4 selections for top row.
+            const topRowValues = $('.js-example-basic-multiple').val() || [];
+            if (topRowValues.length > 4) {
+                const lastSelectedValue = e.params.data.id;
+                $('.js-example-basic-multiple').val(topRowValues.filter(value => value !== lastSelectedValue)).trigger('change');
+                alert('You can only select up to 4 categories.');
+                return;
+            }
+            // Serialize the entire form and send an AJAX request.
+            const formData = $('#filter-form').serialize();
             $.ajax({
                 url: "{{ route('unduplicated-net-reach') }}",
                 method: "GET",
-                data: { top_row: data },
+                data: formData,
                 success: function(response) {
                     if (response.commercialQualityData) {
-                        chart.data.labels = response.commercialQualityData.labels; // Update labels
-                        chart.data.datasets[0].data = response.commercialQualityData.cumulative; // Update cumulative
-                        chart.data.datasets[1].data = response.commercialQualityData.marginal; // Update marginal
-                        chart.update(); // Re-render chart with updated data
+                        chart.data.labels = response.commercialQualityData.labels;
+                        chart.data.datasets[0].data = response.commercialQualityData.cumulative;
+                        chart.data.datasets[1].data = response.commercialQualityData.marginal;
+                        chart.update();
                     }
+                },
+                error: function (xhr, status, error) {
+                    const errMsg = xhr.responseJSON ? xhr.responseJSON.message : "An error occurred.";
+                    alert(errMsg);
                 }
             });
         });
 
-        $(document).ready(function() {
-            $('.js-example-basic-multiple').select2({
-                placeholder: "Select an option", // Placeholder text
-                width: '50%'
-            });
-
+        // Initialize Select2 on all filter dropdowns.
+        $('.js-example-basic-multiple, .js-additional-filter').select2({
+            placeholder: "Select an option",
+            width: '50%'
         });
-
-        // Export Chart Functionality
-        document.getElementById('downloadChart').addEventListener('click', function() {
-            var canvas = document.getElementById('reachChart'); // Target correct chart
-            var ctx = canvas.getContext('2d');
-
-            // Add white background to the canvas before export
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-over';
-            ctx.fillStyle = 'white';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Generate image from canvas
-            var image = canvas.toDataURL('image/jpeg', 1.0);
-            var link = document.createElement('a');
-            link.href = image;
-            link.download = 'chart.jpg';
-            link.click();
-
-            ctx.restore();
-        });
-
-        // Initialize Select2
-        // $('#multiple-select-field').select2({
-        //     theme: 'bootstrap-5',
-        //     width: '100%',
-        //     placeholder: 'Choose anything',
-        //     closeOnSelect: false,
-        // });
     } else {
         console.error('Invalid chart data: Labels, marginal, or cumulative data is missing.');
     }
 });
-
-
 </script>
-
-
+@endsection

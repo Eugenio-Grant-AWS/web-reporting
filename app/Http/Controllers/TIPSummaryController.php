@@ -3,20 +3,56 @@
 namespace App\Http\Controllers;
 
 use App\Models\IndexedReview;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TIPSummaryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $breadcrumb = 'TIP Summary';
 
-        // Fetch distinct media types and TPI values
-        $mediaTypes = IndexedReview::distinct()->pluck('MediaType');
-        $tpis = IndexedReview::distinct()->pluck('tpi')->toArray();
+        // Define the filterable columns (using the same keys as your old code)
+        $filters = [
+            'RespoSer'  => 'uniqueRespoSer',
+            'QuotGene'  => 'uniqueGender',
+            'QuotEdad'  => 'uniqueAge',
+            'QuoSegur'  => 'uniqueQuoSegur',
+            'MediaType' => 'uniqueMediaType',
+            'index'     => 'uniqueIndex',
+            'Influence' => 'uniqueInfluence',
+            'tpi'       => 'uniquetpi',
+        ];
 
-        // Fetch counts for all media types and TPIs
-        $fixedTotals = IndexedReview::select('MediaType', 'tpi', DB::raw('COUNT(*) as total'))
+        // Get distinct values for each filter (for the dropdowns)
+        $distinctValues = [];
+        foreach ($filters as $column => $requestKey) {
+            $distinctValues[$requestKey] = IndexedReview::distinct()->pluck($column);
+        }
+
+        // Build the base query and apply filters if provided
+        $query = IndexedReview::query();
+        foreach ($filters as $column => $requestKey) {
+            if ($request->filled($requestKey)) {
+                $filterValues = $request->input($requestKey);
+                // For MediaType, trim the values to avoid extra spaces/newlines mismatches
+                if ($column === 'MediaType') {
+                    $filterValues = array_map('trim', $filterValues);
+                    $placeholders = implode(',', array_fill(0, count($filterValues), '?'));
+                    $query->whereRaw("TRIM(MediaType) IN ($placeholders)", $filterValues);
+                } else {
+                    $query->whereIn($column, $filterValues);
+                }
+            }
+        }
+
+        // Use the filtered query for all calculations (if no filters, it returns all records)
+        $mediaTypes = (clone $query)->distinct()->pluck('MediaType');
+        $tpis = (clone $query)->distinct()->pluck('tpi')->toArray();
+
+        // Get counts (fixed totals) per MediaType and tpi
+        $fixedTotals = (clone $query)
+            ->select('MediaType', 'tpi', DB::raw('COUNT(*) as total'))
             ->groupBy('MediaType', 'tpi')
             ->get()
             ->groupBy('MediaType')
@@ -25,8 +61,9 @@ class TIPSummaryController extends Controller
             })
             ->toArray();
 
-        // Fetch SUM of influence instead of COUNT
-        $influenceSums = IndexedReview::where('influence', '>', 0)
+        // Get the SUM of influence values (only where influence > 0)
+        $influenceSums = (clone $query)
+            ->where('influence', '>', 0)
             ->select('MediaType', 'tpi', DB::raw('SUM(influence) as total_influence'))
             ->groupBy('MediaType', 'tpi')
             ->get()
@@ -36,11 +73,13 @@ class TIPSummaryController extends Controller
             })
             ->toArray();
 
+        // The following calculations are exactly as in your new code
+
         $commercialQualityData = [];
         $columnWiseSums = array_fill_keys($tpis, 0);
         $rowCount = count($mediaTypes);
 
-        // Compute probabilities instead of direct counts
+        // Compute percentages using SUM(influence) divided by COUNT(*) for each media type and tpi
         foreach ($mediaTypes as $mediaType) {
             $percentageSum = 0;
             $commercialQualityData[$mediaType] = [];
@@ -50,7 +89,7 @@ class TIPSummaryController extends Controller
                 $commercialQualityData[$mediaType][$tpi] = round($influenceValue, 2);
 
                 if ($tpi !== '7. Ignoro' && !empty($fixedTotals[$mediaType][$tpi])) {
-                    // Calculate percentage using SUM(influence) instead of COUNT
+                    // Calculate the percentage based on influence / count
                     $percentage = ($influenceValue / $fixedTotals[$mediaType][$tpi]) * 100;
                     $commercialQualityData[$mediaType][$tpi . ' Percentage'] = round($percentage, 2);
                     $columnWiseSums[$tpi] += $percentage;
@@ -58,14 +97,17 @@ class TIPSummaryController extends Controller
                 }
             }
 
-            // Compute Row-wise Grand Total %
+            // Compute Row-wise Grand Total Percentage
             if ($percentageSum > 0) {
                 $firstTpi = reset($tpis);
-                $commercialQualityData[$mediaType]['Grand Total Row %'] = round(($percentageSum / ($fixedTotals[$mediaType][$firstTpi] ?? 1)) * 100, 2);
+                $commercialQualityData[$mediaType]['Grand Total Row %'] = round(
+                    ($percentageSum / ($fixedTotals[$mediaType][$firstTpi] ?? 1)) * 100,
+                    2
+                );
             }
         }
 
-        // Compute Column-wise percentage as an average of row-wise percentages
+        // Compute Column-wise Percentages (average of row percentages)
         $columnWisePercentages = [];
         $columnWiseGrandTotal = 0;
 
@@ -76,13 +118,14 @@ class TIPSummaryController extends Controller
                 $columnWiseGrandTotal += $columnPercentage;
             }
         }
-
-        // Compute Grand Total Column-Wise Percentage
         if ($columnWiseGrandTotal > 0) {
-            $columnWisePercentages['Grand Total Column %'] = round(($columnWiseGrandTotal / count($columnWisePercentages)), 2);
+            $columnWisePercentages['Grand Total Column %'] = round(
+                ($columnWiseGrandTotal / count($columnWisePercentages)),
+                2
+            );
         }
 
-        // Apply Excel-like formula (X7/X$42) * 100 using probability-based influence
+        // Calculate Adjusted Percentages using an Excel-like formula
         foreach ($mediaTypes as $mediaType) {
             foreach ($tpis as $tpi) {
                 if (
@@ -98,6 +141,7 @@ class TIPSummaryController extends Controller
             }
         }
 
+        // Media Type mapping
         $mediaTypeMapping = [
             "Abrir emails comerciales" => "Emails comerciales",
             "Buscar aseguradoras en Google" => "Buscar aseguradoras",
@@ -135,20 +179,44 @@ class TIPSummaryController extends Controller
             "Visitar centros comerciales" => "Centros comerciales",
         ];
 
+        // Remap media type names
         $commercialQualityData = collect($commercialQualityData)->mapWithKeys(function ($data, $mediaType) use ($mediaTypeMapping) {
-            // Clean the mediaType by trimming spaces
             $cleanedMediaType = trim($mediaType);
-
-            // Use the mapping to replace old labels with new labels
             $newMediaType = $mediaTypeMapping[$cleanedMediaType] ?? $cleanedMediaType;
-
             return [$newMediaType => $data];
         })->toArray();
 
+        // Append the column percentages if needed
         $commercialQualityData['Column Percentages'] = $columnWisePercentages;
-        // dd($commercialQualityData);
         $dataMessage = empty($commercialQualityData) ? "No data available to display." : null;
 
-        return view('tip-summary', compact('breadcrumb', 'commercialQualityData', 'dataMessage'));
+        // If the request is an AJAX call, return JSON data for the table
+        if ($request->ajax()) {
+            $dataRows = [];
+            foreach ($commercialQualityData as $mediaType => $data) {
+                if ($mediaType === 'Column Percentages') {
+                    continue;
+                }
+                $dataRows[] = [
+                    'MediaChannels'   => $mediaType,
+                    'Awareness'       => round($data['1. Awareness Percentage'] ?? 0, 2) . '%',
+                    'Understanding'   => round($data['2. Understanding Percentage'] ?? 0, 2) . '%',
+                    'Trial'           => round($data['3. Trial Percentage'] ?? 0, 2) . '%',
+                    'TopOfMind'       => round($data['4. Top of Mind Percentage'] ?? 0, 2) . '%',
+                    'Image'           => round($data['5. Image Percentage'] ?? 0, 2) . '%',
+                    'Loyalty'         => round($data['6. Loyalty Percentage'] ?? 0, 2) . '%',
+                ];
+            }
+            return response()->json(['data' => $dataRows]);
+        }
+
+        // Return the view for non-AJAX requests
+        return view('tip-summary', compact(
+            'breadcrumb',
+            'commercialQualityData',
+            'dataMessage',
+            'distinctValues',
+            'mediaTypeMapping'
+        ));
     }
 }

@@ -11,43 +11,100 @@ class NetReachController extends Controller
     {
         $breadcrumb = 'Net Reach';
 
-        // Default selected categories
+        // --- Top Row Selection ---
+        // Default selected categories (for the three media channel columns used in calculation)
         $defaultCategories = [
             'ver_tv_senal_nacional',
             'ver_tv_cable',
             'ver_tv_internet',
         ];
 
+        // Save selected top row columns in session; require at least 3 selections.
         session()->forget('selected_top_row');
         $selectedCategories = $request->input('top_row', $defaultCategories);
         session(['selected_top_row' => $selectedCategories]);
-
 
         if (count($selectedCategories) < 3) {
             return response()->json(['message' => 'At least 3 categories must be selected.'], 400);
         }
 
-        // Fetch consumers data
-        $consumers = DB::table('consumers_reacheds')->get();
+        // --- Additional Filters ---
+        // Define extra filterable columns.
+        $additionalFilterColumns = [
+            'resposer',
+            'quotgene',
+            'quotedad',
+            'quosegur',
+        ];
+        // Retrieve distinct options (from the entire table) for each additional filter.
+        $additionalFilterOptions = [];
+        foreach ($additionalFilterColumns as $col) {
+            $additionalFilterOptions[$col] = DB::table('consumers_reacheds')->distinct()->pluck($col);
+        }
+        // Define a mapping for display labels (change these to English)
+        $filterLabelMapping = [
+            'resposer'  => 'Responder',
+            'quotgene'  => 'Gender',
+            'quotedad'  => 'Age',
+            'quosegur'  => 'Insurance',
+        ];
+        
+        // Build the consumers query and apply additional filters if present.
+        $query = DB::table('consumers_reacheds');
+        foreach ($additionalFilterColumns as $col) {
+            // Expect the filter input name to be "filter_{column}"
+            $param = 'filter_' . $col;
+            if ($request->filled($param)) {
+                $value = $request->input($param);
+                if (is_array($value)) {
+                    $query->whereIn($col, $value);
+                } else {
+                    $query->where($col, $value);
+                }
+            }
+        }
+        $consumers = $query->get();
         $total_responses = $consumers->count() ?: 1;
 
-        // Compute data dynamically based on selected categories
+        // --- Calculation based on selected top row columns ---
+        // Compute counts for each combination using the three selected media channels.
         $dataCounts = [];
-        $dataCounts[$selectedCategories[0]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 0)->where($selectedCategories[2], 0)->count();
-        $dataCounts[$selectedCategories[1]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 1)->where($selectedCategories[2], 0)->count();
-        $dataCounts[$selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 0)->where($selectedCategories[2], 1)->count();
-        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[1]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 1)->where($selectedCategories[2], 0)->count();
-        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 0)->where($selectedCategories[2], 1)->count();
-        $dataCounts[$selectedCategories[1] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)->where($selectedCategories[1], 1)->where($selectedCategories[2], 1)->count();
-        $dataCounts['All Three'] = $consumers->where($selectedCategories[0], 1)->where($selectedCategories[1], 1)->where($selectedCategories[2], 1)->count();
+        $dataCounts[$selectedCategories[0]] = $consumers->where($selectedCategories[0], 1)
+            ->where($selectedCategories[1], 0)
+            ->where($selectedCategories[2], 0)
+            ->count();
+        $dataCounts[$selectedCategories[1]] = $consumers->where($selectedCategories[0], 0)
+            ->where($selectedCategories[1], 1)
+            ->where($selectedCategories[2], 0)
+            ->count();
+        $dataCounts[$selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)
+            ->where($selectedCategories[1], 0)
+            ->where($selectedCategories[2], 1)
+            ->count();
+        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[1]] = $consumers->where($selectedCategories[0], 1)
+            ->where($selectedCategories[1], 1)
+            ->where($selectedCategories[2], 0)
+            ->count();
+        $dataCounts[$selectedCategories[0] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 1)
+            ->where($selectedCategories[1], 0)
+            ->where($selectedCategories[2], 1)
+            ->count();
+        $dataCounts[$selectedCategories[1] . ' + ' . $selectedCategories[2]] = $consumers->where($selectedCategories[0], 0)
+            ->where($selectedCategories[1], 1)
+            ->where($selectedCategories[2], 1)
+            ->count();
+        $dataCounts['All Three'] = $consumers->where($selectedCategories[0], 1)
+            ->where($selectedCategories[1], 1)
+            ->where($selectedCategories[2], 1)
+            ->count();
 
-        // Calculate percentages
+        // Calculate percentages for each combination
         $dataPercentages = [];
         foreach ($dataCounts as $key => $count) {
             $dataPercentages[$key] = round(($count / $total_responses) * 100, 1);
         }
-        // dd($dataPercentages);
-        // Prepare chart data
+
+        // Prepare chart data in the expected format.
         $chartData = [
             'labels' => array_map(function ($key) use ($dataPercentages) {
                 return $key . ' (' . $dataPercentages[$key] . '%)';
@@ -62,13 +119,20 @@ class NetReachController extends Controller
                 ],
             ],
         ];
-        // dd($chartData);
-        // Return the updated chart data as JSON for the AJAX request
+
+        // For AJAX requests, return the new chart data as JSON.
         if ($request->ajax()) {
             return response()->json(['chartData' => $chartData]);
         }
 
         $dataMessage = null;
-        return view('net-reach', compact('chartData', 'dataMessage', 'breadcrumb', 'selectedCategories'));
+        return view('net-reach', compact(
+            'chartData',
+            'dataMessage',
+            'breadcrumb',
+            'selectedCategories',
+            'additionalFilterOptions',
+            'filterLabelMapping'
+        ));
     }
 }
