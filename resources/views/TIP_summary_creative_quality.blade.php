@@ -51,9 +51,12 @@
                 <div class="row">
                     @foreach ($distinctValues as $key => $values)
                         <div class="col-md-3 mt-2">
-                            <label for="{{ $key }}">{{ ucwords(str_replace('unique', '', $key)) }}</label>
+                         <label for="{{ $key }}">
+                    <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                </label>
+                          
                             <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
-                                <option value="">Select Options</option>
+                                <option value="">Seleccionar</option>
                                 @foreach ($values as $value)
                                     @if($key === 'uniqueMediaType')
                                         <!-- Trim the database value to remove extra spaces/newlines -->
@@ -69,7 +72,7 @@
                         </div>
                     @endforeach
                     <div class="col-md-3 mt-4">
-                        <button type="button" id="applyFilters" class="btn btn-primary">Apply Filters</button>
+                        <button type="button" id="applyFilters" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
             </form>
@@ -126,12 +129,12 @@
 
             // Initialize Select2 for multiple filters
             $('.js-multiple-filter').select2({
-                placeholder: "Select Options",
+                placeholder: "Seleccionar",
                 allowClear: true,
                 width: "100%"
             });
 
-            // Apply Filters using AJAX
+            // Aplicar using AJAX
             $('#applyFilters').on('click', function () {
                 let formData = $('#filter-form').serialize();
 

@@ -57,7 +57,7 @@
                         @foreach($additionalFilterOptions as $col => $options)
                             <div class="col-md-3 mb-3">
                                 <label for="filter_{{ $col }}">
-                                    {{ isset($filterLabelMapping[$col]) ? $filterLabelMapping[$col] : strtolower($col) }}
+                                <strong> {{ isset($filterLabelMapping[$col]) ? $filterLabelMapping[$col] : strtolower($col) }}</strong>
                                 </label>
                                 <select class="form-select js-additional-filter" name="filter_{{ $col }}[]" multiple="multiple" id="filter_{{ $col }}">
                                     @foreach($options as $option)
@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Initialize Select2 on all filter dropdowns.
         $('.js-example-basic-multiple, .js-additional-filter').select2({
-            placeholder: "Select an option",
+            placeholder: "Seleccionar",
             width: '50%'
         });
     } else {

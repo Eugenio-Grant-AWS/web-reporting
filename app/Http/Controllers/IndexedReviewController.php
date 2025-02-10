@@ -14,23 +14,22 @@ class IndexedReviewController extends Controller
 
         // Define all filters (key = database column, value = request parameter key)
         $filters = [
-            'RespoSer'  => 'uniqueRespoSer',
             'QuotGene'  => 'uniqueGender',
             'QuotEdad'  => 'uniqueAge',
             'QuoSegur'  => 'uniqueQuoSegur',
-            'MediaType' => 'uniqueMediaType',
-            'index'     => 'uniqueIndex',
-            'Influence' => 'uniqueInfluence',
-            'tpi'       => 'uniquetpi',
         ];
-
+        $filterLabels = [
+            'uniqueGender'   => 'Género',
+            'uniqueAge'      => 'Edad',
+            'uniqueQuoSegur' => 'Seguro', // Adjust as needed
+        ];
         // Get distinct values for each filter (to populate dropdowns)
         $distinctValues = [];
         foreach ($filters as $column => $requestKey) {
             $distinctValues[$requestKey] = TouchpointInfluence::distinct()->pluck($column);
         }
 
-        // Build the base query and apply filters (using whereIn for multiple select)
+        // Build the base query and Aplicar (using whereIn for multiple select)
         $query = TouchpointInfluence::query();
         foreach ($filters as $column => $requestKey) {
             if ($request->filled($requestKey)) {
@@ -39,7 +38,10 @@ class IndexedReviewController extends Controller
                     // Trim form values and use TRIM() on the DB column to avoid mismatches
                     $filterValues = array_map('trim', $filterValues);
                     $placeholders = implode(',', array_fill(0, count($filterValues), '?'));
-                    $query->whereRaw("TRIM(MediaType) IN ($placeholders)", $filterValues);
+                    $query->whereRaw(
+                        "REPLACE(REPLACE(MediaType, '\r', ''), '\n', '') IN ($placeholders)",
+                        $filterValues
+                    );
                 } else {
                     $query->whereIn($column, $filterValues);
                 }
@@ -203,7 +205,8 @@ class IndexedReviewController extends Controller
             'commercialQualityData',
             'dataMessage',
             'distinctValues',
-            'mediaTypeMapping'
+            'mediaTypeMapping',
+            'filterLabels'
         ));
     }
 }

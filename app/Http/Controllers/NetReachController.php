@@ -31,7 +31,6 @@ class NetReachController extends Controller
         // --- Additional Filters ---
         // Define extra filterable columns.
         $additionalFilterColumns = [
-            'resposer',
             'quotgene',
             'quotedad',
             'quosegur',
@@ -42,13 +41,12 @@ class NetReachController extends Controller
             $additionalFilterOptions[$col] = DB::table('consumers_reacheds')->distinct()->pluck($col);
         }
         // Define a mapping for display labels (change these to English)
+
         $filterLabelMapping = [
-            'resposer'  => 'Responder',
-            'quotgene'  => 'Gender',
-            'quotedad'  => 'Age',
-            'quosegur'  => 'Insurance',
+            'QuotGene'  => 'Género',
+            'QuotEdad'  => 'Age',
+            'QuoSegur'  => 'Tipo Seguro',
         ];
-        
         // Build the consumers query and apply additional filters if present.
         $query = DB::table('consumers_reacheds');
         foreach ($additionalFilterColumns as $col) {

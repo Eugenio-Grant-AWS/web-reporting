@@ -80,9 +80,9 @@ $defaultSelection = [
 
     <div class="row">
     <!-- QuotGene Filter -->
-    <div class="col-sm-6 col-md-4 mb-3">
+    <div class="col-sm-3 mb-3">
         <div class="filter-group">
-            <label for="quotgene">QuotGene</label>
+        <label for="uniqueGender"><strong>Género</strong></label>
             <select name="quotgene[]" id="quotgene" class="form-select js-example-basic-multiple " multiple >
                 @foreach($quotgeneValues as $quotgene)
                     <option value="{{ $quotgene }}">{{ $quotgene }}</option>
@@ -92,9 +92,9 @@ $defaultSelection = [
     </div>
 
     <!-- QuotEdad Filter -->
-    <div class="col-sm-6 col-md-4 mb-3">
+    <div class="col-sm-3 mb-3">
         <div class="filter-group">
-            <label for="quotedad">QuotEdad</label>
+           <label for="uniqueAge"><strong>Edad</strong></label>
             <select name="quotedad[]" id="quotedad" class="form-select js-example-basic-multiple" multiple>
                 @foreach($quotedadValues as $quotedad)
                     <option value="{{ $quotedad }}">{{ $quotedad }}</option>
@@ -104,9 +104,9 @@ $defaultSelection = [
     </div>
 
     <!-- QuoSegur Filter -->
-    <div class="col-sm-6 col-md-4 mb-3">
+    <div class="col-sm-3 mb-3">
         <div class="filter-group">
-            <label for="quosegur">QuoSegur</label>
+            <label for="quosegur"><strong>Tipo Seguro</strong></label>
             <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
                 @foreach($quosegurValues as $quosegur)
                     <option value="{{ $quosegur }}">{{ $quosegur }}</option>
@@ -115,9 +115,9 @@ $defaultSelection = [
         </div>
     </div>
 
-    <!-- Apply Filters Button -->
-    <div class="col-12 mt-3 d-flex justify-content-end">
-        <button type="button" class="btn btn-primary" id="applyFiltersBtn">Apply Filters</button>
+    <!-- Aplicar Button -->
+    <div class="col-3 mt-3 ">
+        <button type="button" class="btn btn-primary" id="applyFiltersBtn">Aplicar</button>
     </div>
 </div>
 
@@ -248,7 +248,7 @@ $defaultSelection = [
 
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2({
-                placeholder: "Select an option", // Placeholder text
+                placeholder: "Seleccionar", // Placeholder text
                 width: '50%'
             });
         });
@@ -256,7 +256,7 @@ $defaultSelection = [
     $(document).ready(function() {
     // Initialize select2 for better multi-select functionality
     $('.form-select').select2({
-        placeholder: "Select an option",  // Placeholder text
+        placeholder: "Seleccionar",  // Placeholder text
         width: '100%'  // Full width for select dropdowns
     });
 });

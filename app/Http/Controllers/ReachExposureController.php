@@ -75,7 +75,7 @@ class ReachExposureController extends Controller
             $uniqueValue = $mediaTypes->pluck('Value')->unique();
             $uniqueAdjusted_value = $mediaTypes->pluck('Adjusted_value')->unique();
             $uniqueMediaType = $mediaTypes->pluck('MediaType')->unique();
-        // Apply filters based on selected options from the request
+        // Aplicar based on selected options from the request
         if ($request->has('uniqueGender') && !empty($request->uniqueGender)) {
             $mediaTypes = $mediaTypes->whereIn('QuotGene', $request->uniqueGender);
         }

@@ -29,7 +29,7 @@ class ConsumersReachedController extends Controller
         // Start the query with selected values for media channels
         $query = DB::table('consumers_reacheds')->select(array_keys($selectedValues));
     
-        // Apply filters only if they are present in the request
+        // Aplicar only if they are present in the request
         if ($request->has('quotgene') && $request->input('quotgene') != null) {
             $query->whereIn('quotgene', $request->input('quotgene'));
         }

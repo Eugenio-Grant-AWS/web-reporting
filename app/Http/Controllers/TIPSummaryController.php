@@ -14,32 +14,35 @@ class TIPSummaryController extends Controller
 
         // Define the filterable columns (using the same keys as your old code)
         $filters = [
-            'RespoSer'  => 'uniqueRespoSer',
             'QuotGene'  => 'uniqueGender',
             'QuotEdad'  => 'uniqueAge',
             'QuoSegur'  => 'uniqueQuoSegur',
-            'MediaType' => 'uniqueMediaType',
-            'index'     => 'uniqueIndex',
-            'Influence' => 'uniqueInfluence',
-            'tpi'       => 'uniquetpi',
         ];
-
+        $filterLabels = [
+            'uniqueGender'   => 'Género',
+            'uniqueAge'      => 'Edad',
+            'uniqueQuoSegur' => 'Seguro', // Adjust the label as needed
+        ];
         // Get distinct values for each filter (for the dropdowns)
         $distinctValues = [];
         foreach ($filters as $column => $requestKey) {
             $distinctValues[$requestKey] = IndexedReview::distinct()->pluck($column);
         }
 
-        // Build the base query and apply filters if provided
+        // Build the base query and Aplicar if provided
         $query = IndexedReview::query();
         foreach ($filters as $column => $requestKey) {
             if ($request->filled($requestKey)) {
-                $filterValues = $request->input($requestKey);
-                // For MediaType, trim the values to avoid extra spaces/newlines mismatches
+                $filterValues = $request->$requestKey;
+                // If filtering by MediaType, trim both the filter values and remove newlines from the DB value.
                 if ($column === 'MediaType') {
                     $filterValues = array_map('trim', $filterValues);
                     $placeholders = implode(',', array_fill(0, count($filterValues), '?'));
-                    $query->whereRaw("TRIM(MediaType) IN ($placeholders)", $filterValues);
+                    // Remove newline characters from MediaType in the DB before comparing.
+                    $query->whereRaw(
+                        "REPLACE(REPLACE(MediaType, '\r', ''), '\n', '') IN ($placeholders)",
+                        $filterValues
+                    );
                 } else {
                     $query->whereIn($column, $filterValues);
                 }
@@ -74,7 +77,6 @@ class TIPSummaryController extends Controller
             ->toArray();
 
         // The following calculations are exactly as in your new code
-
         $commercialQualityData = [];
         $columnWiseSums = array_fill_keys($tpis, 0);
         $rowCount = count($mediaTypes);
@@ -143,40 +145,40 @@ class TIPSummaryController extends Controller
 
         // Media Type mapping
         $mediaTypeMapping = [
-            "Abrir emails comerciales" => "Emails comerciales",
-            "Buscar aseguradoras en Google" => "Buscar aseguradoras",
-            "Escuchar Spotify" => "Spotify",
-            "Ir al cine" => "Cine",
-            "Jugar en el celular" => "Jugar en el celular",
-            "Leer periódico digital" => "Periódico digital",
-            "Leer periódico impreso" => "Periódico impreso",
-            "Leer revista digital" => "Revista digital",
-            "Leer revista impresa" => "Revista impresa",
-            "Oír radio" => "Radio",
-            "Oír radio online" => "Radio online",
-            "Periódico por email" => "Periódico email",
-            "Usar Airbnb" => "Airbnb",
-            "Usar Encuentra24" => "Encuentra24",
-            "Usar Facebook" => "Facebook",
-            "Usar Instagram" => "Instagram",
-            "Usar LinkedIn" => "LinkedIn",
-            "Usar listas de correo" => "Listas de correo",
-            "Usar Meet" => "Meet",
-            "Usar metrobús" => "Metrobús",
-            "Usar PedidosYa" => "PedidosYa",
-            "Usar TikTok" => "TikTok",
-            "Usar Uber" => "Uber",
-            "Usar WeTransfer" => "WeTransfer",
-            "Usar WhatsApp" => "WhatsApp",
-            "Usar X (Twitter)" => "Twitter",
-            "Usar YouTube" => "YouTube",
-            "Usar Zoom" => "Zoom",
-            "Ver Netflix" => "Netflix",
-            "Ver TV nacional" => "TV nacional",
-            "Ver TV por cable" => "TV cable",
-            "Ver TV por internet" => "TV por internet",
-            "Ver vallas publicitarias" => "Vallas publicitarias",
-            "Visitar centros comerciales" => "Centros comerciales",
+            "Abrir emails comerciales"          => "Emails comerciales",
+            "Buscar aseguradoras en Google"       => "Buscar aseguradoras",
+            "Escuchar Spotify"                    => "Spotify",
+            "Ir al cine"                          => "Cine",
+            "Jugar en el celular"                 => "Jugar en el celular",
+            "Leer periódico digital"              => "Periódico digital",
+            "Leer periódico impreso"              => "Periódico impreso",
+            "Leer revista digital"                => "Revista digital",
+            "Leer revista impresa"                => "Revista impresa",
+            "Oír radio"                           => "Radio",
+            "Oír radio online"                    => "Radio online",
+            "Periódico por email"                 => "Periódico email",
+            "Usar Airbnb"                         => "Airbnb",
+            "Usar Encuentra24"                    => "Encuentra24",
+            "Usar Facebook"                       => "Facebook",
+            "Usar Instagram"                      => "Instagram",
+            "Usar LinkedIn"                       => "LinkedIn",
+            "Usar listas de correo"               => "Listas de correo",
+            "Usar Meet"                           => "Meet",
+            "Usar metrobús"                       => "Metrobús",
+            "Usar PedidosYa"                      => "PedidosYa",
+            "Usar TikTok"                         => "TikTok",
+            "Usar Uber"                           => "Uber",
+            "Usar WeTransfer"                     => "WeTransfer",
+            "Usar WhatsApp"                       => "WhatsApp",
+            "Usar X (Twitter)"                    => "Twitter",
+            "Usar YouTube"                        => "YouTube",
+            "Usar Zoom"                           => "Zoom",
+            "Ver Netflix"                         => "Netflix",
+            "Ver TV nacional"                     => "TV nacional",
+            "Ver TV por cable"                    => "TV cable",
+            "Ver TV por internet"                 => "TV por internet",
+            "Ver vallas publicitarias"            => "Vallas publicitarias",
+            "Visitar centros comerciales"         => "Centros comerciales",
         ];
 
         // Remap media type names
@@ -216,7 +218,8 @@ class TIPSummaryController extends Controller
             'commercialQualityData',
             'dataMessage',
             'distinctValues',
-            'mediaTypeMapping'
+            'mediaTypeMapping',
+            'filterLabels'
         ));
     }
 }

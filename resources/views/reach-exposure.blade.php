@@ -24,7 +24,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="filter-group">
-                        <label for="uniqueGender">Gender</label>
+                    <label for="uniqueGender"><strong>Género</strong></label>
                         <select name="uniqueGender[]" id="uniqueGender" class="form-select" multiple>
                             @foreach($uniqueGender as $gender)
                                 <option value="{{ $gender }}">{{ $gender }}</option>
@@ -35,7 +35,7 @@
 
                 <div class="col-md-4">
                     <div class="filter-group">
-                        <label for="uniqueAge">Age</label>
+                        <label for="uniqueAge"><strong>Edad</strong></label>
                         <select name="uniqueAge[]" id="uniqueAge" class="form-select" multiple>
                             @foreach($uniqueAge as $age)
                                 <option value="{{ $age }}">{{ $age }}</option>
@@ -43,7 +43,7 @@
                         </select>
                     </div>
                 </div>
-
+<!-- 
                 <div class="col-md-4">
                     <div class="filter-group">
                         <label for="uniqueValue">Value</label>
@@ -64,9 +64,9 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="col-md-4 mt-3">
+                <!-- <div class="col-md-4 mt-3">
                     <div class="filter-group">
                         <label for="uniqueMediaType">Media Type</label>
                         <select name="uniqueMediaType[]" id="uniqueMediaType" class="form-select" multiple>
@@ -75,10 +75,10 @@
                             @endforeach
                         </select>
                     </div>
-                </div>
+                </div> -->
 
-                <div class="col-md-4 mt-3 text-end">
-                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <div class="col-md-4 mt-3">
+                    <button type="submit" class="btn btn-primary">Aplicar</button>
                 </div>
             </div>
         </form>
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Initialize Select2 for multi-select dropdowns
     $('select').select2({
-        placeholder: "Select options",  // Placeholder text
+        placeholder: "Seleccionar",  // Placeholder text
         width: '100%'  // Make the dropdowns full width
     });
 });

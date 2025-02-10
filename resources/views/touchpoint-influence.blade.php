@@ -87,7 +87,7 @@
                         <i class="fas fa-search"></i>
                         <input type="text" placeholder="Search" id="customSearch" class="bg-transparent border-0">
                     </div> --}}
-                    <div class="select-group bg-custom rounded-4">
+                    <!-- <div class="select-group bg-custom rounded-4">
                         <select id="mediaFilter" class="bg-transparent border-0 form-select">
                             <option value="">Select Media</option>
                             @foreach ($commercialQualityData as $mediaType => $data)
@@ -96,7 +96,7 @@
                                 @endif
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="filter-section mb-4">
@@ -105,7 +105,7 @@
                         @if(!empty($uniqueGender))
                             <div class="col-md-4">
                                 <div class="filter-group">
-                                    <label for="uniqueGender">Gender</label>
+                                    <label for="uniqueGender"><strong>Género</strong></label>
                                     <select name="uniqueGender[]" id="uniqueGender" class="form-select js-example-basic-multiple" multiple>
                                         @foreach($uniqueGender as $gender)
                                             <option value="{{ $gender }}">{{ $gender }}</option>
@@ -118,7 +118,7 @@
                         @if(!empty($uniqueAge))
                             <div class="col-md-4">
                                 <div class="filter-group">
-                                    <label for="uniqueAge">Age</label>
+                                    <label for="uniqueAge"><strong>Edad</strong></label>
                                     <select name="uniqueAge[]" id="uniqueAge" class="form-select js-example-basic-multiple" multiple>
                                         @foreach($uniqueAge as $age)
                                             <option value="{{ $age }}">{{ $age }}</option>
@@ -128,7 +128,7 @@
                             </div>
                         @endif
 
-                        @if(!empty($uniqueValue))
+                        <!-- @if(!empty($uniqueValue))
                             <div class="col-md-4">
                                 <div class="filter-group">
                                     <label for="uniqueValue">Value</label>
@@ -139,9 +139,9 @@
                                     </select>
                                 </div>
                             </div>
-                        @endif
+                        @endif -->
 
-                        @if(!empty($uniqueMediaType))
+                        <!-- @if(!empty($uniqueMediaType))
                             <div class="col-md-4">
                                 <div class="filter-group">
                                     <label for="uniqueMediaType">Media Type</label>
@@ -204,10 +204,10 @@
                                     </select>
                                 </div>
                             </div>
-                        @endif
+                        @endif -->
 
                         <div class="col-md-4 mt-3 text-end">
-                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <button type="submit" class="btn btn-primary">Aplicar</button>
                         </div>
                     </div>
                 </form>
@@ -238,13 +238,13 @@
                                 @if($mediaType !== 'Column Percentages')
                                     <tr>
                                         <td>{{ $mediaType }}</td>
-                                        <td>{{ round($data['1. Awareness Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['2. Understanding Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['3. Trial Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['4. Top of Mind Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['5. Image Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['6. Loyalty Percentage']) ?? 'N/A' }}%</td>
-                                        <td>{{ round($data['Grand Total Row %']) ?? 'N/A' }}%</td>
+                                        <td>{{ round($data['1. Awareness Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['2. Understanding Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['3. Trial Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['4. Top of Mind Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['5. Image Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['6. Loyalty Percentage']) ?? '0' }}%</td>
+                                        <td>{{ round($data['Grand Total Row %']) ?? '0' }}%</td>
                                     </tr>
                                 @endif
                             @endforeach
@@ -252,13 +252,13 @@
                         <tfoot>
                             <tr>
                                 <th>Mean</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['1. Awareness Column Percentage']) ?? 'N/A' }}%</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['2. Understanding Column Percentage']) ?? 'N/A' }}%</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['3. Trial Column Percentage']) ?? 'N/A' }}%</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['4. Top of Mind Column Percentage']) ?? 'N/A' }}%</th>
-                                <th>{{round( $commercialQualityData['Column Percentages']['5. Image Column Percentage'] )?? 'N/A' }}%</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['6. Loyalty Column Percentage']) ?? 'N/A' }}%</th>
-                                <th>{{ round($commercialQualityData['Column Percentages']['Grand Total Column %']) ?? 'N/A' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['1. Awareness Column Percentage']) ?? '0' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['2. Understanding Column Percentage']) ?? '0' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['3. Trial Column Percentage']) ?? '0' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['4. Top of Mind Column Percentage']) ?? '0' }}%</th>
+                                <th>{{round( $commercialQualityData['Column Percentages']['5. Image Column Percentage'] )?? '0' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['6. Loyalty Column Percentage']) ?? '0' }}%</th>
+                                <th>{{ round($commercialQualityData['Column Percentages']['Grand Total Column %']) ?? '0' }}%</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -282,17 +282,17 @@ $(document).ready(function() {
 
     // Initialize Select2 for multi-select filters
     $('.js-example-basic-multiple').select2({
-        placeholder: "Select an option",
+        placeholder: "Seleccionar",
         width: '50%'
     });
 
     // Handle form submission with AJAX
     $('#filter-form').on('submit', function(e) {
         e.preventDefault(); // Prevent the default form submission (which reloads the page)
-        applyFilters(); // Call the function to apply filters
+        applyFilters(); // Call the function to Aplicar
     });
 
-    // Function to apply filters via AJAX
+    // Function to Aplicar via AJAX
     function applyFilters() {
         var formData = $('#filter-form').serialize(); // Get all form data
 
@@ -324,13 +324,13 @@ $(document).ready(function() {
             tableBody.append(`
                 <tr>
                     <td>${mediaType}</td>
-                    <td>${mediaTypeData['1. Awareness Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['2. Understanding Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['3. Trial Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['4. Top of Mind Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['5. Image Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['6. Loyalty Percentage'] || 'N/A'}%</td>
-                    <td>${mediaTypeData['Grand Total Row %'] || 'N/A'}%</td>
+                    <td>${mediaTypeData['1. Awareness Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['2. Understanding Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['3. Trial Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['4. Top of Mind Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['5. Image Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['6. Loyalty Percentage'] || '0'}%</td>
+                    <td>${mediaTypeData['Grand Total Row %'] || '0'}%</td>
                 </tr>
             `);
         });
@@ -351,7 +351,7 @@ $(document).ready(function() {
 
         $(document).ready(function() {
             $('.js-example-basic-multiple').select2({
-                placeholder: "Select an option", // Placeholder text
+                placeholder: "Seleccionar", // Placeholder text
                 width: '50%'
             });
         });

@@ -47,7 +47,9 @@
                 <div class="row">
                     @foreach ($distinctValues as $key => $values)
                         <div class="col-md-3 mb-3">
-                            <label for="{{ $key }}">{{ ucwords(str_replace('unique', '', $key)) }}</label>
+                        <label for="{{ $key }}">
+                    <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                </label>
                             <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
                                 @foreach ($values as $value)
                                     @if($key === 'uniqueMediaType')
@@ -63,7 +65,7 @@
                         </div>
                     @endforeach
                     <div class="col-md-3 align-self-end mb-3">
-                        <button type="button" id="applyFilters" class="btn btn-primary">Apply Filters</button>
+                        <button type="button" id="applyFilters" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
             </form>
@@ -124,12 +126,12 @@
 
             // Initialize Select2 for each filter select
             $('.js-multiple-filter').select2({
-                placeholder: "Select Options",
+                placeholder: "Seleccionar",
                 allowClear: true,
                 width: "100%"
             });
 
-            // Apply filters via AJAX when the button is clicked
+            // Aplicar via AJAX when the button is clicked
             $('#applyFilters').on('click', function () {
                 var formData = $('#filter-form').serialize();
                 $.ajax({
@@ -151,7 +153,7 @@
                         }
                     },
                     error: function () {
-                        alert("Failed to apply filters. Please try again.");
+                        alert("Failed to Aplicar. Please try again.");
                     }
                 });
             });

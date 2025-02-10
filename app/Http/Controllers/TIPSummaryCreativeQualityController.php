@@ -14,16 +14,15 @@ class TIPSummaryCreativeQualityController extends Controller
 
         // Define filterable columns and their request parameter keys
         $filters = [
-            'RespoSer'   => 'uniqueRespoSer',
             'QuotGene'   => 'uniqueGender',
             'QuotEdad'   => 'uniqueAge',
             'QuoSegur'   => 'uniqueQuoSegur',
-            'MediaType'  => 'uniqueMediaType',
-            'index'      => 'uniqueIndex',
-            'Influence'  => 'uniqueInfluence',
-            'tpi'        => 'uniquetpi',
         ];
-
+        $filterLabels = [
+            'uniqueGender'   => 'Género',
+            'uniqueAge'      => 'Edad',
+            'uniqueQuoSegur' => 'Seguro', // Adjust the label as needed
+        ];
         // Fetch distinct values for filters (for the dropdowns)
         $distinctValues = [];
         foreach ($filters as $column => $requestKey) {
@@ -39,14 +38,19 @@ class TIPSummaryCreativeQualityController extends Controller
                     $filterValues = $request->$requestKey;
                     // If filtering by MediaType, trim both the database value and the filter values
                     if ($column === 'MediaType') {
-                        dd($filterValues);
+                        // Remove debugging and trim filter values
                         $filterValues = array_map('trim', $filterValues);
                         $placeholders = implode(',', array_fill(0, count($filterValues), '?'));
-                        $filteredQuery->whereRaw("TRIM(MediaType) IN ($placeholders)", $filterValues);
-                        
+                    
+                        // Remove newline characters from MediaType in the DB before comparing.
+                        $filteredQuery->whereRaw(
+                            "REPLACE(REPLACE(MediaType, '\r', ''), '\n', '') IN ($placeholders)",
+                            $filterValues
+                        );
                     } else {
                         $filteredQuery->whereIn($column, $filterValues);
                     }
+                    
                     
                 }
             }
@@ -325,7 +329,7 @@ class TIPSummaryCreativeQualityController extends Controller
         $commercialQualityData['Column Percentages'] = $columnWisePercentages;
         $dataMessage = empty($commercialQualityData) ? "No data available to display." : null;
 
-        return view('TIP_summary_creative_quality', compact('breadcrumb', 'commercialQualityData', 'dataMessage', 'distinctValues', 'mediaTypeMapping'));
+        return view('TIP_summary_creative_quality', compact('breadcrumb', 'commercialQualityData', 'dataMessage', 'distinctValues', 'mediaTypeMapping','filterLabels'));
 
     }
 }

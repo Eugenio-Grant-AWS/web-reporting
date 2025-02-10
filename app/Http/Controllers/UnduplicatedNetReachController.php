@@ -35,16 +35,15 @@ class UnduplicatedNetReachController extends Controller
 
         // --- Additional Filters ---
         // Define extra filterable columns.
-        $additionalFilters = ['RespoSer', 'QuotGene', 'QuotEdad', 'QuoSegur'];
+        $additionalFilters = ['QuotGene', 'QuotEdad', 'QuoSegur'];
         $additionalFilterOptions = [];
         foreach ($additionalFilters as $col) {
             $additionalFilterOptions[$col] = DB::table('consumers_reacheds')->distinct()->pluck($col);
         }
         $filterLabelMapping = [
-            'RespoSer'  => 'Responder',
-            'QuotGene'  => 'Gender',
+            'QuotGene'  => 'Género',
             'QuotEdad'  => 'Age',
-            'QuoSegur'  => 'Insurance',
+            'QuoSegur'  => 'Tipo Seguro',
         ];
 
         // Build the query using the selected top row columns and additional filters.

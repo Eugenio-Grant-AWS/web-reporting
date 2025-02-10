@@ -14,15 +14,15 @@ class Reach_X_AttentionPlotController extends Controller
         // Define filters for this plot.
         // (Assuming the reach_attention_plots table has columns: MediaType, Reach, and Attention.)
         $filters = [
-            'RespoSer'  => 'uniqueRespoSer',
             'QuotGene'  => 'uniqueGender',
             'QuotEdad'  => 'uniqueAge',
             'QuoSegur'  => 'uniqueQuoSegur',
-            'MediaType' => 'uniqueMediaType',
-            'Attention' => 'uniqueAttention',
-            'Reach'     => 'uniqueReach'
         ];
-
+        $filterLabels = [
+            'uniqueGender'   => 'Género',
+            'uniqueAge'      => 'Edad',
+            'uniqueQuoSegur' => 'Seguro', // Change 'Seguro' to the appropriate label as needed.
+        ];
         // Get distinct values for each filter (to populate the dropdowns)
         $distinctValues = [];
         foreach ($filters as $column => $reqKey) {
@@ -34,7 +34,7 @@ class Reach_X_AttentionPlotController extends Controller
         // Build the base query from the reach_attention_plots table
         $query = DB::table('reach_attention_plots');
 
-        // Apply filters if present
+        // Aplicar if present
         foreach ($filters as $column => $reqKey) {
             if ($request->filled($reqKey)) {
                 $filterValues = $request->input($reqKey); // expecting an array
@@ -130,7 +130,8 @@ class Reach_X_AttentionPlotController extends Controller
             'breadcrumb',
             'dataMessage',
             'distinctValues',
-            'mediaTypeMapping'
+            'mediaTypeMapping',
+            'filterLabels'
         ));
     }
 }

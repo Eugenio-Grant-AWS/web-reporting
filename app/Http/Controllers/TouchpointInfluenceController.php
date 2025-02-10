@@ -15,7 +15,6 @@ class TouchpointInfluenceController extends Controller
         $breadcrumb = 'Touchpoint Influence';
 
         $mediaTypes = TouchpointInfluence::distinct()->pluck('MediaType');
-
         $tpis = TouchpointInfluence::distinct()->pluck('tpi')->toArray();
 
         // Fetch the unique filter options
@@ -31,7 +30,7 @@ class TouchpointInfluenceController extends Controller
         // Start query to fetch data
         $mediaData = TouchpointInfluence::query();
 
-        // Apply filters based on selected options from the request
+        // Aplicar based on selected options from the request
         if ($request->has('uniqueRespoSer') && !empty($request->uniqueRespoSer)) {
             $mediaData = $mediaData->whereIn('RespoSer', $request->uniqueRespoSer);
         }
@@ -44,8 +43,14 @@ class TouchpointInfluenceController extends Controller
         if ($request->has('uniqueQuoSegur') && !empty($request->uniqueQuoSegur)) {
             $mediaData = $mediaData->whereIn('QuoSegur', $request->uniqueQuoSegur);
         }
+        // UPDATED MediaType filter using REPLACE to remove newlines
         if ($request->has('uniqueMediaType') && !empty($request->uniqueMediaType)) {
-            $mediaData = $mediaData->whereIn('MediaType', $request->uniqueMediaType);
+            $filterValues = array_map('trim', $request->uniqueMediaType);
+            $placeholders = implode(',', array_fill(0, count($filterValues), '?'));
+            $mediaData = $mediaData->whereRaw(
+                "REPLACE(REPLACE(MediaType, '\r', ''), '\n', '') IN ($placeholders)",
+                $filterValues
+            );
         }
         if ($request->has('uniquetpi') && !empty($request->uniquetpi)) {
             $mediaData = $mediaData->whereIn('tpi', $request->uniquetpi);
@@ -100,7 +105,10 @@ class TouchpointInfluenceController extends Controller
 
             if ($percentageSum > 0) {
                 $firstTpi = reset($tpis);
-                $commercialQualityData[$mediaType]['Grand Total Row %'] = round(($percentageSum / ($fixedTotals[$mediaType][$firstTpi] ?? 1)) * 100, 2);
+                $commercialQualityData[$mediaType]['Grand Total Row %'] = round(
+                    ($percentageSum / ($fixedTotals[$mediaType][$firstTpi] ?? 1)) * 100,
+                    2
+                );
             }
         }
 
@@ -118,7 +126,6 @@ class TouchpointInfluenceController extends Controller
         if ($columnWiseGrandTotal > 0) {
             $columnWisePercentages['Grand Total Column %'] = round(($columnWiseGrandTotal / count($columnWisePercentages)), 2);
         }
-
 
         $mediaTypeMapping = [
             "Abrir emails comerciales" => "Emails comerciales",
@@ -162,6 +169,7 @@ class TouchpointInfluenceController extends Controller
             $newMediaType = $mediaTypeMapping[$cleanedMediaType] ?? $cleanedMediaType;
             return [$newMediaType => $data];
         })->toArray();
+
         if ($request->ajax()) {
             return response()->json([
                 'commercialQualityData' => $commercialQualityData,  // Send filtered data
@@ -173,6 +181,18 @@ class TouchpointInfluenceController extends Controller
         // Check if data exists
         $dataMessage = collect($commercialQualityData)->isEmpty() ? "No data available to display." : null;
 
-        return view('touchpoint-influence', compact('breadcrumb', 'commercialQualityData', 'dataMessage','uniqueRespoSer','uniqueGender','uniqueAge','uniqueQuoSegur','uniqueMediaType','uniqueIndex','uniqueInfluence','uniquetpi'));
+        return view('touchpoint-influence', compact(
+            'breadcrumb',
+            'commercialQualityData',
+            'dataMessage',
+            'uniqueRespoSer',
+            'uniqueGender',
+            'uniqueAge',
+            'uniqueQuoSegur',
+            'uniqueMediaType',
+            'uniqueIndex',
+            'uniqueInfluence',
+            'uniquetpi'
+        ));
     }
 }
