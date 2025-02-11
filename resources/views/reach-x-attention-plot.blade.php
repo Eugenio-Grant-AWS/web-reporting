@@ -31,12 +31,12 @@
         </div>
         <div class="row mt-3">
             <div class="col-12">
-                <div class=" rounded shadow-sm select-group bg-custom">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>    <!-- Filter Section -->
                     <form id="filter-form" class="mb-3">
                         <div class="row">
                             @foreach ($distinctValues as $key => $values)
-                                <div class="col-md-3 mb-3">
+                                <div class="col-md-3">
                                 <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
                                     <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
                                         @foreach ($values as $value)
@@ -50,7 +50,7 @@
                                     </select>
                                 </div>
                             @endforeach
-                            <div class="col-md-3 align-self-end mb-3">
+                            <div class="col-md-3 align-self-end">
                                 <button type="submit" class="btn btn-primary">Aplicar</button>
                             </div>
                         </div>

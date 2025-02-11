@@ -84,7 +84,7 @@
                             <!-- Security Quote Filter -->
                             <div class="col-md-3">
                                 <div class="filter-group">
-                                    <label for="uniqueQuoSegur">Security Quote</label>
+                                    <label for="uniqueQuoSegur"><strong>Seguro</strong> </label>
                                     <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="form-select js-example-basic-multiple" multiple>
                                         @foreach($uniqueQuoSegur as $quoSegur)
                                             <option value="{{ $quoSegur }}">{{ $quoSegur }}</option>

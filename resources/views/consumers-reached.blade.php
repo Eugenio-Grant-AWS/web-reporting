@@ -133,7 +133,7 @@ $defaultSelection = [
                     <!-- QuoSegur Filter -->
                     <div class="col-sm-3 mb-3">
                         <div class="filter-group">
-                            <label for="quosegur"><strong>Tipo Seguro</strong></label>
+                            <label for="quosegur"><strong>Seguro</strong></label>
                             <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
                                 @foreach($quosegurValues as $quosegur)
                                     <option value="{{ $quosegur }}">

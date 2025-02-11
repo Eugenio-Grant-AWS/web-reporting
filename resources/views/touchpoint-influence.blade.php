@@ -101,7 +101,7 @@
             </div>
             <div class="row mt-3">
                 <div class="col-12">
-                    <div class="rounded shadow-sm select-group bg-custom">
+                    <div class="p-3 rounded shadow-sm select-group bg-custom">
                         <h5 class="mb-3">Apply Filters</h5>
                 <form method="GET" id="filter-form">
                     <div class="row">
@@ -133,7 +133,7 @@
                         @if(!empty($uniqueQuoSegur))
                         <div class="col-md-3">
                             <div class="filter-group">
-                                <label for="uniqueQuoSegur"><strong>QuoSegur</strong></label>
+                                <label for="uniqueQuoSegur"><strong>Seguro</strong></label>
                                 <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="form-select js-example-basic-multiple" multiple>
                                     @foreach($uniqueQuoSegur as $quoSegur)
                                         <option value="{{ $quoSegur }}">{{ $quoSegur }}</option>

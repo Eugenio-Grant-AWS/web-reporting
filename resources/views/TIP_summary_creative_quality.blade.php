@@ -48,7 +48,7 @@
         <!-- Filter Section -->
         <div class="row mt-3">
             <div class="col-12">
-                <div class="rounded shadow-sm select-group bg-custom">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>
             <form id="filter-form">
                 <div class="row">
