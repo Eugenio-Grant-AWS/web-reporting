@@ -18,72 +18,53 @@
         </div>
     </div>
 
-    <!-- Filter Section -->
-    <div class="filter-section mb-4">
-        <form method="GET" id="filter-form">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="filter-group">
-                    <label for="uniqueGender"><strong>Género</strong></label>
-                        <select name="uniqueGender[]" id="uniqueGender" class="form-select" multiple>
-                            @foreach($uniqueGender as $gender)
-                                <option value="{{ $gender }}">{{ $gender }}</option>
-                            @endforeach
-                        </select>
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="p-3 rounded shadow-sm select-group bg-custom">
+                <h5 class="mb-3">Apply Filters</h5>
+                <form method="GET" id="filter-form">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                        <label for="uniqueGender"><strong>Género</strong></label>
+                            <select name="uniqueGender[]" id="uniqueGender" class="form-select" multiple>
+                                @foreach($uniqueGender as $gender)
+                                    <option value="{{ $gender }}">{{ $gender }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="uniqueAge"><strong>Edad</strong></label>
+                            <select name="uniqueAge[]" id="uniqueAge" class="form-select" multiple>
+                                @foreach($uniqueAge as $age)
+                                    <option value="{{ $age }}">{{ $age }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <div class="filter-group">
+                            <label for="uniqueSegur"><strong> Seguro </strong></label>
+                            <select name="uniqueSegur[]" id="uniqueSegur" class="form-select" multiple>
+                                @foreach($uniqueSegur as $value)
+                                    <option value="{{ $value }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <button type="submit" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="filter-group">
-                        <label for="uniqueAge"><strong>Edad</strong></label>
-                        <select name="uniqueAge[]" id="uniqueAge" class="form-select" multiple>
-                            @foreach($uniqueAge as $age)
-                                <option value="{{ $age }}">{{ $age }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-<!-- 
-                <div class="col-md-4">
-                    <div class="filter-group">
-                        <label for="uniqueValue">Value</label>
-                        <select name="uniqueValue[]" id="uniqueValue" class="form-select" multiple>
-                            @foreach($uniqueValue as $value)
-                                <option value="{{ $value }}">{{ $value }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-4 mt-3">
-                    <div class="filter-group">
-                        <label for="uniqueAdjusted_value">Adjusted Value</label>
-                        <select name="uniqueAdjusted_value[]" id="uniqueAdjusted_value" class="form-select" multiple>
-                            @foreach($uniqueAdjusted_value as $adjusted_value)
-                                <option value="{{ $adjusted_value }}">{{ $adjusted_value }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> -->
-
-                <!-- <div class="col-md-4 mt-3">
-                    <div class="filter-group">
-                        <label for="uniqueMediaType">Media Type</label>
-                        <select name="uniqueMediaType[]" id="uniqueMediaType" class="form-select" multiple>
-                            @foreach($uniqueMediaType as $media)
-                                <option value="{{ $media }}">{{ $media }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div> -->
-
-                <div class="col-md-4 mt-3">
-                    <button type="submit" class="btn btn-primary">Aplicar</button>
-                </div>
+                </form>
             </div>
-        </form>
+        </div>
     </div>
-
     <!-- Chart Section -->
     <div class="bg-white rounded-lg">
         @if ($dataMessage)

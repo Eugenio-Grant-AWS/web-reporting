@@ -20,7 +20,7 @@
         </div>
         <div class="col-xl-8">
             <div class="body-right">
-                <div class="search-group bg-custom rounded-4">
+                {{-- <div class="search-group bg-custom rounded-4">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search" class="bg-transparent border-0">
                 </div>
@@ -31,7 +31,7 @@
                         <option>Old</option>
                         <option>Alphabetical Order</option>
                     </select>
-                </div>
+                </div> --}}
                 <button id="downloadChart" class="export-btn">
                     Export Chart as Image <i class="fas fa-download"></i>
                 </button>
@@ -55,25 +55,31 @@
             </div>
         </div>
 
-        <!-- Additional Filters Section -->
+        <!-- Apply Filters Section -->
         <div class="row mt-3">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Additional Filters</h5>
+                    <h5 class="mb-3">Apply Filters</h5>
                     <div class="row">
                         @foreach($additionalFilterOptions as $col => $options)
-                            <div class="col-md-3 mb-3">
-                                <label for="filter_{{ $col }}">
-                                <strong>{{ isset($filterLabelMapping[$col]) ? ucfirst($filterLabelMapping[$col]) : ucfirst(strtolower($col)) }}</strong>
-                                </label>
-                                
-                                <select class="form-select js-additional-filter" name="filter_{{ $col }}[]" multiple="multiple" id="filter_{{ $col }}">
-                                    @foreach($options as $option)
-                                        <option value="{{ $option }}">{{ $option }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endforeach
+                        <div class="col-md-3 mb-3">
+                            <label for="filter_{{ $col }}">
+                                <strong>{{ $filterLabelMapping[$col] ?? ucfirst(strtolower($col)) }}</strong>
+                            </label>
+
+                            <select class="form-select js-additional-filter" name="filter_{{ $col }}[]" multiple="multiple" id="filter_{{ $col }}">
+                                @foreach($options as $option)
+                                    @php
+                                        $optionKey = (string) $option; // Ensure type consistency
+                                    @endphp
+                                    <option value="{{ $option }}">
+                                        {{ $optionTitleMapping[$col][$optionKey] ?? $option }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endforeach
+
                     </div>
                 </div>
             </div>
@@ -161,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
         width: '100%'
     });
 
-    // Attach event handler to both top row and additional filters.
+    // Attach event handler to both top row and Apply Filters.
     $('.js-example-basic-multiple, .js-additional-filter').on('select2:select select2:unselect', function (e) {
         // For top row, enforce maximum of 3 selections.
         const topRowValues = $('.js-example-basic-multiple').val() || [];

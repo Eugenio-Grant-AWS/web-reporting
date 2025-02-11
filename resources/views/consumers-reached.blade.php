@@ -17,10 +17,10 @@ $defaultSelection = [
         </div>
         <div class="col-xl-8">
             <div class="body-right">
-                <div class="mb-3 search-group bg-custom rounded-4">
+                {{-- <div class="mb-3 search-group bg-custom rounded-4">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search" class="bg-transparent border-0 form-control search-input">
-                </div>
+                </div> --}}
 
                 <button id="downloadChart" class="mt-3 export-btn">
                     Export Chart as Image <i class="fas fa-download"></i>
@@ -78,49 +78,89 @@ $defaultSelection = [
         </div>
     </div>
 
-    <div class="row">
-    <!-- QuotGene Filter -->
-    <div class="col-sm-3 mb-3">
-        <div class="filter-group">
-        <label for="uniqueGender"><strong>Género</strong></label>
-            <select name="quotgene[]" id="quotgene" class="form-select js-example-basic-multiple " multiple >
-                @foreach($quotgeneValues as $quotgene)
-                    <option value="{{ $quotgene }}">{{ $quotgene }}</option>
-                @endforeach
-            </select>
+
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="p-3 rounded shadow-sm select-group bg-custom">
+                <h5 class="mb-3">Apply Filters</h5>
+                <div class="row">
+                    <!-- QuotGene Filter -->
+                    <div class="col-sm-3 mb-3">
+                        <div class="filter-group">
+                        <label for="uniqueGender"><strong>Género</strong></label>
+                            <select name="quotgene[]" id="quotgene" class="form-select js-example-basic-multiple " multiple >
+                                @foreach($quotgeneValues as $quotgene)
+                                    <option value="{{ $quotgene }}">
+                                        @if($quotgene == 1)
+                                        Femenino
+                                        @elseif($quotgene == 2)
+                                            Masculino
+                                        @else
+                                            {{ $quotgene }}
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- QuotEdad Filter -->
+                    <div class="col-sm-3 mb-3">
+                        <div class="filter-group">
+                        <label for="uniqueAge"><strong>Edad</strong></label>
+                            <select name="quotedad[]" id="quotedad" class="form-select js-example-basic-multiple" multiple>
+                                @foreach($quotedadValues as $quotedad)
+                                    <option value="{{ $quotedad }}">
+
+                                        @if($quotedad == 2)
+                                        25-34
+                                        @elseif($quotedad == 3)
+                                        35-44
+                                        @elseif($quotedad == 4)
+                                            45-54
+                                        @elseif($quotedad == 5)
+                                            55-65
+                                        @else
+                                            {{ $quotedad }}
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- QuoSegur Filter -->
+                    <div class="col-sm-3 mb-3">
+                        <div class="filter-group">
+                            <label for="quosegur"><strong>Tipo Seguro</strong></label>
+                            <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
+                                @foreach($quosegurValues as $quosegur)
+                                    <option value="{{ $quosegur }}">
+
+                                        @if($quosegur == 1)
+                                            Vida
+                                        @elseif($quosegur == 2)
+                                            Salud
+                                        @elseif($quosegur == 3)
+                                            Auto
+                                        @else
+                                            {{ $quosegur }}
+                                        @endif
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Aplicar Button -->
+                    <div class="col-3 mt-3 ">
+                        <button type="button" class="btn btn-primary" id="applyFiltersBtn">Aplicar</button>
+                    </div>
+            </div>
+            </div>
         </div>
     </div>
-
-    <!-- QuotEdad Filter -->
-    <div class="col-sm-3 mb-3">
-        <div class="filter-group">
-           <label for="uniqueAge"><strong>Edad</strong></label>
-            <select name="quotedad[]" id="quotedad" class="form-select js-example-basic-multiple" multiple>
-                @foreach($quotedadValues as $quotedad)
-                    <option value="{{ $quotedad }}">{{ $quotedad }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <!-- QuoSegur Filter -->
-    <div class="col-sm-3 mb-3">
-        <div class="filter-group">
-            <label for="quosegur"><strong>Tipo Seguro</strong></label>
-            <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
-                @foreach($quosegurValues as $quosegur)
-                    <option value="{{ $quosegur }}">{{ $quosegur }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <!-- Aplicar Button -->
-    <div class="col-3 mt-3 ">
-        <button type="button" class="btn btn-primary" id="applyFiltersBtn">Aplicar</button>
-    </div>
-</div>
-
 </div>
 
 

@@ -28,12 +28,12 @@ class NetReachController extends Controller
             return response()->json(['message' => 'At least 3 categories must be selected.'], 400);
         }
 
-        // --- Additional Filters ---
+        // --- Apply Filters ---
         // Define extra filterable columns.
         $additionalFilterColumns = [
-            'quotgene',
-            'quotedad',
-            'quosegur',
+            'QuotGene', // Ensure these match the case used in mappings
+            'QuotEdad',
+            'QuoSegur',
         ];
         // Retrieve distinct options (from the entire table) for each additional filter.
         $additionalFilterOptions = [];
@@ -44,10 +44,28 @@ class NetReachController extends Controller
 
         $filterLabelMapping = [
             'QuotGene'  => 'Género',
-            'QuotEdad'  => 'Age',
-            'QuoSegur'  => 'Tipo Seguro',
+            'QuotEdad'  => 'Edad',
+            'QuoSegur'  => 'Seguro',
         ];
-        // Build the consumers query and apply additional filters if present.
+
+        $optionTitleMapping = [
+            'QuotGene' => [
+                '1' => 'Masculino',
+                '2' => 'Femenino',
+            ],
+            'QuotEdad' => [
+                '2' => '25-34',
+                '3' => '35-44',
+                '4' => '45-54',
+                '5' => '55-65',
+            ],
+            'QuoSegur' => [
+                '1'  => 'Vida',
+                '2'  => 'Salud',
+                '3'  => 'Auto',
+            ],
+        ];
+        // Build the consumers query and apply Apply Filters if present.
         $query = DB::table('consumers_reacheds');
         foreach ($additionalFilterColumns as $col) {
             // Expect the filter input name to be "filter_{column}"
@@ -122,7 +140,7 @@ class NetReachController extends Controller
         if ($request->ajax()) {
             return response()->json(['chartData' => $chartData]);
         }
-
+        // dd($optionTitleMapping);
         $dataMessage = null;
         return view('net-reach', compact(
             'chartData',
@@ -130,7 +148,8 @@ class NetReachController extends Controller
             'breadcrumb',
             'selectedCategories',
             'additionalFilterOptions',
-            'filterLabelMapping'
+            'filterLabelMapping',
+            'optionTitleMapping'
         ));
     }
 }

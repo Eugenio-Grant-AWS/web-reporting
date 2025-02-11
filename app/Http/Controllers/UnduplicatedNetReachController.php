@@ -33,7 +33,7 @@ class UnduplicatedNetReachController extends Controller
         // Determine the labels (i.e. column names) from the selected values.
         $labels = array_keys($selectedValues);
 
-        // --- Additional Filters ---
+        // --- Apply Filters ---
         // Define extra filterable columns.
         $additionalFilters = ['QuotGene', 'QuotEdad', 'QuoSegur'];
         $additionalFilterOptions = [];
@@ -42,11 +42,29 @@ class UnduplicatedNetReachController extends Controller
         }
         $filterLabelMapping = [
             'QuotGene'  => 'Género',
-            'QuotEdad'  => 'Age',
-            'QuoSegur'  => 'Tipo Seguro',
+            'QuotEdad'  => 'Edad',
+            'QuoSegur'  => 'Seguro',
         ];
 
-        // Build the query using the selected top row columns and additional filters.
+        $optionTitleMapping = [
+            'QuotGene' => [
+                '1' => 'Masculino',
+                '2' => 'Femenino',
+            ],
+            'QuotEdad' => [
+                '2' => '25-34',
+                '3' => '35-44',
+                '4' => '45-54',
+                '5' => '55-65',
+            ],
+            'QuoSegur' => [
+                '1'  => 'Vida',
+                '2'  => 'Salud',
+                '3'  => 'Auto',
+            ],
+        ];
+
+        // Build the query using the selected top row columns and Apply Filters.
         $query = DB::table('consumers_reacheds')->select($labels);
         foreach ($additionalFilters as $col) {
             $param = 'filter_' . $col;
@@ -113,14 +131,15 @@ class UnduplicatedNetReachController extends Controller
         }
 
         $dataMessage = $totalCount === 0 ? "No data available to display." : null;
-
+        // dd($optionTitleMapping);
         return view('unduplicated-net-reach', compact(
             'commercialQualityData',
             'dataMessage',
             'breadcrumb',
             'selectedValues',
             'additionalFilterOptions',
-            'filterLabelMapping'
+            'filterLabelMapping',
+            'optionTitleMapping'
         ));
     }
 }

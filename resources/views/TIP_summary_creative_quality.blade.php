@@ -1,4 +1,4 @@
-@extends('layouts.admin') 
+@extends('layouts.admin')
 @section('title', $breadcrumb)
 
 @section('content')
@@ -46,15 +46,18 @@
         <h6>TIP Summary x Creative Quality</h6>
 
         <!-- Filter Section -->
-        <div class="filter-section mb-4">
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Apply Filters</h5>
             <form id="filter-form">
                 <div class="row">
                     @foreach ($distinctValues as $key => $values)
                         <div class="col-md-3 mt-2">
                          <label for="{{ $key }}">
-                    <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
-                </label>
-                          
+                            <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                        </label>
+
                             <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
                                 <option value="">Seleccionar</option>
                                 @foreach ($values as $value)
@@ -76,6 +79,8 @@
                     </div>
                 </div>
             </form>
+        </div>
+            </div>
         </div>
 
         <!-- Data Table -->
@@ -146,7 +151,7 @@
                         if (response.data && response.data.length > 0) {
                             // Render new table with filtered data
                             $('#data-container').html(renderTable(response.data));
-                            
+
                             // Reinitialize DataTable after new content is loaded
                             table.destroy();
                             table = new DataTable('#myTable', {

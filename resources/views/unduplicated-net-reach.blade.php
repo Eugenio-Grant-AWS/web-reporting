@@ -20,10 +20,10 @@
         </div>
         <div class="col-xl-8">
             <div class="body-right">
-                <div class="search-group bg-custom rounded-4">
+                {{-- <div class="search-group bg-custom rounded-4">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search" class="bg-transparent border-0">
-                </div>
+                </div> --}}
                 <button id="downloadChart" class="export-btn">
                     Export Chart as Image <i class="fas fa-download"></i>
                 </button>
@@ -48,24 +48,27 @@
             </div>
         </div>
 
-        <!-- Additional Filters Section -->
+        <!-- Apply Filters Section -->
         <div class="row mt-3">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Additional Filters</h5>
+                    <h5 class="mb-3">Apply Filters</h5>
                     <div class="row">
                         @foreach($additionalFilterOptions as $col => $options)
                             <div class="col-md-3 mb-3">
                                 <label for="filter_{{ $col }}">
-                                <strong> {{ isset($filterLabelMapping[$col]) ? $filterLabelMapping[$col] : strtolower($col) }}</strong>
+                                    <strong>{{ $filterLabelMapping[$col] ?? strtolower($col) }}</strong>
                                 </label>
                                 <select class="form-select js-additional-filter" name="filter_{{ $col }}[]" multiple="multiple" id="filter_{{ $col }}">
                                     @foreach($options as $option)
-                                        <option value="{{ $option }}">{{ $option }}</option>
+                                        <option value="{{ $option }}">
+                                            {{ $optionTitleMapping[$col][$option] ?? $option }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         @endforeach
+
                     </div>
                 </div>
             </div>

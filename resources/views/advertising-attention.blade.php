@@ -18,17 +18,18 @@
         </div>
     </div>
 
-    <div class="row-12">
-        <div class="filter-section mb-4">
-            <!-- Set the form action to the current route -->
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="p-3 rounded shadow-sm select-group bg-custom">
+                <h5 class="mb-3">Apply Filters</h5>
             <form method="GET" id="filter-form" action="{{ route('advertising-attention-by-touchpoint') }}">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="filter-group">
                              <label for="uniqueGender"><strong>Género</strong></label>
                             <select name="uniqueGender[]" id="uniqueGender" class="js-example-basic-multiple form-select" multiple>
                                 @foreach($uniqueGender as $gender)
-                                    <option value="{{ $gender }}" 
+                                    <option value="{{ $gender }}"
                                         @if(in_array($gender, request('uniqueGender', []))) selected @endif>
                                         {{ $gender }}
                                     </option>
@@ -37,7 +38,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="filter-group">
                         <label for="uniqueAge"><strong>Edad</strong></label>
                             <select name="uniqueAge[]" id="uniqueAge" class="js-example-basic-multiple form-select" multiple>
@@ -51,19 +52,19 @@
                         </div>
                     </div>
 
-                    <!-- <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="filter-group">
-                        <label for="uniqueValue">Valor</label>
-                            <select name="uniqueValue[]" id="uniqueValue" class="js-example-basic-multiple form-select" multiple>
-                                @foreach($uniqueValue as $value)
+                        <label for="uniqueQuoSegur"><strong>Seguro</strong> </label>
+                            <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="js-example-basic-multiple form-select" multiple>
+                                @foreach($uniqueQuoSegur as $value)
                                     <option value="{{ $value }}"
-                                        @if(in_array($value, request('uniqueValue', []))) selected @endif>
+                                        @if(in_array($value, request('uniqueQuoSegur', []))) selected @endif>
                                         {{ $value }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                    </div> -->
+                    </div>
 
                     <!-- <div class="col-md-4 mt-3">
                         <div class="filter-group">
@@ -79,11 +80,12 @@
                         </div>
                     </div> -->
 
-                    <div class="col-md-4 mt-3">
+                    <div class="col-md-3 mt-3">
                         <button type="submit" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
             </form>
+        </div>
         </div>
     </div>
 

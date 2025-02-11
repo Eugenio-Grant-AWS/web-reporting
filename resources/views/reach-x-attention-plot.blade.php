@@ -12,7 +12,7 @@
         </div>
         <div class="col-xl-8">
             <div class="body-right">
-                <div class="search-group bg-custom rounded-4">
+                {{-- <div class="search-group bg-custom rounded-4">
                     <i class="fas fa-search"></i>
                     <input type="text" placeholder="Search" class="bg-transparent border-0">
                 </div>
@@ -23,40 +23,46 @@
                         <option>Old</option>
                         <option>Alphabetical Order</option>
                     </select>
-                </div>
+                </div> --}}
                 <button id="downloadChart" class="export-btn">
                     Export Chart as Image <i class="fas fa-download"></i>
                 </button>
             </div>
         </div>
-          <!-- Filter Section -->
-    <form id="filter-form" class="mb-3">
-        <div class="row">
-            @foreach ($distinctValues as $key => $values)
-                <div class="col-md-3 mb-3">
-                <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
-                    <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
-                        @foreach ($values as $value)
-                            @if($key === 'uniqueMediaType')
-                                @php $cleanValue = trim($value); @endphp
-                                <option value="{{ $cleanValue }}">{{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}</option>
-                            @else
-                                <option value="{{ $value }}">{{ $value }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-            @endforeach
-            <div class="col-md-3 align-self-end mb-3">
-                <button type="submit" class="btn btn-primary">Aplicar</button>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class=" rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Apply Filters</h5>    <!-- Filter Section -->
+                    <form id="filter-form" class="mb-3">
+                        <div class="row">
+                            @foreach ($distinctValues as $key => $values)
+                                <div class="col-md-3 mb-3">
+                                <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                                    <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
+                                        @foreach ($values as $value)
+                                            @if($key === 'uniqueMediaType')
+                                                @php $cleanValue = trim($value); @endphp
+                                                <option value="{{ $cleanValue }}">{{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}</option>
+                                            @else
+                                                <option value="{{ $value }}">{{ $value }}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @endforeach
+                            <div class="col-md-3 align-self-end mb-3">
+                                <button type="submit" class="btn btn-primary">Aplicar</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
             </div>
         </div>
-    </form>
     </div>
-  
+
 
     <!-- Top Row: Title, Search, Sort, Export (unchanged) -->
-  
+
 
     <!-- Chart Container -->
     <div class="bg-white rounded-lg">

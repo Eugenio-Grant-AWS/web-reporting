@@ -40,16 +40,19 @@
     </style>
     <div class="container-fluid">
         <h6>Indexed Review Of Stronger Drivers</h6>
-        
+
         <!-- Filter Section (server‑side filters) -->
-        <div class="filter-section mb-3">
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Apply Filters</h5>
             <form id="filter-form" method="GET">
                 <div class="row">
                     @foreach ($distinctValues as $key => $values)
                         <div class="col-md-3 mb-3">
                         <label for="{{ $key }}">
-                    <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
-                </label>
+                            <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                        </label>
                             <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
                                 @foreach ($values as $value)
                                     @if($key === 'uniqueMediaType')
@@ -74,7 +77,9 @@
                 </div>
             </form>
         </div>
-        
+            </div>
+        </div>
+
         <!-- Data Table Container -->
         <div id="data-container">
             @section('table')
