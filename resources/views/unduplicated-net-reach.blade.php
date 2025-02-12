@@ -37,7 +37,7 @@
         <div class="row mt-3">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Select Media Channels (Choose 4)</h5>
+                    <h5 class="mb-3">Select Media Channels</h5>
                     <select class="js-example-basic-multiple" name="top_row[]" multiple="multiple">
                         <option value="ver_tv_senal_nacional" {{ isset($selectedValues['ver_tv_senal_nacional']) ? 'selected' : '' }}>ver_tv_senal_nacional</option>
                         <option value="escuchar_radio" {{ isset($selectedValues['escuchar_radio']) ? 'selected' : '' }}>escuchar_radio</option>
