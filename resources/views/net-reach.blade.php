@@ -50,6 +50,38 @@
                         <option value="ver_tv_senal_nacional" {{ in_array('ver_tv_senal_nacional', $selectedCategories) ? 'selected' : '' }}>ver_tv_senal_nacional</option>
                         <option value="ver_tv_cable" {{ in_array('ver_tv_cable', $selectedCategories) ? 'selected' : '' }}>ver_tv_cable</option>
                         <option value="ver_tv_internet" {{ in_array('ver_tv_internet', $selectedCategories) ? 'selected' : '' }}>ver_tv_internet</option>
+                        <option value="escuchar_radio">escuchar_radio</option>
+                        <option value="escuchar_radio_internet">escuchar_radio_internet</option>
+                        <option value="leer_revista_impresa">leer_revista_impresa</option>
+                        <option value="leer_revista_digital">leer_revista_digital</option>
+                        <option value="leer_periodico_impreso">leer_periodico_impreso</option>
+                        <option value="leer_periodico_digital">leer_periodico_digital</option>
+                        <option value="leer_periodico_email">leer_periodico_email</option>
+                        <option value="vallas_publicitarias">vallas_publicitarias</option>
+                        <option value="centros_comerciales">centros_comerciales</option>
+                        <option value="transitar_metrobuses">transitar_metrobuses</option>
+                        <option value="ver_cine">ver_cine</option>
+                        <option value="abrir_correos_companias">abrir_correos_companias</option>
+                        <option value="entrar_sitios_web">entrar_sitios_web</option>
+                        <option value="entrar_facebook">entrar_facebook</option>
+                        <option value="entrar_twitter">entrar_twitter</option>
+                        <option value="entrar_instagram">entrar_instagram</option>
+                        <option value="entrar_youtube">entrar_youtube</option>
+                        <option value="entrar_linkedin">entrar_linkedin</option>
+                        <option value="entrar_whatsapp">entrar_whatsapp</option>
+                        <option value="escuchar_spotify">escuchar_spotify</option>
+                        <option value="ver_netflix">ver_netflix</option>
+                        <option value="utilizar_mailing_list">utilizar_mailing_list</option>
+                        <option value="videojuegos_celular">videojuegos_celular</option>
+                        <option value="utilizar_we_transfer">utilizar_we_transfer</option>
+                        <option value="utilizar_waze">utilizar_waze</option>
+                        <option value="utilizar_uber">utilizar_uber</option>
+                        <option value="utilizar_pedidos_ya">utilizar_pedidos_ya</option>
+                        <option value="utilizar_meet">utilizar_meet</option>
+                        <option value="utilizar_zoom">utilizar_zoom</option>
+                        <option value="utilizar_airbnb">utilizar_airbnb</option>
+                        <option value="entrar_google">entrar_google</option>
+                        <option value="entrar_encuentra24">entrar_encuentra24</option>
                     </select>
                 </div>
             </div>
