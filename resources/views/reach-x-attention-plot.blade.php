@@ -29,7 +29,7 @@
                 </button>
             </div>
         </div>
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>    <!-- Filter Section -->
@@ -106,18 +106,18 @@
             xaxis: {
                 title: { text: 'Reach Exposure/Probability', style: { color: '#D4421D', fontSize: '14px' } },
                 labels: { formatter: val => val.toFixed(0) + '%' },
-                tickAmount: 12,
+                tickAmount: 10,
                 min: 0,
-                max: 120,
+                max: 100,
                 axisBorder: { show: true },
                 axisTicks: { show: true }
             },
             yaxis: {
                 title: { text: 'Attention Touchpoints (Occasional or More Frequent)', style: { color: '#1D4CD4', fontSize: '14px' } },
                 labels: { formatter: val => val.toFixed(0) + '%' },
-                tickAmount: 20,
+                tickAmount: 8,
                 min: 0,
-                max: 100,
+                max: 80,
                 axisBorder: { show: true },
                 axisTicks: { show: true }
             },

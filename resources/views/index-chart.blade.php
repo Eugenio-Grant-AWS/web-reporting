@@ -42,7 +42,7 @@
         <h6>Indexed Review Of Stronger Drivers</h6>
 
         <!-- Filter Section (server‑side filters) -->
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>
@@ -71,7 +71,7 @@
                             </select>
                         </div>
                     @endforeach
-                    <div class="col-md-3 align-self-end mb-3">
+                    <div class="col-md-3 align-self-end">
                         <button type="submit" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
