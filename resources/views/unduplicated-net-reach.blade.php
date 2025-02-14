@@ -193,7 +193,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     datalabels: { display: true },
                 },
                 scales: {
-                    y: { beginAtZero: true, ticks: { callback: (value) => value } },
+                    y: {
+                        min: 0, // Set minimum scale value to 100
+                        max: 120,
+                        stepSize: 10,
+                         beginAtZero: true,
+                         ticks: { callback: (value) => value }
+                         },
+
                 },
             },
             plugins: [ChartDataLabels]
