@@ -42,7 +42,7 @@
     <!-- Filter Form -->
     <form id="filter-form">
         <!-- Top Row Selection: Select Media Channels (Choose 3) -->
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Select Media Channels (Choose 3)</h5>
@@ -61,6 +61,7 @@
                         <option value="centros_comerciales">centros_comerciales</option>
                         <option value="transitar_metrobuses">transitar_metrobuses</option>
                         <option value="ver_cine">ver_cine</option>
+                        <option value="Tiktok">TikTok</option>
                         <option value="abrir_correos_companias">abrir_correos_companias</option>
                         <option value="entrar_sitios_web">entrar_sitios_web</option>
                         <option value="entrar_facebook">entrar_facebook</option>
@@ -88,13 +89,13 @@
         </div>
 
         <!-- Apply Filters Section -->
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>
                     <div class="row">
                         @foreach($additionalFilterOptions as $col => $options)
-                        <div class="col-md-3 mb-3">
+                        <div class="mb-3 col-md-3">
                             <label for="filter_{{ $col }}">
                                 <strong>{{ $filterLabelMapping[$col] ?? ucfirst(strtolower($col)) }}</strong>
                             </label>
@@ -119,7 +120,7 @@
     </form>
 
     <!-- Chart Container -->
-    <div class="bg-white rounded-lg mt-3">
+    <div class="mt-3 bg-white rounded-lg">
         @if ($dataMessage)
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent

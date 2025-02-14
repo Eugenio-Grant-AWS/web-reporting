@@ -44,8 +44,9 @@ $defaultSelection = [
                         <option value="leer_revista_impresa">leer_revista_impresa</option>
                         <option value="leer_revista_digital">leer_revista_digital</option>
                         <option value="leer_periodico_impreso">leer_periodico_impreso</option>
+                        <option value="leer_periodico_impreso">leer_periodico_impreso</option>
 
-                        <option value="leer_periodico_digital">leer_periodico_digital</option>
+                        <option value="Tiktok">TikTok</option>
                         <option value="leer_periodico_email">leer_periodico_email</option>
                         <option value="vallas_publicitarias">vallas_publicitarias</option>
                         <option value="centros_comerciales">centros_comerciales</option>
@@ -80,13 +81,13 @@ $defaultSelection = [
 
 
 
-    <div class="row mt-3">
+    <div class="mt-3 row">
         <div class="col-12">
             <div class="p-3 rounded shadow-sm select-group bg-custom">
                 <h5 class="mb-3">Apply Filters</h5>
                 <div class="row">
                     <!-- QuotGene Filter -->
-                    <div class="col-sm-3 mb-3">
+                    <div class="mb-3 col-sm-3">
                         <div class="filter-group">
                         <label for="uniqueGender"><strong>Género</strong></label>
                             <select name="quotgene[]" id="quotgene" class="form-select js-example-basic-multiple " multiple >
@@ -106,7 +107,7 @@ $defaultSelection = [
                     </div>
 
                     <!-- QuotEdad Filter -->
-                    <div class="col-sm-3 mb-3">
+                    <div class="mb-3 col-sm-3">
                         <div class="filter-group">
                         <label for="uniqueAge"><strong>Edad</strong></label>
                             <select name="quotedad[]" id="quotedad" class="form-select js-example-basic-multiple" multiple>
@@ -131,7 +132,7 @@ $defaultSelection = [
                     </div>
 
                     <!-- QuoSegur Filter -->
-                    <div class="col-sm-3 mb-3">
+                    <div class="mb-3 col-sm-3">
                         <div class="filter-group">
                             <label for="quosegur"><strong>Seguro</strong></label>
                             <select name="quosegur[]" id="quosegur" class="form-select js-example-basic-multiple" multiple>
@@ -154,7 +155,7 @@ $defaultSelection = [
                     </div>
 
                     <!-- Aplicar Button -->
-                    <div class="col-3 mt-3 ">
+                    <div class="mt-3 col-3 ">
                         <button type="button" class="btn btn-primary" id="applyFiltersBtn">Aplicar</button>
                     </div>
             </div>

@@ -34,7 +34,7 @@
     <!-- Filter Form -->
     <form id="filter-form">
         <!-- Top Row Selection: Select Media Channels (Choose 4) -->
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Select Media Channels</h5>
@@ -47,7 +47,7 @@
                         <option value="ver_tv_internet">ver_tv_internet</option>
                         <option value="escuchar_radio_internet">escuchar_radio_internet</option>
                         <option value="leer_revista_digital">leer_revista_digital</option>
-
+                        <option value="Tiktok">TikTok</option>
                         <option value="leer_periodico_digital">leer_periodico_digital</option>
                         <option value="leer_periodico_email">leer_periodico_email</option>
                         <option value="vallas_publicitarias">vallas_publicitarias</option>
@@ -81,13 +81,13 @@
         </div>
 
         <!-- Apply Filters Section -->
-        <div class="row mt-3">
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>
                     <div class="row">
                         @foreach($additionalFilterOptions as $col => $options)
-                            <div class="col-md-3 mb-3">
+                            <div class="mb-3 col-md-3">
                                 <label for="filter_{{ $col }}">
                                     <strong>{{ $filterLabelMapping[$col] ?? strtolower($col) }}</strong>
                                 </label>
@@ -108,7 +108,7 @@
     </form>
 
     <!-- Chart Container -->
-    <div class="bg-white rounded-lg mt-3">
+    <div class="mt-3 bg-white rounded-lg">
         @if ($dataMessage)
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent

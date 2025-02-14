@@ -54,6 +54,7 @@ return new class extends Migration
             $table->integer('utilizar_airbnb')->nullable();
             $table->integer('entrar_google')->nullable();
             $table->integer('entrar_encuentra24')->nullable();
+            $table->integer('Tiktok')->nullable();
             // $table->integer('reach')->nullable();
             // $table->timestamps();
         });
