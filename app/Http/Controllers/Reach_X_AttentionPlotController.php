@@ -56,8 +56,8 @@ class Reach_X_AttentionPlotController extends Controller
             DB::raw('ROUND(100.0 * COUNT(CASE WHEN Reach = "Reached" THEN 1 END) / COUNT(*), 2) as reachPercentage'),
             DB::raw('ROUND(100.0 * COUNT(CASE WHEN Attention = "Yes" THEN 1 END) / COUNT(*), 2) as attentionPercentage')
         )
-        ->groupBy('MediaType')
-        ->get();
+            ->groupBy('MediaType')
+            ->get();
 
         // Define a mapping for MediaType labels (if needed)
         $mediaTypeMapping = [

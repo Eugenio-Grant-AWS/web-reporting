@@ -141,7 +141,8 @@ class NetReachController extends Controller
             return response()->json(['chartData' => $chartData]);
         }
         // dd($optionTitleMapping);
-        $dataMessage = null;
+        $dataMessage = $consumers->isEmpty() ? "No data available to display." : null;
+
         return view('net-reach', compact(
             'chartData',
             'dataMessage',

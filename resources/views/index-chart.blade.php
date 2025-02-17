@@ -41,95 +41,100 @@
     <div class="container-fluid">
         <h6>Indexed Review Of Stronger Drivers</h6>
 
+        @if ($dataMessage)
+            @component('components.no_data_message', ['message' => $dataMessage])
+            @endcomponent
+        @else
         <!-- Filter Section (server‑side filters) -->
-        <div class="mt-3 row">
-            <div class="col-12">
-                <div class="p-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Apply Filters</h5>
-            <form id="filter-form" method="GET">
-                <div class="row">
-                    @foreach ($distinctValues as $key => $values)
-                        <div class="col-md-3">
-                        <label for="{{ $key }}">
-                            <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
-                        </label>
-                            <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
-                                @foreach ($values as $value)
-                                    @if($key === 'uniqueMediaType')
-                                        @php $cleanValue = trim($value); @endphp
-                                        <option value="{{ $cleanValue }}"
-                                            {{ (request($key) && in_array($cleanValue, request($key))) ? 'selected' : '' }}>
-                                            {{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}
-                                        </option>
-                                    @else
-                                        <option value="{{ $value }}"
-                                            {{ (request($key) && in_array($value, request($key))) ? 'selected' : '' }}>
-                                            {{ $value }}
-                                        </option>
-                                    @endif
+            <div class="mt-3 row">
+                <div class="col-12">
+                    <div class="p-3 rounded shadow-sm select-group bg-custom">
+                        <h5 class="mb-3">Apply Filters</h5>
+                        <form id="filter-form" method="GET">
+                            <div class="row">
+                                @foreach ($distinctValues as $key => $values)
+                                    <div class="col-md-3">
+                                    <label for="{{ $key }}">
+                                        <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                                    </label>
+                                        <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
+                                            @foreach ($values as $value)
+                                                @if($key === 'uniqueMediaType')
+                                                    @php $cleanValue = trim($value); @endphp
+                                                    <option value="{{ $cleanValue }}"
+                                                        {{ (request($key) && in_array($cleanValue, request($key))) ? 'selected' : '' }}>
+                                                        {{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $value }}"
+                                                        {{ (request($key) && in_array($value, request($key))) ? 'selected' : '' }}>
+                                                        {{ $value }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 @endforeach
-                            </select>
-                        </div>
-                    @endforeach
-                    <div class="col-md-3 align-self-end">
-                        <button type="submit" class="btn btn-primary">Aplicar</button>
+                                <div class="col-md-3 align-self-end">
+                                    <button type="submit" class="btn btn-primary">Aplicar</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </form>
-        </div>
             </div>
-        </div>
 
-        <!-- Data Table Container -->
-        <div id="data-container">
-            @section('table')
-            <table id="myTable" class="display nowrap dataTable dtr-inline collapsed">
-                <thead>
-                    <tr>
-                        <th>Media Channels</th>
-                        <th>Awareness</th>
-                        <th>Understanding</th>
-                        <th>Trial</th>
-                        <th>Top of Mind</th>
-                        <th>Image</th>
-                        <th>Loyalty</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($commercialQualityData as $mediaType => $data)
-                        @if($mediaType !== 'Column Percentages')
-                            <tr>
-                                <td>{{ $mediaType }}</td>
-                                @foreach ([
-                                    '1. Awareness Adjusted Percentage',
-                                    '2. Understanding Adjusted Percentage',
-                                    '3. Trial Adjusted Percentage',
-                                    '4. Top of Mind Adjusted Percentage',
-                                    '5. Image Adjusted Percentage',
-                                    '6. Loyalty Adjusted Percentage'
-                                ] as $key)
-                                    @php
-                                        $value = $data[$key] ?? 'N/A';
-                                        $style = '';
-                                        if (is_numeric($value)) {
-                                            // Round off the value to the nearest integer
-                                            $value = round($value);
-                                            if ($value <= 80) {
-                                                $style = 'background-color: #ffc7ce;';
-                                            } elseif ($value > 130) {
-                                                $style = 'background-color: #c6efce;';
+            <!-- Data Table Container -->
+            <div id="data-container">
+                @section('table')
+                <table id="myTable" class="display nowrap dataTable dtr-inline collapsed">
+                    <thead>
+                        <tr>
+                            <th>Media Channels</th>
+                            <th>Awareness</th>
+                            <th>Understanding</th>
+                            <th>Trial</th>
+                            <th>Top of Mind</th>
+                            <th>Image</th>
+                            <th>Loyalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($commercialQualityData as $mediaType => $data)
+                            @if($mediaType !== 'Column Percentages')
+                                <tr>
+                                    <td>{{ $mediaType }}</td>
+                                    @foreach ([
+                                        '1. Awareness Adjusted Percentage',
+                                        '2. Understanding Adjusted Percentage',
+                                        '3. Trial Adjusted Percentage',
+                                        '4. Top of Mind Adjusted Percentage',
+                                        '5. Image Adjusted Percentage',
+                                        '6. Loyalty Adjusted Percentage'
+                                    ] as $key)
+                                        @php
+                                            $value = $data[$key] ?? 'N/A';
+                                            $style = '';
+                                            if (is_numeric($value)) {
+                                                // Round off the value to the nearest integer
+                                                $value = round($value);
+                                                if ($value <= 80) {
+                                                    $style = 'background-color: #ffc7ce;';
+                                                } elseif ($value > 130) {
+                                                    $style = 'background-color: #c6efce;';
+                                                }
                                             }
-                                        }
-                                    @endphp
-                                    <td style="{{ $style }}">{{ is_numeric($value) ? $value : 'N/A' }}</td>
-                                @endforeach
-                            </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-            @show
-        </div>
+                                        @endphp
+                                        <td style="{{ $style }}">{{ is_numeric($value) ? $value : 'N/A' }}</td>
+                                    @endforeach
+                                </tr>
+                            @endif
+                        @endforeach
+                    </tbody>
+                </table>
+                @show
+            </div>
+        @endif
     </div>
 
     <!-- Include jQuery, DataTables, and Select2 JS libraries -->

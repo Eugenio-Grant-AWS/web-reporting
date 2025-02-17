@@ -113,8 +113,13 @@ class UnduplicatedNetReachController extends Controller
             }
             $cumulativeReach = array_sum($cumulativeTracker);
             $marginalReach = $cumulativeReach - $previousReach;
-            $marginalPercentages[] = round(($marginalReach / $totalCount) * 100, 2);
-            $cumulativePercentages[] = round(($cumulativeReach / $totalCount) * 100, 2);
+            if ($totalCount > 0) {
+                $marginalPercentages[] = round(($marginalReach / $totalCount) * 100, 2);
+                $cumulativePercentages[] = round(($cumulativeReach / $totalCount) * 100, 2);
+            } else {
+                $marginalPercentages[] = 0;
+                $cumulativePercentages[] = 0;
+            }
             $previousReach = $cumulativeReach;
         }
 

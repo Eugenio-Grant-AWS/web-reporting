@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('consumers_reacheds', function (Blueprint $table) {
             $table->id();
-            $table->string('resposer')->nullable(); // Responder's identifier
-            $table->string('quotgene')->nullable(); // QuotGene
-            $table->string('quotedad')->nullable(); // QuotEdad
-            $table->string('quosegur')->nullable(); // QuoSegur
-
-            // Add columns for all variables
+            $table->string('resposer')->nullable();
+            $table->string('quotgene')->nullable();
+            $table->string('quotedad')->nullable();
+            $table->string('quosegur')->nullable();
             $table->integer('ver_tv_senal_nacional')->nullable();
             $table->integer('ver_tv_cable')->nullable();
             $table->integer('ver_tv_internet')->nullable();
@@ -46,17 +44,14 @@ return new class extends Migration
             $table->integer('utilizar_mailing_list')->nullable();
             $table->integer('videojuegos_celular')->nullable();
             $table->integer('utilizar_we_transfer')->nullable();
-            $table->integer('utilizar_waze')->nullable();
-            $table->integer('utilizar_uber')->nullable();
-            $table->integer('utilizar_pedidos_ya')->nullable();
+            $table->integer('utilizar_uber')->nullable(); // capitalized version
+            $table->integer('utilizar_pedidos_ya')->nullable(); // capitalized version
             $table->integer('utilizar_meet')->nullable();
             $table->integer('utilizar_zoom')->nullable();
             $table->integer('utilizar_airbnb')->nullable();
-            $table->integer('entrar_google')->nullable();
+            $table->integer('entrar_tiktok')->nullable(); // capitalized version
             $table->integer('entrar_encuentra24')->nullable();
-            $table->integer('Tiktok')->nullable();
-            // $table->integer('reach')->nullable();
-            // $table->timestamps();
+            $table->integer('ir_a_sucursales_aseguradoras')->nullable(); // added new field for "Ir a Sucursales de las aseguradoras"
         });
     }
 

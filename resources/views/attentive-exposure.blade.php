@@ -30,7 +30,13 @@
                 </div>
             </div>
         </div>
-        <div class="row mt-3">
+
+
+        @if ($dataMessage)
+            @component('components.no_data_message', ['message' => $dataMessage])
+            @endcomponent
+        @else
+        <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
                     <h5 class="mb-3">Apply Filters</h5>
@@ -71,7 +77,7 @@
                             </div> -->
 
                             <!-- Response Service Filter -->
-                            <!-- <div class="col-md-4 mt-3">
+                            <!-- <div class="mt-3 col-md-4">
                                 <div class="filter-group">
                                     <label for="uniqueRespoSer">Response Service</label>
                                     <select name="uniqueRespoSer[]" id="uniqueRespoSer" class="form-select js-example-basic-multiple" multiple>
@@ -94,19 +100,14 @@
                             </div>
 
                             <!-- Aplicar Button -->
-                            <div class="col-md-3 mt-3">
+                            <div class="mt-3 col-md-3">
                                 <button type="submit" class="btn btn-primary">Aplicar</button>
                             </div>
                         </div>
                     </form>
-        </div>
+                </div>
             </div>
         </div>
-
-        @if ($dataMessage)
-            @component('components.no_data_message', ['message' => $dataMessage])
-            @endcomponent
-        @else
             <!-- Chart Container -->
             <div id="chart" class="mt-3"></div>
         @endif

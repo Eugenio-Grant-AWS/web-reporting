@@ -18,82 +18,83 @@
         </div>
     </div>
 
-    <div class="row mt-3">
-        <div class="col-12">
-            <div class="p-3 rounded shadow-sm select-group bg-custom">
-                <h5 class="mb-3">Apply Filters</h5>
-            <form method="GET" id="filter-form" action="{{ route('advertising-attention-by-touchpoint') }}">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="filter-group">
-                             <label for="uniqueGender"><strong>Género</strong></label>
-                            <select name="uniqueGender[]" id="uniqueGender" class="js-example-basic-multiple form-select" multiple>
-                                @foreach($uniqueGender as $gender)
-                                    <option value="{{ $gender }}"
-                                        @if(in_array($gender, request('uniqueGender', []))) selected @endif>
-                                        {{ $gender }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="col-md-3">
-                        <div class="filter-group">
-                        <label for="uniqueAge"><strong>Edad</strong></label>
-                            <select name="uniqueAge[]" id="uniqueAge" class="js-example-basic-multiple form-select" multiple>
-                                @foreach($uniqueAge as $age)
-                                    <option value="{{ $age }}"
-                                        @if(in_array($age, request('uniqueAge', []))) selected @endif>
-                                        {{ $age }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="filter-group">
-                        <label for="uniqueQuoSegur"><strong>Seguro</strong> </label>
-                            <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="js-example-basic-multiple form-select" multiple>
-                                @foreach($uniqueQuoSegur as $value)
-                                    <option value="{{ $value }}"
-                                        @if(in_array($value, request('uniqueQuoSegur', []))) selected @endif>
-                                        {{ $value }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- <div class="col-md-4 mt-3">
-                        <div class="filter-group">
-                        <label for="uniqueMediaType">Tipo de medio</label>
-                            <select name="uniqueMediaType[]" id="uniqueMediaType" class="js-example-basic-multiple form-select" multiple>
-                                @foreach($uniqueMediaType as $media)
-                                    <option value="{{ $media }}"
-                                        @if(in_array($media, request('uniqueMediaType', []))) selected @endif>
-                                        {{ $media }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div> -->
-
-                    <div class="col-md-3 mt-3">
-                        <button type="submit" class="btn btn-primary">Aplicar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-        </div>
-    </div>
 
     <div class="bg-white rounded-lg">
         @if ($dataMessage)
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent
         @else
+        <div class="mt-3 row">
+            <div class="col-12">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Apply Filters</h5>
+                <form method="GET" id="filter-form" action="{{ route('advertising-attention-by-touchpoint') }}">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                                 <label for="uniqueGender"><strong>Género</strong></label>
+                                <select name="uniqueGender[]" id="uniqueGender" class="js-example-basic-multiple form-select" multiple>
+                                    @foreach($uniqueGender as $gender)
+                                        <option value="{{ $gender }}"
+                                            @if(in_array($gender, request('uniqueGender', []))) selected @endif>
+                                            {{ $gender }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                            <label for="uniqueAge"><strong>Edad</strong></label>
+                                <select name="uniqueAge[]" id="uniqueAge" class="js-example-basic-multiple form-select" multiple>
+                                    @foreach($uniqueAge as $age)
+                                        <option value="{{ $age }}"
+                                            @if(in_array($age, request('uniqueAge', []))) selected @endif>
+                                            {{ $age }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="filter-group">
+                            <label for="uniqueQuoSegur"><strong>Seguro</strong> </label>
+                                <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="js-example-basic-multiple form-select" multiple>
+                                    @foreach($uniqueQuoSegur as $value)
+                                        <option value="{{ $value }}"
+                                            @if(in_array($value, request('uniqueQuoSegur', []))) selected @endif>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- <div class="mt-3 col-md-4">
+                            <div class="filter-group">
+                            <label for="uniqueMediaType">Tipo de medio</label>
+                                <select name="uniqueMediaType[]" id="uniqueMediaType" class="js-example-basic-multiple form-select" multiple>
+                                    @foreach($uniqueMediaType as $media)
+                                        <option value="{{ $media }}"
+                                            @if(in_array($media, request('uniqueMediaType', []))) selected @endif>
+                                            {{ $media }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> -->
+
+                        <div class="mt-3 col-md-3">
+                            <button type="submit" class="btn btn-primary">Aplicar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
             <div class="pt-5 d-flex justify-content-center">
                 <div class="flow-chart">
                     <div id="chart"></div>

@@ -9,12 +9,15 @@ $defaultSelection = [
 @endphp
 
 <div class="container-fluid">
+
     <div class="row align-items-baseline">
+
         <div class="col-xl-4">
             <div class="body-left">
                 <h6>Net % of Consumers Reached</h6>
             </div>
         </div>
+
         <div class="col-xl-8">
             <div class="body-right">
                 {{-- <div class="mb-3 search-group bg-custom rounded-4">
@@ -29,52 +32,59 @@ $defaultSelection = [
         </div>
     </div>
 
+
+    @if ($dataMessage)
+    @component('components.no_data_message', ['message' => $dataMessage])
+    @endcomponent
+@else
+
     <!-- Filters Section -->
     <div class="row">
         <div class="col-12">
             <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
                 <h5 class="mb-3">Select Media Channels</h5>
                 <form method="GET" id="filter-form">
-                <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
+                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
                         <option value="ver_tv_senal_nacional" <?= isset($defaultSelection['ver_tv_senal_nacional']) ? 'selected' : '' ?>>ver_tv_senal_nacional</option>
-                        <option value="ver_tv_cable">ver_tv_cable</option>
-                        <option value="ver_tv_internet">ver_tv_internet</option>
-                        <option value="escuchar_radio">escuchar_radio</option>
-                        <option value="escuchar_radio_internet">escuchar_radio_internet</option>
-                        <option value="leer_revista_impresa">leer_revista_impresa</option>
-                        <option value="leer_revista_digital">leer_revista_digital</option>
-                        <option value="leer_periodico_impreso">leer_periodico_impreso</option>
-                        <option value="leer_periodico_impreso">leer_periodico_impreso</option>
-
-                        <option value="Tiktok">TikTok</option>
-                        <option value="leer_periodico_email">leer_periodico_email</option>
-                        <option value="vallas_publicitarias">vallas_publicitarias</option>
-                        <option value="centros_comerciales">centros_comerciales</option>
-                        <option value="transitar_metrobuses">transitar_metrobuses</option>
-                        <option value="ver_cine">ver_cine</option>
-                        <option value="abrir_correos_companias">abrir_correos_companias</option>
-                        <option value="entrar_sitios_web">entrar_sitios_web</option>
-                        <option value="entrar_facebook">entrar_facebook</option>
-                        <option value="entrar_twitter">entrar_twitter</option>
-                        <option value="entrar_instagram">entrar_instagram</option>
-                        <option value="entrar_youtube">entrar_youtube</option>
-                        <option value="entrar_linkedin">entrar_linkedin</option>
-                        <option value="entrar_whatsapp">entrar_whatsapp</option>
-                        <option value="escuchar_spotify">escuchar_spotify</option>
-                        <option value="ver_netflix">ver_netflix</option>
-                        <option value="utilizar_mailing_list">utilizar_mailing_list</option>
-                        <option value="videojuegos_celular">videojuegos_celular</option>
-                        <option value="utilizar_we_transfer">utilizar_we_transfer</option>
-                        <option value="utilizar_waze">utilizar_waze</option>
-                        <option value="utilizar_uber">utilizar_uber</option>
-                        <option value="utilizar_pedidos_ya">utilizar_pedidos_ya</option>
-                        <option value="utilizar_meet">utilizar_meet</option>
-                        <option value="utilizar_zoom">utilizar_zoom</option>
-                        <option value="utilizar_airbnb">utilizar_airbnb</option>
-                        <option value="entrar_google">entrar_google</option>
-                        <option value="entrar_encuentra24">entrar_encuentra24</option>
-                      </select>
+                        <option value="ver_tv_cable" <?= isset($defaultSelection['ver_tv_cable']) ? 'selected' : '' ?>>ver_tv_cable</option>
+                        <option value="ver_tv_internet" <?= isset($defaultSelection['ver_tv_internet']) ? 'selected' : '' ?>>ver_tv_internet</option>
+                        <option value="escuchar_radio" <?= isset($defaultSelection['escuchar_radio']) ? 'selected' : '' ?>>escuchar_radio</option>
+                        <option value="escuchar_radio_internet" <?= isset($defaultSelection['escuchar_radio_internet']) ? 'selected' : '' ?>>escuchar_radio_internet</option>
+                        <option value="leer_revista_impresa" <?= isset($defaultSelection['leer_revista_impresa']) ? 'selected' : '' ?>>leer_revista_impresa</option>
+                        <option value="leer_revista_digital" <?= isset($defaultSelection['leer_revista_digital']) ? 'selected' : '' ?>>leer_revista_digital</option>
+                        <option value="leer_periodico_impreso" <?= isset($defaultSelection['leer_periodico_impreso']) ? 'selected' : '' ?>>leer_periodico_impreso</option>
+                        <option value="leer_periodico_digital" <?= isset($defaultSelection['leer_periodico_digital']) ? 'selected' : '' ?>>leer_periodico_digital</option>
+                        <option value="leer_periodico_email" <?= isset($defaultSelection['leer_periodico_email']) ? 'selected' : '' ?>>leer_periodico_email</option>
+                        <option value="vallas_publicitarias" <?= isset($defaultSelection['vallas_publicitarias']) ? 'selected' : '' ?>>vallas_publicitarias</option>
+                        <option value="centros_comerciales" <?= isset($defaultSelection['centros_comerciales']) ? 'selected' : '' ?>>centros_comerciales</option>
+                        <option value="transitar_metrobuses" <?= isset($defaultSelection['transitar_metrobuses']) ? 'selected' : '' ?>>transitar_metrobuses</option>
+                        <option value="ver_cine" <?= isset($defaultSelection['ver_cine']) ? 'selected' : '' ?>>ver_cine</option>
+                        <option value="abrir_correos_companias" <?= isset($defaultSelection['abrir_correos_companias']) ? 'selected' : '' ?>>abrir_correos_companias</option>
+                        <option value="entrar_sitios_web" <?= isset($defaultSelection['entrar_sitios_web']) ? 'selected' : '' ?>>entrar_sitios_web</option>
+                        <option value="entrar_facebook" <?= isset($defaultSelection['entrar_facebook']) ? 'selected' : '' ?>>entrar_facebook</option>
+                        <option value="entrar_twitter" <?= isset($defaultSelection['entrar_twitter']) ? 'selected' : '' ?>>entrar_twitter</option>
+                        <option value="entrar_instagram" <?= isset($defaultSelection['entrar_instagram']) ? 'selected' : '' ?>>entrar_instagram</option>
+                        <option value="entrar_youtube" <?= isset($defaultSelection['entrar_youtube']) ? 'selected' : '' ?>>entrar_youtube</option>
+                        <option value="entrar_linkedin" <?= isset($defaultSelection['entrar_linkedin']) ? 'selected' : '' ?>>entrar_linkedin</option>
+                        <option value="entrar_whatsapp" <?= isset($defaultSelection['entrar_whatsapp']) ? 'selected' : '' ?>>entrar_whatsapp</option>
+                        <option value="escuchar_spotify" <?= isset($defaultSelection['escuchar_spotify']) ? 'selected' : '' ?>>escuchar_spotify</option>
+                        <option value="ver_netflix" <?= isset($defaultSelection['ver_netflix']) ? 'selected' : '' ?>>ver_netflix</option>
+                        <option value="utilizar_mailing_list" <?= isset($defaultSelection['utilizar_mailing_list']) ? 'selected' : '' ?>>utilizar_mailing_list</option>
+                        <option value="videojuegos_celular" <?= isset($defaultSelection['videojuegos_celular']) ? 'selected' : '' ?>>videojuegos_celular</option>
+                        <option value="utilizar_we_transfer" <?= isset($defaultSelection['utilizar_we_transfer']) ? 'selected' : '' ?>>utilizar_we_transfer</option>
+                        <option value="utilizar_waze" <?= isset($defaultSelection['utilizar_waze']) ? 'selected' : '' ?>>utilizar_waze</option>
+                        <option value="utilizar_uber" <?= isset($defaultSelection['utilizar_uber']) ? 'selected' : '' ?>>utilizar_uber</option>
+                        <option value="utilizar_pedidos_ya" <?= isset($defaultSelection['utilizar_pedidos_ya']) ? 'selected' : '' ?>>utilizar_pedidos_ya</option>
+                        <option value="utilizar_meet" <?= isset($defaultSelection['utilizar_meet']) ? 'selected' : '' ?>>utilizar_meet</option>
+                        <option value="utilizar_zoom" <?= isset($defaultSelection['utilizar_zoom']) ? 'selected' : '' ?>>utilizar_zoom</option>
+                        <option value="utilizar_airbnb" <?= isset($defaultSelection['utilizar_airbnb']) ? 'selected' : '' ?>>utilizar_airbnb</option>
+                        <option value="entrar_google" <?= isset($defaultSelection['entrar_google']) ? 'selected' : '' ?>>entrar_google</option>
+                        <option value="entrar_encuentra24" <?= isset($defaultSelection['entrar_encuentra24']) ? 'selected' : '' ?>>entrar_encuentra24</option>
+                        <option value="entrar_tiktok" <?= isset($defaultSelection['entrar_tiktok']) ? 'selected' : '' ?>>entrar_tiktok</option>
+                        <option value="ir_a_sucursales_aseguradoras" <?= isset($defaultSelection['ir_a_sucursales_aseguradoras']) ? 'selected' : '' ?>>Ir a Sucursales de las aseguradoras</option>
+                    </select>
                 </form>
+
             </div>
         </div>
     </div>
@@ -162,15 +172,11 @@ $defaultSelection = [
             </div>
         </div>
     </div>
-</div>
+
 
 
     <!-- Chart Section -->
     <div class="bg-white rounded-lg">
-        @if ($dataMessage)
-            @component('components.no_data_message', ['message' => $dataMessage])
-            @endcomponent
-        @else
             <div class="pt-5 d-flex justify-content-center">
                 <div class="flow-chart">
                     <div id="pieChartTest"></div>

@@ -40,79 +40,81 @@
 
     <div class="container-fluid">
         <h6>TIP Summary</h6>
-
-        <!-- Filter Section -->
-        <div class="row mt-3">
-            <div class="col-12">
-                <div class="p-3 rounded shadow-sm select-group bg-custom">
-                    <h5 class="mb-3">Apply Filters</h5>
-            <form id="filter-form">
-                <div class="row">
-                    @foreach ($distinctValues as $key => $values)
-                        <div class="col-md-3">
-                             <label for="{{ $key }}">
-                            <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
-                           </label>
-                            <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
-                                @foreach ($values as $value)
-                                    @if($key === 'uniqueMediaType')
-                                        @php $cleanValue = trim($value); @endphp
-                                        <option value="{{ $cleanValue }}">
-                                            {{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}
-                                        </option>
-                                    @else
-                                        <option value="{{ $value }}">{{ $value }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                    @endforeach
-                    <div class="col-md-3 align-self-end">
-                        <button type="button" id="applyFilters" class="btn btn-primary">Aplicar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-            </div>
-        </div>
-
         @if ($dataMessage)
             <div class="alert alert-warning">{{ $dataMessage }}</div>
-        @endif
-
-        <!-- Data Table -->
-        <div id="data-container">
-            <div class="table-responsive">
-                <table id="myTable" class="display nowrap">
-                    <thead>
-                        <tr>
-                            <th>Media Channels</th>
-                            <th>Awareness</th>
-                            <th>Understanding</th>
-                            <th>Trial</th>
-                            <th>Top of Mind</th>
-                            <th>Image</th>
-                            <th>Loyalty</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($commercialQualityData as $mediaType => $data)
-                            @if ($mediaType !== 'Column Percentages')
-                                <tr>
-                                    <td>{{ $mediaType }}</td>
-                                    <td>{{ round($data['1. Awareness Percentage'] ?? 0) }}%</td>
-                                    <td>{{ round($data['2. Understanding Percentage'] ?? 0) }}%</td>
-                                    <td>{{ round($data['3. Trial Percentage'] ?? 0) }}%</td>
-                                    <td>{{ round($data['4. Top of Mind Percentage'] ?? 0) }}%</td>
-                                    <td>{{ round($data['5. Image Percentage'] ?? 0) }}%</td>
-                                    <td>{{ round($data['6. Loyalty Percentage'] ?? 0) }}%</td>
-                                </tr>
-                            @endif
+        @else
+        <!-- Filter Section -->
+            <div class="mt-3 row">
+                <div class="col-12">
+                    <div class="p-3 rounded shadow-sm select-group bg-custom">
+                        <h5 class="mb-3">Apply Filters</h5>
+                <form id="filter-form">
+                    <div class="row">
+                        @foreach ($distinctValues as $key => $values)
+                            <div class="col-md-3">
+                                <label for="{{ $key }}">
+                                <strong>{{ $filterLabels[$key] ?? ucwords(str_replace('unique', '', $key)) }}</strong>
+                            </label>
+                                <select name="{{ $key }}[]" id="{{ $key }}" class="form-select js-multiple-filter" multiple>
+                                    @foreach ($values as $value)
+                                        @if($key === 'uniqueMediaType')
+                                            @php $cleanValue = trim($value); @endphp
+                                            <option value="{{ $cleanValue }}">
+                                                {{ $mediaTypeMapping[$cleanValue] ?? $cleanValue }}
+                                            </option>
+                                        @else
+                                            <option value="{{ $value }}">{{ $value }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                         @endforeach
-                    </tbody>
-                </table>
+                        <div class="col-md-3 align-self-end">
+                            <button type="button" id="applyFilters" class="btn btn-primary">Aplicar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
+                </div>
+            </div>
+
+
+
+            <!-- Data Table -->
+            <div id="data-container">
+                <div class="table-responsive">
+                    <table id="myTable" class="display nowrap">
+                        <thead>
+                            <tr>
+                                <th>Media Channels</th>
+                                <th>Awareness</th>
+                                <th>Understanding</th>
+                                <th>Trial</th>
+                                <th>Top of Mind</th>
+                                <th>Image</th>
+                                <th>Loyalty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($commercialQualityData as $mediaType => $data)
+                                @if ($mediaType !== 'Column Percentages')
+                                    <tr>
+                                        <td>{{ $mediaType }}</td>
+                                        <td>{{ round($data['1. Awareness Percentage'] ?? 0) }}%</td>
+                                        <td>{{ round($data['2. Understanding Percentage'] ?? 0) }}%</td>
+                                        <td>{{ round($data['3. Trial Percentage'] ?? 0) }}%</td>
+                                        <td>{{ round($data['4. Top of Mind Percentage'] ?? 0) }}%</td>
+                                        <td>{{ round($data['5. Image Percentage'] ?? 0) }}%</td>
+                                        <td>{{ round($data['6. Loyalty Percentage'] ?? 0) }}%</td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            @endif
     </div>
 
     <!-- Include jQuery, DataTables, and Select2 JS libraries -->

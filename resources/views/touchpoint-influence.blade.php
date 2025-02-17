@@ -99,130 +99,131 @@
                     </div> -->
                 </div>
             </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <div class="p-3 rounded shadow-sm select-group bg-custom">
-                        <h5 class="mb-3">Apply Filters</h5>
-                <form method="GET" id="filter-form">
-                    <div class="row">
-                        @if(!empty($uniqueGender))
-                            <div class="col-md-3">
-                                <div class="filter-group">
-                                    <label for="uniqueGender"><strong>Género</strong></label>
-                                    <select name="uniqueGender[]" id="uniqueGender" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueGender as $gender)
-                                            <option value="{{ $gender }}">{{ $gender }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
 
-                        @if(!empty($uniqueAge))
-                            <div class="col-md-3">
-                                <div class="filter-group">
-                                    <label for="uniqueAge"><strong>Edad</strong></label>
-                                    <select name="uniqueAge[]" id="uniqueAge" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueAge as $age)
-                                            <option value="{{ $age }}">{{ $age }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-                        @if(!empty($uniqueQuoSegur))
-                        <div class="col-md-3">
-                            <div class="filter-group">
-                                <label for="uniqueQuoSegur"><strong>Seguro</strong></label>
-                                <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="form-select js-example-basic-multiple" multiple>
-                                    @foreach($uniqueQuoSegur as $quoSegur)
-                                        <option value="{{ $quoSegur }}">{{ $quoSegur }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-                        <!-- @if(!empty($uniqueValue))
-                            <div class="col-md-4">
-                                <div class="filter-group">
-                                    <label for="uniqueValue">Value</label>
-                                    <select name="uniqueValue[]" id="uniqueValue" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueValue as $value)
-                                            <option value="{{ $value }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif -->
-
-                        <!-- @if(!empty($uniqueMediaType))
-                            <div class="col-md-4">
-                                <div class="filter-group">
-                                    <label for="uniqueMediaType">Media Type</label>
-                                    <select name="uniqueMediaType[]" id="uniqueMediaType" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueMediaType as $media)
-                                            <option value="{{ $media }}">{{ $media }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-
-                        @if(!empty($uniqueRespoSer))
-                            <div class="col-md-4 mt-3">
-                                <div class="filter-group">
-                                    <label for="uniqueRespoSer">Response Service</label>
-                                    <select name="uniqueRespoSer[]" id="uniqueRespoSer" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueRespoSer as $respoSer)
-                                            <option value="{{ $respoSer }}">{{ $respoSer }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-
-
-
-                        @if(!empty($uniqueReach))
-                            <div class="col-md-4 mt-3">
-                                <div class="filter-group">
-                                    <label for="uniqueReach">Reach</label>
-                                    <select name="uniqueReach[]" id="uniqueReach" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueReach as $reach)
-                                            <option value="{{ $reach }}">{{ $reach }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif
-
-                        @if(!empty($uniqueattentive_exposure))
-                            <div class="col-md-4 mt-3">
-                                <div class="filter-group">
-                                    <label for="uniqueattentive_exposure">Attentive Exposure</label>
-                                    <select name="uniqueattentive_exposure[]" id="uniqueattentive_exposure" class="form-select js-example-basic-multiple" multiple>
-                                        @foreach($uniqueattentive_exposure as $attentive_exposure)
-                                            <option value="{{ $attentive_exposure }}">{{ $attentive_exposure }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        @endif -->
-
-                        <div class="col-md-3 mt-3">
-                            <button type="submit" class="btn btn-primary">Aplicar</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                </div>
-            </div>
 
         </div>
         @if ($dataMessage)
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent
         @else
+        <div class="mt-3 row">
+            <div class="col-12">
+                <div class="p-3 rounded shadow-sm select-group bg-custom">
+                    <h5 class="mb-3">Apply Filters</h5>
+                    <form method="GET" id="filter-form">
+                        <div class="row">
+                            @if(!empty($uniqueGender))
+                                <div class="col-md-3">
+                                    <div class="filter-group">
+                                        <label for="uniqueGender"><strong>Género</strong></label>
+                                        <select name="uniqueGender[]" id="uniqueGender" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueGender as $gender)
+                                                <option value="{{ $gender }}">{{ $gender }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if(!empty($uniqueAge))
+                                <div class="col-md-3">
+                                    <div class="filter-group">
+                                        <label for="uniqueAge"><strong>Edad</strong></label>
+                                        <select name="uniqueAge[]" id="uniqueAge" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueAge as $age)
+                                                <option value="{{ $age }}">{{ $age }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(!empty($uniqueQuoSegur))
+                            <div class="col-md-3">
+                                <div class="filter-group">
+                                    <label for="uniqueQuoSegur"><strong>Seguro</strong></label>
+                                    <select name="uniqueQuoSegur[]" id="uniqueQuoSegur" class="form-select js-example-basic-multiple" multiple>
+                                        @foreach($uniqueQuoSegur as $quoSegur)
+                                            <option value="{{ $quoSegur }}">{{ $quoSegur }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        @endif
+                            <!-- @if(!empty($uniqueValue))
+                                <div class="col-md-4">
+                                    <div class="filter-group">
+                                        <label for="uniqueValue">Value</label>
+                                        <select name="uniqueValue[]" id="uniqueValue" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueValue as $value)
+                                                <option value="{{ $value }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif -->
+
+                            <!-- @if(!empty($uniqueMediaType))
+                                <div class="col-md-4">
+                                    <div class="filter-group">
+                                        <label for="uniqueMediaType">Media Type</label>
+                                        <select name="uniqueMediaType[]" id="uniqueMediaType" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueMediaType as $media)
+                                                <option value="{{ $media }}">{{ $media }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if(!empty($uniqueRespoSer))
+                                <div class="mt-3 col-md-4">
+                                    <div class="filter-group">
+                                        <label for="uniqueRespoSer">Response Service</label>
+                                        <select name="uniqueRespoSer[]" id="uniqueRespoSer" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueRespoSer as $respoSer)
+                                                <option value="{{ $respoSer }}">{{ $respoSer }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+
+
+
+                            @if(!empty($uniqueReach))
+                                <div class="mt-3 col-md-4">
+                                    <div class="filter-group">
+                                        <label for="uniqueReach">Reach</label>
+                                        <select name="uniqueReach[]" id="uniqueReach" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueReach as $reach)
+                                                <option value="{{ $reach }}">{{ $reach }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if(!empty($uniqueattentive_exposure))
+                                <div class="mt-3 col-md-4">
+                                    <div class="filter-group">
+                                        <label for="uniqueattentive_exposure">Attentive Exposure</label>
+                                        <select name="uniqueattentive_exposure[]" id="uniqueattentive_exposure" class="form-select js-example-basic-multiple" multiple>
+                                            @foreach($uniqueattentive_exposure as $attentive_exposure)
+                                                <option value="{{ $attentive_exposure }}">{{ $attentive_exposure }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif -->
+
+                            <div class="mt-3 col-md-3">
+                                <button type="submit" class="btn btn-primary">Aplicar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
             <div class="mt-3 data-table-jqeury">
                 <div class="table-responsive">
                     <table id="myTable" class="display nowrap dataTable dtr-inline collapsed">

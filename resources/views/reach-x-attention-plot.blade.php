@@ -29,6 +29,19 @@
                 </button>
             </div>
         </div>
+
+    </div>
+
+
+    <!-- Top Row: Title, Search, Sort, Export (unchanged) -->
+
+
+    <!-- Chart Container -->
+    <div class="bg-white rounded-lg">
+        @if ($dataMessage)
+            @component('components.no_data_message', ['message' => $dataMessage])
+            @endcomponent
+        @else
         <div class="mt-3 row">
             <div class="col-12">
                 <div class="p-3 rounded shadow-sm select-group bg-custom">
@@ -58,18 +71,6 @@
                     </div>
             </div>
         </div>
-    </div>
-
-
-    <!-- Top Row: Title, Search, Sort, Export (unchanged) -->
-
-
-    <!-- Chart Container -->
-    <div class="bg-white rounded-lg">
-        @if ($dataMessage)
-            @component('components.no_data_message', ['message' => $dataMessage])
-            @endcomponent
-        @else
             <div class="pt-5 d-flex justify-content-center">
                 <div class="flow-chart">
                     <div id="chart"></div> <!-- Chart will be rendered here -->
