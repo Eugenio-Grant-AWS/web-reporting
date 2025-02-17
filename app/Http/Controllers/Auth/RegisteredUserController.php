@@ -40,7 +40,7 @@ class RegisteredUserController extends Controller
                     'firstname' => ['required', 'string', 'max:255'],
                     'lastname' => ['required', 'string', 'max:255'],
                     'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-                    'password' => ['required', 'string', 'min:8'],
+                    'password' => ['required', 'string', 'min:6'],
                     'password_confirmation' => ['required', 'same:password'],
                     'terms' => ['accepted'],
                 ],
