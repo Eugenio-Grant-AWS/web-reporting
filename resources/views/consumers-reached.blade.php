@@ -44,45 +44,46 @@ $defaultSelection = [
             <div class="p-3 mt-3 rounded shadow-sm select-group bg-custom">
                 <h5 class="mb-3">Select Media Channels</h5>
                 <form method="GET" id="filter-form">
-                    <select class="js-example-basic-multiple" name="states[]" multiple="multiple">
-                        <option value="ver_tv_senal_nacional" <?= isset($defaultSelection['ver_tv_senal_nacional']) ? 'selected' : '' ?>>ver_tv_senal_nacional</option>
-                        <option value="ver_tv_cable" <?= isset($defaultSelection['ver_tv_cable']) ? 'selected' : '' ?>>ver_tv_cable</option>
-                        <option value="ver_tv_internet" <?= isset($defaultSelection['ver_tv_internet']) ? 'selected' : '' ?>>ver_tv_internet</option>
-                        <option value="escuchar_radio" <?= isset($defaultSelection['escuchar_radio']) ? 'selected' : '' ?>>escuchar_radio</option>
-                        <option value="escuchar_radio_internet" <?= isset($defaultSelection['escuchar_radio_internet']) ? 'selected' : '' ?>>escuchar_radio_internet</option>
-                        <option value="leer_revista_impresa" <?= isset($defaultSelection['leer_revista_impresa']) ? 'selected' : '' ?>>leer_revista_impresa</option>
-                        <option value="leer_revista_digital" <?= isset($defaultSelection['leer_revista_digital']) ? 'selected' : '' ?>>leer_revista_digital</option>
-                        <option value="leer_periodico_impreso" <?= isset($defaultSelection['leer_periodico_impreso']) ? 'selected' : '' ?>>leer_periodico_impreso</option>
-                        <option value="leer_periodico_digital" <?= isset($defaultSelection['leer_periodico_digital']) ? 'selected' : '' ?>>leer_periodico_digital</option>
-                        <option value="leer_periodico_email" <?= isset($defaultSelection['leer_periodico_email']) ? 'selected' : '' ?>>leer_periodico_email</option>
-                        <option value="vallas_publicitarias" <?= isset($defaultSelection['vallas_publicitarias']) ? 'selected' : '' ?>>vallas_publicitarias</option>
-                        <option value="centros_comerciales" <?= isset($defaultSelection['centros_comerciales']) ? 'selected' : '' ?>>centros_comerciales</option>
-                        <option value="transitar_metrobuses" <?= isset($defaultSelection['transitar_metrobuses']) ? 'selected' : '' ?>>transitar_metrobuses</option>
-                        <option value="ver_cine" <?= isset($defaultSelection['ver_cine']) ? 'selected' : '' ?>>ver_cine</option>
-                        <option value="abrir_correos_companias" <?= isset($defaultSelection['abrir_correos_companias']) ? 'selected' : '' ?>>abrir_correos_companias</option>
-                        <option value="entrar_sitios_web" <?= isset($defaultSelection['entrar_sitios_web']) ? 'selected' : '' ?>>entrar_sitios_web</option>
-                        <option value="entrar_facebook" <?= isset($defaultSelection['entrar_facebook']) ? 'selected' : '' ?>>entrar_facebook</option>
-                        <option value="entrar_twitter" <?= isset($defaultSelection['entrar_twitter']) ? 'selected' : '' ?>>entrar_twitter</option>
-                        <option value="entrar_instagram" <?= isset($defaultSelection['entrar_instagram']) ? 'selected' : '' ?>>entrar_instagram</option>
-                        <option value="entrar_youtube" <?= isset($defaultSelection['entrar_youtube']) ? 'selected' : '' ?>>entrar_youtube</option>
-                        <option value="entrar_linkedin" <?= isset($defaultSelection['entrar_linkedin']) ? 'selected' : '' ?>>entrar_linkedin</option>
-                        <option value="entrar_whatsapp" <?= isset($defaultSelection['entrar_whatsapp']) ? 'selected' : '' ?>>entrar_whatsapp</option>
-                        <option value="escuchar_spotify" <?= isset($defaultSelection['escuchar_spotify']) ? 'selected' : '' ?>>escuchar_spotify</option>
-                        <option value="ver_netflix" <?= isset($defaultSelection['ver_netflix']) ? 'selected' : '' ?>>ver_netflix</option>
-                        <option value="utilizar_mailing_list" <?= isset($defaultSelection['utilizar_mailing_list']) ? 'selected' : '' ?>>utilizar_mailing_list</option>
-                        <option value="videojuegos_celular" <?= isset($defaultSelection['videojuegos_celular']) ? 'selected' : '' ?>>videojuegos_celular</option>
-                        <option value="utilizar_we_transfer" <?= isset($defaultSelection['utilizar_we_transfer']) ? 'selected' : '' ?>>utilizar_we_transfer</option>
-                        <option value="utilizar_waze" <?= isset($defaultSelection['utilizar_waze']) ? 'selected' : '' ?>>utilizar_waze</option>
-                        <option value="utilizar_uber" <?= isset($defaultSelection['utilizar_uber']) ? 'selected' : '' ?>>utilizar_uber</option>
-                        <option value="utilizar_pedidos_ya" <?= isset($defaultSelection['utilizar_pedidos_ya']) ? 'selected' : '' ?>>utilizar_pedidos_ya</option>
-                        <option value="utilizar_meet" <?= isset($defaultSelection['utilizar_meet']) ? 'selected' : '' ?>>utilizar_meet</option>
-                        <option value="utilizar_zoom" <?= isset($defaultSelection['utilizar_zoom']) ? 'selected' : '' ?>>utilizar_zoom</option>
-                        <option value="utilizar_airbnb" <?= isset($defaultSelection['utilizar_airbnb']) ? 'selected' : '' ?>>utilizar_airbnb</option>
-                        <option value="entrar_google" <?= isset($defaultSelection['entrar_google']) ? 'selected' : '' ?>>entrar_google</option>
-                        <option value="entrar_encuentra24" <?= isset($defaultSelection['entrar_encuentra24']) ? 'selected' : '' ?>>entrar_encuentra24</option>
-                        <option value="entrar_tiktok" <?= isset($defaultSelection['entrar_tiktok']) ? 'selected' : '' ?>>entrar_tiktok</option>
-                        <option value="ir_a_sucursales_aseguradoras" <?= isset($defaultSelection['ir_a_sucursales_aseguradoras']) ? 'selected' : '' ?>>Ir a Sucursales de las aseguradoras</option>
+                    <select class="js-example-basic-multiple" name="top_row[]" multiple="multiple">
+                        <option value="ver_tv_senal_nacional" {{ isset($selectedValues['ver_tv_senal_nacional']) ? 'selected' : '' }}>Ver TV nacional</option>
+                        <option value="ver_tv_cable" {{ isset($selectedValues['ver_tv_cable']) ? 'selected' : '' }}>Ver TV por cable</option>
+                        <option value="ver_tv_internet" {{ isset($selectedValues['ver_tv_internet']) ? 'selected' : '' }}>Ver TV por internet</option>
+                        <option value="ver_netflix" {{ isset($selectedValues['ver_netflix']) ? 'selected' : '' }}>Ver Netflix</option>
+                        <option value="escuchar_spotify" {{ isset($selectedValues['escuchar_spotify']) ? 'selected' : '' }}>Escuchar Spotify</option>
+
+                        <option value="escuchar_radio" {{ isset($selectedValues['escuchar_radio']) ? 'selected' : '' }}>Escuchar Radio</option>
+                        <option value="escuchar_radio_internet" {{ isset($selectedValues['escuchar_radio_internet']) ? 'selected' : '' }}>Escuchar Radio Internet</option>
+                        <option value="leer_revista_impresa" {{ isset($selectedValues['leer_revista_impresa']) ? 'selected' : '' }}>Leer Revista Impresa</option>
+                        <option value="leer_revista_digital" {{ isset($selectedValues['leer_revista_digital']) ? 'selected' : '' }}>Leer Revista Digital</option>
+                        <option value="leer_periodico_impreso" {{ isset($selectedValues['leer_periodico_impreso']) ? 'selected' : '' }}>Leer Periódico Impreso</option>
+                        <option value="leer_periodico_digital" {{ isset($selectedValues['leer_periodico_digital']) ? 'selected' : '' }}>Leer Periódico Digital</option>
+                        <option value="leer_periodico_email" {{ isset($selectedValues['leer_periodico_email']) ? 'selected' : '' }}>Periódico por email</option>
+                        <option value="vallas_publicitarias" {{ isset($selectedValues['vallas_publicitarias']) ? 'selected' : '' }}>Ver vallas publicitarias</option>
+                        <option value="centros_comerciales" {{ isset($selectedValues['centros_comerciales']) ? 'selected' : '' }}>Visitar centros comerciales</option>
+                        <option value="transitar_metrobuses" {{ isset($selectedValues['transitar_metrobuses']) ? 'selected' : '' }}>Usar metrobús</option>
+                        <option value="ver_cine" {{ isset($selectedValues['ver_cine']) ? 'selected' : '' }}>Ir al cine</option>
+                        <option value="entrar_sitios_web" {{ isset($selectedValues['entrar_sitios_web']) ? 'selected' : '' }}> Buscar aseguradoras en Google</option>
+                        <option value="entrar_facebook" {{ isset($selectedValues['entrar_facebook']) ? 'selected' : '' }}>Usar Facebook</option>
+                        <option value="entrar_twitter" {{ isset($selectedValues['entrar_twitter']) ? 'selected' : '' }}> Usar X (Twitter)</option>
+                        <option value="entrar_instagram" {{ isset($selectedValues['entrar_instagram']) ? 'selected' : '' }}>Usar Instagram</option>
+                        <option value="entrar_youtube" {{ isset($selectedValues['entrar_youtube']) ? 'selected' : '' }}> Usar YouTube</option>
+                        <option value="entrar_linkedin" {{ isset($selectedValues['entrar_linkedin']) ? 'selected' : '' }}> Usar LinkedIn</option>
+                        <option value="entrar_whatsapp" {{ isset($selectedValues['entrar_whatsapp']) ? 'selected' : '' }}> Usar WhatsApp</option>
+                        <option value="entrar_tiktok" {{ isset($selectedValues['entrar_tiktok']) ? 'selected' : '' }}> Usar TikTok</option>
+                        <option value="utilizar_mailing_list" {{ isset($selectedValues['utilizar_mailing_list']) ? 'selected' : '' }}>Utilizar Mailing List</option>
+                        <option value="videojuegos_celular" {{ isset($selectedValues['videojuegos_celular']) ? 'selected' : '' }}>Jugar en el celular</option>
+                        <option value="utilizar_uber" {{ isset($selectedValues['utilizar_uber']) ? 'selected' : '' }}>Usar Uber</option>
+                        <option value="utilizar_pedidos_ya" {{ isset($selectedValues['utilizar_pedidos_ya']) ? 'selected' : '' }}>Usar PedidosYa</option>
+                        <option value="utilizar_meet" {{ isset($selectedValues['utilizar_meet']) ? 'selected' : '' }}>Usar Meet</option>
+                        <option value="utilizar_we_transfer" {{ isset($selectedValues['utilizar_we_transfer']) ? 'selected' : '' }}>Usar WeTransfert</option>
+                        <option value="abrir_correos_companias" {{ isset($selectedValues['abrir_correos_companias']) ? 'selected' : '' }}>Usar listas de correo</option>
+
+                        <option value="utilizar_zoom" {{ isset($selectedValues['utilizar_zoom']) ? 'selected' : '' }}>Usar Zoom</option>
+                        <option value="utilizar_airbnb" {{ isset($selectedValues['utilizar_airbnb']) ? 'selected' : '' }}>Usar Airbnb</option>
+                        <option value="entrar_encuentra24" {{ isset($selectedValues['entrar_encuentra24']) ? 'selected' : '' }}> Usar Encuentra24</option>
+                        <option value="ir_a_sucursales_aseguradoras" {{ isset($selectedValues['ir_a_sucursales_aseguradoras']) ? 'selected' : '' }}>Visitar aseguradoras</option>
                     </select>
+
                 </form>
 
             </div>
