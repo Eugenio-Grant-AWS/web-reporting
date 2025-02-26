@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.2",
         "icehouse-ventures/laravel-chartjs": "^4.1",
+        "jeremykenedy/laravel-roles": "^11.0",
+        "jeremykenedy/laravel-users": "^4.5",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9"
     },

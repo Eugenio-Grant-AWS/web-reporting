@@ -5,6 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    {{-- Default CSS from Laravel Users --}}
+    @if(config('laravelusers.enableBootstrapCssCdn'))
+        <link rel="stylesheet" type="text/css" href="{{ config('laravelusers.bootstrapCssCdn') }}">
+    @endif
+    @if(config('laravelusers.enableAppCss'))
+        <link rel="stylesheet" type="text/css" href="{{ asset(config('laravelusers.appCssPublicFile')) }}">
+    @endif
+    @yield('template_linked_css')
+
     <link href="{{ asset('assets/css/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
@@ -24,6 +34,39 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        .c-pagination ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .c-pagination li {
+            display: inline-block;
+        }
+
+        .c-pagination li a {
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+
+        .c-pagination li.active a {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .c-pagination li.disabled a {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .c-pagination li a:hover {
+            background-color: #f0f0f0;
+        }
+
+    </style>
 </head>
 
 <body>
@@ -44,8 +87,26 @@
         </div>
     </section>
 
-
     @yield('scripts')
+
+     {{-- Default JS from Laravel Users --}}
+     @if(config('laravelusers.enablejQueryCdn'))
+            <script src="{{ asset(config('laravelusers.jQueryCdn')) }}"></script>
+        @endif
+        @if(config('laravelusers.enableBootstrapPopperJsCdn'))
+            <script src="{{ asset(config('laravelusers.bootstrapPopperJsCdn')) }}"></script>
+        @endif
+        @if(config('laravelusers.enableBootstrapJsCdn'))
+            <script src="{{ asset(config('laravelusers.bootstrapJsCdn')) }}"></script>
+        @endif
+        @if(config('laravelusers.enableAppJs'))
+            <script src="{{ asset(config('laravelusers.appJsPublicFile')) }}"></script>
+        @endif
+        @include('laravelusers::scripts.toggleText')
+
+        @yield('template_scripts')
+
+
 
     <script src="{{ asset('assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/font-awesome.js') }}"></script>
@@ -54,6 +115,8 @@
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-venn"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
 
 </body>
 

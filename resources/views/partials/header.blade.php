@@ -10,15 +10,18 @@
                         {{-- <p>Home / <span>{{ $breadcrumb ?? 'Default Page' }}</span></p> --}}
 
                         <p>
-                            <a href="{{ route('reach-exposure-probability-with-mean') }}"
-                                style="text-decoration: none; color: inherit;">Home</a> /
-                            @if (session('previous_url'))
-                                <a href="{{ session('previous_url') }}"
-                                    style="text-decoration: none; color: inherit;">{{ $breadcrumb ?? '' }}</a>
+                            <a href="{{ route('reach-exposure-probability-with-mean') }}" style="text-decoration: none; color: inherit;">Home</a> /
+                            @if (request()->is('users*')) <!-- Check if the current URL is related to 'users' -->
+                                <span>Users Management</span> <!-- Show 'Users' as the breadcrumb -->
+                            @elseif (session('previous_url')) <!-- Check if there's a previous URL in the session -->
+                                <a href="{{ session('previous_url') }}" style="text-decoration: none; color: inherit;">
+                                    {{ $breadcrumb ?? '' }}
+                                </a>
                             @else
-                                <span>{{ $breadcrumb ?? 'Default Page' }}</span>
+                                <span>{{ $breadcrumb ?? 'Default Page' }}</span> <!-- Default breadcrumb -->
                             @endif
                         </p>
+
 
                     </div>
                 </div>

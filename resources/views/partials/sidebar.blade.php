@@ -4,7 +4,7 @@
         <a href="/reach-exposure-probability-with-mean"><img src="{{ asset('assets/images/logo.png') }}"
                 alt=""></a>
     </div>
-    <ul class="gap-3 p-3 mb-0 nav nav-pills flex-column mb-sm-auto  align-content-center" id="menu">
+    <ul class="gap-3 p-3 mb-0 nav nav-pills flex-column mb-sm-auto align-content-center" id="menu">
 
         <li class="nav-item">
             <a href="{{ route('reach-exposure-probability-with-mean') }}"
@@ -89,6 +89,15 @@
                 <i class="fas fa-chart-line"></i>
                 <span>Optimized Campaign Summary</span>
             </a>
+        </li>
+        <li class="nav-item">
+            @if(Auth::check() && Auth::user()->hasRole('admin'))
+            <a href="{{ route('users.index') }}"
+                class="gap-2 align-middle nav-link d-flex align-items-center {{ request()->is('users*') ? 'current' : '' }}">
+                <i class="fas fa-users"></i>
+                <span>User Management</span>
+            </a>
+            @endif
         </li>
     </ul>
 

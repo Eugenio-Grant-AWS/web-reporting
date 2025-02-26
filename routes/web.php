@@ -55,5 +55,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/advertising-attention-by-touchpoint', [AdvertisingAttentionController::class, 'index'])->name('advertising-attention-by-touchpoint');
 });
 
+Route::resource('users', 'App\Http\Controllers\CustomUserManagementController');
 
 require __DIR__ . '/auth.php';

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5092f46612537e980cc03699409426e2",
+    "content-hash": "f8392d95de822e4e40886a558545be30",
     "packages": [
         {
             "name": "brick/math",
@@ -509,6 +509,52 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
+        },
+        {
+            "name": "eklundkristoffer/seedster",
+            "version": "8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eklundkristoffer/seedster.git",
+                "reference": "6b1b561ff7f7daec90f9203aaa2e3e065a54dfea"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eklundkristoffer/seedster/zipball/6b1b561ff7f7daec90f9203aaa2e3e065a54dfea",
+                "reference": "6b1b561ff7f7daec90f9203aaa2e3e065a54dfea",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.5.*|5.6.*|5.7.*|5.8.*|6.*|^7.0|^8.0|^9.0|^10.0|^11.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Seedster\\SeedsterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Seedster\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kristoffer Eklund",
+                    "email": "kristoffereklund1@gmail.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/eklundkristoffer/seedster/issues",
+                "source": "https://github.com/eklundkristoffer/seedster/tree/8.0"
+            },
+            "time": "2024-03-13T00:41:57+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -1120,6 +1166,150 @@
             "time": "2024-09-14T21:15:39+00:00"
         },
         {
+            "name": "jeremykenedy/laravel-roles",
+            "version": "v11.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykenedy/laravel-roles.git",
+                "reference": "d85150490c9aa20a7ffae17ae2bf8cb4d2a7a0e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykenedy/laravel-roles/zipball/d85150490c9aa20a7ffae17ae2bf8cb4d2a7a0e7",
+                "reference": "d85150490c9aa20a7ffae17ae2bf8cb4d2a7a0e7",
+                "shasum": ""
+            },
+            "require": {
+                "eklundkristoffer/seedster": "^8.0",
+                "laravel/framework": "5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|6.*|7.*|8.*|^9.0|^10.0|^11.0",
+                "laravel/helpers": "^1.7",
+                "php": "^7.2|^8.0|^8.1|^8.2|^8.3"
+            },
+            "require-dev": {
+                "illuminate/support": "^8.5|^9.0|^10.0|^11.0",
+                "laravel/laravel": "^8.0|^9.0|^10.0|^11.0",
+                "laravel/tinker": "^2.9",
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "jeremykenedy\\LaravelRoles\\RolesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "jeremykenedy\\LaravelRoles\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Bičan",
+                    "email": "romanbican@seznam.cz"
+                },
+                {
+                    "name": "Jeremy Kenedy",
+                    "email": "jeremykenedy@gmail.com"
+                }
+            ],
+            "description": "A Powerful package for handling roles and permissions in Laravel. Supports Laravel 5.3 up to 11.",
+            "keywords": [
+                "acl",
+                "laravel",
+                "laravel-levels",
+                "laravel-permissions",
+                "laravel-roles",
+                "levels",
+                "permissions",
+                "roles"
+            ],
+            "support": {
+                "issues": "https://github.com/jeremykenedy/laravel-roles/issues",
+                "source": "https://github.com/jeremykenedy/laravel-roles/tree/v11.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jeremykenedy",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/jeremykenedy",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2024-11-22T07:52:08+00:00"
+        },
+        {
+            "name": "jeremykenedy/laravel-users",
+            "version": "v4.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykenedy/laravel-users.git",
+                "reference": "d01c46237558b20dbe73bc4491d10678fc986926"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykenedy/laravel-users/zipball/d01c46237558b20dbe73bc4491d10678fc986926",
+                "reference": "d01c46237558b20dbe73bc4491d10678fc986926",
+                "shasum": ""
+            },
+            "require": {
+                "laravellux/html": "^7.1",
+                "php": "^7.2|^8.0|^8.1|^8.2|^8.3"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "jeremykenedy\\laravelusers\\LaravelUsersServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "jeremykenedy\\laravelusers\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "jeremykenedy",
+                    "email": "jeremykenedy@gmail.com"
+                }
+            ],
+            "description": "Laravel Users Management CRUD Package",
+            "keywords": [
+                "Users",
+                "crud",
+                "laravel",
+                "management"
+            ],
+            "support": {
+                "issues": "https://github.com/jeremykenedy/laravel-users/issues",
+                "source": "https://github.com/jeremykenedy/laravel-users/tree/v4.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/jeremykenedy",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/jeremykenedy",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2024-10-29T00:52:55+00:00"
+        },
+        {
             "name": "laravel/framework",
             "version": "v11.34.2",
             "source": {
@@ -1333,6 +1523,63 @@
             "time": "2024-11-27T15:43:57+00:00"
         },
         {
+            "name": "laravel/helpers",
+            "version": "v1.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel/helpers.git",
+                "reference": "672d79d5b5f65dc821e57783fa11f22c4d762d70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel/helpers/zipball/672d79d5b5f65dc821e57783fa11f22c4d762d70",
+                "reference": "672d79d5b5f65dc821e57783fa11f22c4d762d70",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.8.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.2.0|^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.10",
+                "phpunit/phpunit": "^7.0|^8.0|^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                },
+                {
+                    "name": "Dries Vints",
+                    "email": "dries@laravel.com"
+                }
+            ],
+            "description": "Provides backwards compatibility for helpers in the latest Laravel release.",
+            "keywords": [
+                "helpers",
+                "laravel"
+            ],
+            "support": {
+                "source": "https://github.com/laravel/helpers/tree/v1.7.2"
+            },
+            "time": "2025-01-24T15:41:25+00:00"
+        },
+        {
             "name": "laravel/prompts",
             "version": "v0.3.2",
             "source": {
@@ -1517,6 +1764,82 @@
                 "source": "https://github.com/laravel/tinker/tree/v2.10.0"
             },
             "time": "2024-09-23T13:32:56+00:00"
+        },
+        {
+            "name": "laravellux/html",
+            "version": "v7.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelLux/html.git",
+                "reference": "9fcd7079f5c577bf297feba8a18dbd2a98a6b4ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelLux/html/zipball/9fcd7079f5c577bf297feba8a18dbd2a98a6b4ec",
+                "reference": "9fcd7079f5c577bf297feba8a18dbd2a98a6b4ec",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/routing": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/session": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "illuminate/view": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": ">=8.0"
+            },
+            "require-dev": {
+                "illuminate/database": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "mockery/mockery": "~1.6.2",
+                "phpunit/phpunit": "~8.5|^9.5.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Form": "LaravelLux\\Html\\FormFacade",
+                        "Html": "LaravelLux\\Html\\HtmlFacade"
+                    },
+                    "providers": [
+                        "LaravelLux\\Html\\HtmlServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "6.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "LaravelLux\\Html\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Mudd",
+                    "email": "admin@adammudd.co.uk"
+                },
+                {
+                    "name": "Adam Engebretson",
+                    "email": "adam@laravelcollective.com"
+                },
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                }
+            ],
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "homepage": "https://website.com.se",
+            "support": {
+                "issues": "https://github.com/laravellux/html/issues",
+                "source": "https://github.com/laravellux/html"
+            },
+            "time": "2024-12-09T14:56:00+00:00"
         },
         {
             "name": "league/commonmark",

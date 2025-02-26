@@ -131,12 +131,12 @@
 
 @section('scripts')
 <!-- Include necessary libraries -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 <!-- Include Chart.js and ChartDataLabels plugin if needed -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script> --}}
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     // Initialize the chart using the initial data passed from PHP.
@@ -208,6 +208,18 @@ document.addEventListener("DOMContentLoaded", function () {
             plugins: [ChartDataLabels]
         });
 
+        document.getElementById('downloadChart').addEventListener('click', function() {
+            if (chart) {  // Ensure chart is initialized
+                const imageUrl = chart.toBase64Image();
+                var link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = 'chart.png';
+                link.click();
+            } else {
+                console.error('Chart is not initialized.');
+            }
+        });
+
         // Attach change event to both top row and additional filter dropdowns.
         $('.js-example-basic-multiple, .js-additional-filter').on('select2:select select2:unselect', function (e) {
             // Enforce a maximum of 4 selections for top row.
@@ -247,6 +259,8 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.error('Invalid chart data: Labels, marginal, or cumulative data is missing.');
     }
+
+
 });
 </script>
 @endsection

@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row align-items-baseline mb-4">
+    <div class="mb-4 row align-items-baseline">
         <div class="col-xl-4">
             <div class="body-left">
                 <h6>Reach Exposure - Probability with Mean</h6>
@@ -11,14 +11,14 @@
         </div>
         <div class="col-xl-8">
             <div class="body-right text-end">
-                <button id="downloadChart" class="export-btn btn btn-primary mb-3">
+                <button id="downloadChart" class="mb-3 export-btn btn btn-primary">
                     Export Chart as Image <i class="fas fa-download"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="row mt-3">
+    <div class="mt-3 row">
         <div class="col-12">
             <div class="p-3 rounded shadow-sm select-group bg-custom">
                 <h5 class="mb-3">Apply Filters</h5>
@@ -57,7 +57,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-3 mt-3">
+                    <div class="mt-3 col-md-3">
                         <button type="submit" class="btn btn-primary">Aplicar</button>
                     </div>
                 </div>
@@ -166,6 +166,16 @@ document.addEventListener("DOMContentLoaded", function() {
         placeholder: "Seleccionar",  // Placeholder text
         width: '100%'  // Make the dropdowns full width
     });
+
+
+    document.getElementById('downloadChart').addEventListener('click', function() {
+            chart.dataURI().then(function(uri) {
+                var link = document.createElement('a');
+                link.href = uri.imgURI;
+                link.download = 'chart.png';
+                link.click();
+            });
+        });
 });
 </script>
 @endsection

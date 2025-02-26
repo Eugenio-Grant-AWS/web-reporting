@@ -194,6 +194,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let vennChart = new Chart(ctx, createChartConfig());
 
+    document.getElementById('downloadChart').addEventListener('click', function() {
+        if (vennChart) {  // Ensure chart is initialized
+            const imageUrl = vennChart.toBase64Image();
+            var link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = 'venn_chart.png';
+            link.click();
+        } else {
+            console.error('Chart is not initialized.');
+        }
+    });
     // Initialize Select2 on all filter dropdowns
     $('.js-example-basic-multiple, .js-additional-filter').select2({
         placeholder: "Seleccionar",
