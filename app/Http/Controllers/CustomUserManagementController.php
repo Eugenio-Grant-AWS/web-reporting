@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use jeremykenedy\laravelusers\App\Http\Controllers\UsersManagementController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Validator;
-use Auth;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use jeremykenedy\laravelusers\App\Http\Controllers\UsersManagementController;
 
 class CustomUserManagementController extends UsersManagementController
 {
@@ -126,9 +126,10 @@ class CustomUserManagementController extends UsersManagementController
             }
         }
 
+        // Prepare data to pass to the view
         $data = [
-            'user'          => $user,
-            'rolesEnabled'  => $this->_rolesEnabled,
+            'user' => $user,
+            'rolesEnabled' => $this->_rolesEnabled,
         ];
 
         if ($this->_rolesEnabled) {
@@ -136,8 +137,12 @@ class CustomUserManagementController extends UsersManagementController
             $data['currentRole'] = $currentRole;
         }
 
-        return view(config('laravelusers.editIndividualUserBlade'))->with($data);
+        // Pass the data to the view with loggedInAdminId
+        return view(config('laravelusers.editIndividualUserBlade'), $data)
+            ->with('loggedInAdminId', Auth::user()->id);
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -149,53 +154,69 @@ class CustomUserManagementController extends UsersManagementController
      */
     public function update(Request $request, $id)
     {
+        // Fetch the user by ID
         $user = config('laravelusers.defaultUserModel')::find($id);
+
+        // Check if email or password is being updated
         $emailCheck = ($request->input('email') != '') && ($request->input('email') != $user->email);
         $passwordCheck = $request->input('password') != null;
 
+        // Default rules for firstname and lastname
         $rules = [
-            'firstname'                => 'required|string|max:255',
-            'lastname'                 => 'required|string|max:255',
+            'firstname' => 'required|string|max:255',
+            'lastname'  => 'required|string|max:255',
         ];
 
+        // If email is being changed, add email validation rules
         if ($emailCheck) {
             $rules['email'] = 'required|email|max:255|unique:users';
         }
 
+        // If password is being changed, add password validation rules
         if ($passwordCheck) {
             $rules['password'] = 'required|string|min:6|max:20|confirmed';
             $rules['password_confirmation'] = 'required|string|same:password';
         }
 
-        if ($this->_rolesEnabled) {
+        // Conditionally apply the role validation
+        // Skip validation for the logged-in admin's own profile
+        if ($this->_rolesEnabled && Auth::user()->id !== $user->id) {
+            // Only apply role validation for non-admin users or when editing someone else's profile
             $rules['role'] = 'required';
         }
 
+        // Validate the request data based on the rules
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        // Update the user's firstname and lastname
+        // Update user details
         $user->firstname = strip_tags($request->input('firstname'));
         $user->lastname = strip_tags($request->input('lastname'));
 
+        // If email is changed, update email
         if ($emailCheck) {
             $user->email = $request->input('email');
         }
 
+        // If password is changed, update password
         if ($passwordCheck) {
             $user->password = Hash::make($request->input('password'));
         }
 
-        if ($this->_rolesEnabled) {
+        // Update roles if roles are enabled and the role is provided
+        if ($this->_rolesEnabled && Auth::user()->id !== $user->id) {
+            // Detach previous roles and attach the new ones
             $user->detachAllRoles();
             $user->attachRole($request->input('role'));
         }
 
+        // Save the user
         $user->save();
 
+        // Redirect back with success message
         return back()->with('success', trans('laravelusers::laravelusers.messages.update-user-success'));
     }
 }

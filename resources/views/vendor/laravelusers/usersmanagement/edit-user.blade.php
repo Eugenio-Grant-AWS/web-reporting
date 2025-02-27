@@ -129,42 +129,54 @@
                             </div>
 
                             @if($rolesEnabled)
-                                <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
-                                    @if(config('laravelusers.fontAwesomeEnabled'))
-                                        {!! Form::label('role', trans('laravelusers::forms.create_user_label_role'), array('class' => 'col-md-3 control-label')); !!}
-                                    @endif
-                                    <div class="col-md-9">
-                                        <div class="input-group">
+                            <div class="form-group has-feedback row {{ $errors->has('role') ? ' has-error ' : '' }}">
+                                @if(config('laravelusers.fontAwesomeEnabled'))
+                                    {!! Form::label('role', trans('laravelusers::forms.create_user_label_role'), array('class' => 'col-md-3 control-label')); !!}
+                                @endif
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <!-- If the logged-in user is editing their own profile -->
+                                        @if(Auth::user()->id === $user->id)
+                                            <!-- Show readonly Admin for the logged-in admin -->
+                                            <input type="text" class="form-control" value="Admin" readonly>
+                                        @else
+                                            <!-- Show the role dropdown for other users -->
                                             <select class="custom-select form-control" name="role[]" id="role" multiple>
-                                                <option value="">{!! trans('laravelusers::forms.create_user_ph_role') !!}</option>
+                                                <!-- Default option: No role selected -->
+                                                {{-- <option value="">{!! trans('laravelusers::forms.create_user_ph_role') !!}</option> --}}
+
+                                                <!-- Available roles to select from -->
                                                 @if ($roles)
                                                     @foreach($roles as $role)
-                                                        @if ($currentRole)
-                                                            <option value="{{ $role->id }}" {{ in_array($role->id ,$currentRole) ? 'selected="selected"' : '' }}>{{ $role->name }}</option>
-                                                        @else
-                                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                                        @endif
+                                                        <option value="{{ $role->id }}" {{ in_array($role->id, $currentRole) ? 'selected="selected"' : '' }}>
+                                                            {{ $role->name }}
+                                                        </option>
                                                     @endforeach
                                                 @endif
                                             </select>
-                                            <div class="input-group-append">
-                                                <label class="input-group-text" for="role">
-                                                    @if(config('laravelusers.fontAwesomeEnabled'))
-                                                        <i class="{!! trans('laravelusers::forms.create_user_icon_role') !!}" aria-hidden="true"></i>
-                                                    @else
-                                                        {!! trans('laravelusers::forms.create_user_label_role') !!}
-                                                    @endif
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @if ($errors->has('role'))
-                                            <span class="help-block">
-                                                <strong>{{ $errors->first('role') }}</strong>
-                                            </span>
+
                                         @endif
+                                        <div class="input-group-append">
+                                            <label class="input-group-text" for="role">
+                                                @if(config('laravelusers.fontAwesomeEnabled'))
+                                                    <i class="{!! trans('laravelusers::forms.create_user_icon_role') !!}" aria-hidden="true"></i>
+                                                @else
+                                                    {!! trans('laravelusers::forms.create_user_label_role') !!}
+                                                @endif
+                                            </label>
+                                        </div>
                                     </div>
+                                    @if ($errors->has('role'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('role') }}</strong>
+                                        </span>
+                                    @endif
                                 </div>
-                            @endif
+                            </div>
+                        @endif
+
+
+
 
                             <!-- Password Change Section -->
                             <div class="pw-change-container">
@@ -223,8 +235,10 @@
                                 <div class="mb-2 col-12 col-sm-6">
                                     <a href="#" class="mt-3 btn btn-outline-secondary btn-block btn-change-pw" title="{!! trans('laravelusers::forms.change-pw') !!}">
                                         <i class="fa fa-fw fa-lock" aria-hidden="true"></i>
-                                        <span></span> {!! trans('laravelusers::forms.change-pw') !!}
+                                        <span>{!! trans('laravelusers::forms.change-pw') !!}</span>  <!-- Initially set to Change Password -->
                                     </a>
+
+
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     {!! Form::button(trans('laravelusers::forms.save-changes'), array('class' => 'btn btn-success btn-block margin-bottom-1 mt-3 mb-2 btn-save','type' => 'submit')) !!}
