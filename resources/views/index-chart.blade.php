@@ -41,7 +41,8 @@
     <div class="container-fluid">
         <h6>Indexed Review Of Stronger Drivers</h6>
 
-        @if ($dataMessage)
+        @if (empty($commercialQualityData['Column Percentages']) || count($commercialQualityData['Column Percentages']) === 0)
+
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent
         @else

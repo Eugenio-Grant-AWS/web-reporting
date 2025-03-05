@@ -45,7 +45,8 @@
     <div class="container-fluid">
         <h6>TIP Summary x Creative Quality</h6>
 
-        @if ($dataMessage)
+        @if (empty($commercialQualityData['Column Percentages']) || count($commercialQualityData['Column Percentages']) === 0)
+
             <div class="alert alert-warning">{{ $dataMessage }}</div>
         @else
         <!-- Filter Section -->

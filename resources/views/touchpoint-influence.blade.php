@@ -102,7 +102,8 @@
 
 
         </div>
-        @if ($dataMessage)
+        @if (empty($commercialQualityData['Column Percentages']) || count($commercialQualityData['Column Percentages']) === 0)
+
             @component('components.no_data_message', ['message' => $dataMessage])
             @endcomponent
         @else

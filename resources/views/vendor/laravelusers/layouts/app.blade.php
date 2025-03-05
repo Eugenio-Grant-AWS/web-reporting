@@ -40,12 +40,12 @@
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <!-- Left Side Of Navbar -->
-                        <ul class="navbar-nav mr-auto">
+                        <ul class="mr-auto navbar-nav">
 
                         </ul>
 
                         <!-- Right Side Of Navbar -->
-                        <ul class="navbar-nav ml-auto">
+                        <ul class="ml-auto navbar-nav">
                             <!-- Authentication Links -->
                             @guest
                                 <li><a class="nav-link" href="{{ route('login') }}">Login</a></li>
@@ -94,7 +94,7 @@
         @endif
         @include('laravelusers::scripts.toggleText')
 
-        @yield('template_scripts')
+        @stack('template_scripts')
 
     </body>
 </html>

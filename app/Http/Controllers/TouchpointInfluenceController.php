@@ -180,7 +180,6 @@ class TouchpointInfluenceController extends Controller
 
         // Check if data exists
         $dataMessage = collect($commercialQualityData)->isEmpty() ? "No data available to display." : null;
-
         return view('touchpoint-influence', compact(
             'breadcrumb',
             'commercialQualityData',
