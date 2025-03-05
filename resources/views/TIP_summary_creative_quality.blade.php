@@ -47,7 +47,8 @@
 
         @if (empty($commercialQualityData['Column Percentages']) || count($commercialQualityData['Column Percentages']) === 0)
 
-            <div class="alert alert-warning">{{ $dataMessage }}</div>
+        @component('components.no_data_message', ['message' => $dataMessage])
+        @endcomponent
         @else
         <!-- Filter Section -->
             <div class="mt-3 row">
